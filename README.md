@@ -136,6 +136,7 @@ MY_STUDY_PROJECT/
 │   └── bookshelf-3d.js          # Tactile 18-volume curriculum library
 ├── project_history/             # Complete Project Trajectory & Conversations
 │   ├── README.md                # Project history index
+│   ├── FULL_CONVERSATION_TRANSCRIPT.md # Complete transcript of all 40 chat turns
 │   ├── PROJECT_TIMELINE_AND_CONVERSATIONS.md # Chronological log of all milestones
 │   └── SYSTEM_ARCHITECTURE_EVOLUTION.md    # Architecture diagrams & build toolchains
 ├── curriculum-data.js           # Full 210-topic master syllabus database
@@ -143,7 +144,7 @@ MY_STUDY_PROJECT/
 └── start.sh                     # Local development startup script
 ```
 
-> Read the complete chronicle of conversations, architectural milestones, and design iterations in [`project_history/PROJECT_TIMELINE_AND_CONVERSATIONS.md`](project_history/PROJECT_TIMELINE_AND_CONVERSATIONS.md).
+> Read the complete verbatim chat interactions in [`project_history/FULL_CONVERSATION_TRANSCRIPT.md`](project_history/FULL_CONVERSATION_TRANSCRIPT.md) and the architectural chronicle in [`project_history/PROJECT_TIMELINE_AND_CONVERSATIONS.md`](project_history/PROJECT_TIMELINE_AND_CONVERSATIONS.md).
 
 ---
 
