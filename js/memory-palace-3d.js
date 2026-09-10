@@ -114,6 +114,11 @@
     pedestals = [];
     sparks = [];
 
+    const savedStab = JSON.parse(localStorage.getItem("studyPulsePalaceStability") || "{}");
+    PALACE_CARDS.forEach(c => {
+      if (savedStab[c.id] !== undefined) c.stability = savedStab[c.id];
+    });
+
     const w = palaceContainer.clientWidth || 800;
     const h = palaceContainer.clientHeight || 540;
 
@@ -472,6 +477,11 @@
     else if (score === 2) { card.stability = Math.min(75, card.stability + 12); xp = 50; }
     else if (score === 3) { card.stability = Math.min(92, card.stability + 25); xp = 100; }
     else if (score === 4) { card.stability = 98; xp = 150; }
+
+    // Save stability to localStorage
+    const savedStab = JSON.parse(localStorage.getItem("studyPulsePalaceStability") || "{}");
+    savedStab[card.id] = card.stability;
+    localStorage.setItem("studyPulsePalaceStability", JSON.stringify(savedStab));
 
     // Update 3D Crystal and Ring colors
     const newCol = getStabilityColor(card.stability);

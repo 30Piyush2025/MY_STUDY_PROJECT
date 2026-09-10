@@ -83,6 +83,7 @@
     cacheElements();
     bindEvents();
     initTopologyCanvas();
+    initUserActivityState();
     startEqualizerVisualizer();
     updatePomoDisplay();
     renderFlashcard();
@@ -384,6 +385,7 @@
       } else {
         pausePomodoro();
         speakVoiceCue('Focus interval completed. Excellent work! 150 XP awarded.');
+        addFocusMinutes(25);
         addXP(150, 'Completed 25m Focus Block');
         showToast('🎉 Focus Block Completed! (+150 XP)');
       }
@@ -736,17 +738,25 @@
     if (!heatmapContainer) return;
     heatmapContainer.innerHTML = '';
 
-    // Generate 196 cells (28 weeks x 7 days)
-    for (let i = 0; i < 196; i++) {
+    const history = JSON.parse(localStorage.getItem("studyPulseActivityHistory") || "{}");
+    const today = new Date();
+
+    // Render 196 cells (28 weeks x 7 days) ending today
+    for (let i = 195; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dStr = d.toISOString().split("T")[0];
+      const mins = history[dStr] || 0;
+
       const cell = document.createElement('div');
       cell.className = 'heatmap-cell';
-      const rand = Math.random();
-      if (rand > 0.85) cell.classList.add('l4');
-      else if (rand > 0.65) cell.classList.add('l3');
-      else if (rand > 0.40) cell.classList.add('l2');
-      else if (rand > 0.15) cell.classList.add('l1');
 
-      cell.title = `Day ${i + 1}: ${Math.round(rand * 5.5 * 10) / 10} hours logged`;
+      if (mins >= 120) cell.classList.add('l4');
+      else if (mins >= 60) cell.classList.add('l3');
+      else if (mins >= 25) cell.classList.add('l2');
+      else if (mins > 0) cell.classList.add('l1');
+
+      cell.title = `${d.toLocaleDateString("en-US", { month: "short", day: "numeric" })}: ${mins} mins focus logged`;
       heatmapContainer.appendChild(cell);
     }
   }
@@ -754,6 +764,81 @@
   // =========================================================================
   // Topic Checklist & Module Master Matrix (Screenshot 6)
   // =========================================================================
+
+  // =========================================================================
+  // REAL USER STATE & PERSISTENCE ENGINE (No Fake Data)
+  // =========================================================================
+  function initUserActivityState() {
+    const todayStr = new Date().toISOString().split("T")[0];
+
+    // Today Focus Minutes
+    const focusData = JSON.parse(localStorage.getItem("studyPulseTodayFocus") || "{}");
+    let todayMinutes = 0;
+    if (focusData.date === todayStr) {
+      todayMinutes = focusData.minutes || 0;
+    } else {
+      focusData.date = todayStr;
+      focusData.minutes = 0;
+      localStorage.setItem("studyPulseTodayFocus", JSON.stringify(focusData));
+    }
+
+    // Daily Streak Calculation
+    const streakData = JSON.parse(localStorage.getItem("studyPulseStreak") || "{}");
+    let streakCount = streakData.count || 1;
+    if (streakData.lastActiveDate) {
+      const lastDate = new Date(streakData.lastActiveDate);
+      const todayDate = new Date(todayStr);
+      const diffTime = todayDate - lastDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        streakCount += 1;
+      } else if (diffDays > 1) {
+        streakCount = 1; // streak broke
+      }
+    }
+    streakData.lastActiveDate = todayStr;
+    streakData.count = streakCount;
+    localStorage.setItem("studyPulseStreak", JSON.stringify(streakData));
+
+    updateDashboardMetricsUI(todayMinutes, streakCount);
+  }
+
+  function addFocusMinutes(mins) {
+    const todayStr = new Date().toISOString().split("T")[0];
+    const focusData = JSON.parse(localStorage.getItem("studyPulseTodayFocus") || "{}");
+    let currentMins = (focusData.date === todayStr ? focusData.minutes : 0) + mins;
+    focusData.date = todayStr;
+    focusData.minutes = currentMins;
+    localStorage.setItem("studyPulseTodayFocus", JSON.stringify(focusData));
+
+    // Daily activity history for heatmap
+    const history = JSON.parse(localStorage.getItem("studyPulseActivityHistory") || "{}");
+    history[todayStr] = (history[todayStr] || 0) + mins;
+    localStorage.setItem("studyPulseActivityHistory", JSON.stringify(history));
+
+    const streakData = JSON.parse(localStorage.getItem("studyPulseStreak") || "{}");
+    updateDashboardMetricsUI(currentMins, streakData.count || 1);
+  }
+
+  function updateDashboardMetricsUI(todayMinutes, streakCount) {
+    const hours = Math.floor(todayMinutes / 60);
+    const mins = todayMinutes % 60;
+    const focusStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+
+    const elTodayFocus = document.getElementById("metric-today-focus");
+    if (elTodayFocus) elTodayFocus.textContent = focusStr;
+
+    const elStreak = document.getElementById("metric-active-streak");
+    if (elStreak) elStreak.textContent = `${streakCount} Day${streakCount > 1 ? "s" : ""}`;
+
+    const elHeaderStreak = document.getElementById("header-streak-val");
+    if (elHeaderStreak) elHeaderStreak.textContent = `${streakCount} Day${streakCount > 1 ? "s" : ""}`;
+
+    const elTotalVolume = document.getElementById("analytics-total-volume");
+    if (elTotalVolume) elTotalVolume.textContent = `${(todayMinutes / 60).toFixed(1)}h`;
+  }
+
   function setupChecklistListeners() {
     // Accordion expand/collapse
     const headers = document.querySelectorAll('.module-header');
@@ -764,29 +849,50 @@
       });
     });
 
-    // Checkbox toggles
-    const checkboxes = document.querySelectorAll('.custom-checkbox');
-    checkboxes.forEach(cb => {
+    // Load saved checklist state from localStorage
+    const savedChecked = JSON.parse(localStorage.getItem("studyPulseCheckedTopics") || "[]");
+    const allRows = document.querySelectorAll('.topic-row');
+
+    allRows.forEach(row => {
+      const titleSpan = row.querySelector('.topic-title-span');
+      const title = titleSpan ? titleSpan.textContent.trim() : "";
+      const cb = row.querySelector('.custom-checkbox');
+      if (!cb) return;
+
+      const isChecked = savedChecked.includes(title);
+      cb.classList.toggle('checked', isChecked);
+      row.classList.toggle('completed', isChecked);
+
       cb.addEventListener('click', (e) => {
         e.stopPropagation();
-        const wasChecked = cb.classList.contains('checked');
-        cb.classList.toggle('checked');
-        const row = cb.closest('.topic-row');
-        row.classList.toggle('completed', cb.classList.contains('checked'));
-        recalcMasteryGauge();
-        if (!wasChecked) {
-          addXP(150, 'Topic Mastered');
+        const checkedList = JSON.parse(localStorage.getItem("studyPulseCheckedTopics") || "[]");
+        const nowChecked = !cb.classList.contains('checked');
+
+        cb.classList.toggle('checked', nowChecked);
+        row.classList.toggle('completed', nowChecked);
+
+        if (nowChecked) {
+          if (!checkedList.includes(title)) checkedList.push(title);
+          addXP(150, `Mastered: ${title.substring(0, 20)}...`);
+        } else {
+          const idx = checkedList.indexOf(title);
+          if (idx !== -1) checkedList.splice(idx, 1);
         }
+
+        localStorage.setItem("studyPulseCheckedTopics", JSON.stringify(checkedList));
+        recalcMasteryGauge();
       });
     });
+
+    recalcMasteryGauge();
   }
 
   function recalcMasteryGauge() {
     const allCbs = document.querySelectorAll('.custom-checkbox');
     const checkedCbs = document.querySelectorAll('.custom-checkbox.checked');
-    const total = allCbs.length || 210;
-    const completed = checkedCbs.length || 142;
-    const pct = Math.round((completed / total) * 100);
+    const total = allCbs.length || 10;
+    const completed = checkedCbs.length;
+    const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
     const gaugeVal = document.getElementById('matrix-gauge-val');
     const gaugeCircle = document.getElementById('matrix-circle-fill');
@@ -797,6 +903,25 @@
     if (gaugeCircle) gaugeCircle.setAttribute('stroke-dasharray', `${pct}, 100`);
     if (progressFill) progressFill.style.width = `${pct}%`;
     if (statText) statText.textContent = `${completed} of ${total} Topics Mastered`;
+
+    // Dashboard 4-tile sync
+    const elDashMastered = document.getElementById("metric-topics-mastered");
+    const elDashPct = document.getElementById("metric-topics-pct");
+    if (elDashMastered) elDashMastered.textContent = `${completed} / ${total}`;
+    if (elDashPct) elDashPct.textContent = `${pct}%`;
+
+    // Update each module header progress stat dynamically
+    document.querySelectorAll('.module-card').forEach(mod => {
+      const modCbs = mod.querySelectorAll('.custom-checkbox');
+      const modDone = mod.querySelectorAll('.custom-checkbox.checked');
+      const modFill = mod.querySelector('.module-mini-fill');
+      const modStat = mod.querySelector('.module-progress-stat');
+      if (modCbs.length > 0 && modStat && modFill) {
+        const modPct = Math.round((modDone.length / modCbs.length) * 100);
+        modFill.style.width = `${modPct}%`;
+        modStat.textContent = `${modDone.length}/${modCbs.length} (${modPct}%)`;
+      }
+    });
   }
 
   function filterCurriculumBySubject(subj) {
@@ -871,7 +996,7 @@
   // ENHANCEMENT: RPG Skill Tree & Level Progression Engine
   // =========================================================================
   const RPGState = {
-    xp: parseInt(localStorage.getItem('studyPulseXP') || '4250', 10),
+    xp: parseInt(localStorage.getItem('studyPulseXP') || '0', 10),
     level: 14,
     title: 'NEURAL ARCHITECT',
     get levelNumber() {
@@ -1048,10 +1173,10 @@
 
     if (reviews.length === 0) {
       list.innerHTML = `
-        <div class="review-item-card" style="opacity: 0.7;">
-          <div style="color: #fbbf24;">★★★★★</div>
-          <div style="font-weight: 600; margin: 3px 0;">Marcus T. (Staff AI Engineer)</div>
-          <p style="color: var(--text-muted); font-size: 0.76rem;">"The 3D Bookshelf and FSRS integration make this one of the most cohesive study platforms I've seen. Great work on Raft and MLOps tracks."</p>
+        <div class="review-item-card" style="text-align: center; padding: 1.5rem; color: var(--text-dim);">
+          <div style="font-size: 1.4rem; margin-bottom: 6px;">💬</div>
+          <div style="font-weight: 600; color: var(--text-muted);">No Peer Reviews Yet</div>
+          <p style="color: var(--text-dim); font-size: 0.74rem; margin-top: 4px;">Share your link with friends or submit your own study reflection above!</p>
         </div>
       `;
       return;

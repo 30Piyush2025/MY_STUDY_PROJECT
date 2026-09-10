@@ -56,10 +56,10 @@
       <!-- Header Meta & Actions -->
       <div class="header-meta-actions">
         <div class="rpg-level-pill" id="rpg-level-pill" title="RPG Master Level & XP Progression">
-          <span style="font-weight: 700;" id="nav-rpg-level">LVL 14</span>
-          <span id="nav-rpg-title" style="font-size: 0.68rem; opacity: 0.85;">NEURAL ARCHITECT</span>
+          <span style="font-weight: 700;" id="nav-rpg-level">LVL 1</span>
+          <span id="nav-rpg-title" style="font-size: 0.68rem; opacity: 0.85;">CODE INITIATE</span>
           <div class="rpg-xp-mini-track">
-            <div class="rpg-xp-mini-fill" id="nav-rpg-xp-fill" style="width: 72%;"></div>
+            <div class="rpg-xp-mini-fill" id="nav-rpg-xp-fill" style="width: 0%;"></div>
           </div>
         </div>
         <div class="nav-timer-pill" id="nav-timer-pill">
@@ -67,7 +67,7 @@
           <span id="nav-timer-clock">24:18 | POMODORO</span>
         </div>
         <div class="streak-pill">
-          <span>🔥</span> <span>14 Days</span>
+          <span>🔥</span> <span id="header-streak-val">1 Day</span>
         </div>
         <!-- Theme Toggle Button -->
         <button class="android-theme-btn" id="btn-theme-toggle" onclick="window.toggleAppTheme()" aria-label="Toggle Dark/Light Theme" title="Toggle Light / Dark Mode">
@@ -139,10 +139,10 @@
             <span class="metric-label">Today's Focus</span>
             <span class="metric-icon-badge">⏱️</span>
           </div>
-          <div class="metric-main-val">4h 12m</div>
+          <div class="metric-main-val" id="metric-today-focus">0m</div>
           <div class="metric-sub-row">
-            <span class="metric-delta pos">+18%</span>
-            <span class="metric-context">vs yesterday</span>
+            <span class="metric-delta pos">Active</span>
+            <span class="metric-context">logged today</span>
           </div>
         </div>
 
@@ -151,9 +151,9 @@
             <span class="metric-label">Topics Mastered</span>
             <span class="metric-icon-badge">📚</span>
           </div>
-          <div class="metric-main-val">18 / 24</div>
+          <div class="metric-main-val" id="metric-topics-mastered">0 / 10</div>
           <div class="metric-sub-row">
-            <span class="metric-delta pos">75%</span>
+            <span class="metric-delta pos" id="metric-topics-pct">0%</span>
             <span class="metric-context">curriculum complete</span>
           </div>
         </div>
@@ -163,10 +163,10 @@
             <span class="metric-label">Active Streak</span>
             <span class="metric-icon-badge">🔥</span>
           </div>
-          <div class="metric-main-val">14 Days</div>
+          <div class="metric-main-val" id="metric-active-streak">1 Day</div>
           <div class="metric-sub-row">
-            <span class="metric-delta pos">Personal Best</span>
-            <span class="metric-context">21 days target</span>
+            <span class="metric-delta pos">Daily Habit</span>
+            <span class="metric-context">keep it burning</span>
           </div>
         </div>
 
@@ -175,10 +175,10 @@
             <span class="metric-label">SRS Retention</span>
             <span class="metric-icon-badge">🧠</span>
           </div>
-          <div class="metric-main-val">94%</div>
+          <div class="metric-main-val">100%</div>
           <div class="metric-sub-row">
             <span class="metric-delta pos">Optimal</span>
-            <span class="metric-context">142 cards active</span>
+            <span class="metric-context">FSRS-4.5 engine</span>
           </div>
         </div>
       </div>
@@ -482,10 +482,10 @@
           <div class="global-progress-bar-block">
             <div class="global-label-row">
               <span>GLOBAL TARGET PROGRESS</span>
-              <span id="matrix-mastered-stat">142 of 210 Topics Mastered</span>
+              <span id="matrix-mastered-stat">0 of 10 Topics Mastered</span>
             </div>
             <div class="global-track">
-              <div class="global-fill" id="matrix-global-fill" style="width: 68%;"></div>
+              <div class="global-fill" id="matrix-global-fill" style="width: 0%;"></div>
             </div>
           </div>
         </div>
@@ -494,8 +494,8 @@
         <div class="gauge-circle-widget">
           <svg viewBox="0 0 36 36" class="circular-chart">
             <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path class="circle" id="matrix-circle-fill" stroke-dasharray="68, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <text x="18" y="20.35" class="percentage" id="matrix-gauge-val">68%</text>
+            <path class="circle" id="matrix-circle-fill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <text x="18" y="20.35" class="percentage" id="matrix-gauge-val">0%</text>
           </svg>
           <span class="gauge-caption">MASTER INDEX</span>
         </div>
@@ -548,9 +548,9 @@
             </div>
           </div>
           <div class="module-topics-body">
-            <div class="topic-row completed">
+            <div class="topic-row">
               <div class="topic-left-side">
-                <div class="custom-checkbox checked"></div>
+                <div class="custom-checkbox"></div>
                 <div class="topic-info-text">
                   <span class="topic-title-span">Raft Leader Election & Term Transitions <span class="topic-tag">CONSENSUS</span></span>
                   <span class="topic-meta-sub">3.5h · 4 Lectures · Heartbeat intervals & randomized timeouts</span>
@@ -562,9 +562,9 @@
               </div>
             </div>
 
-            <div class="topic-row completed">
+            <div class="topic-row">
               <div class="topic-left-side">
-                <div class="custom-checkbox checked"></div>
+                <div class="custom-checkbox"></div>
                 <div class="topic-info-text">
                   <span class="topic-title-span">Log Replication & Majority Quorum Commits <span class="topic-tag">REPLICATION</span></span>
                   <span class="topic-meta-sub">2.8h · 3 Lectures · AppendEntries RPC consistency checks</span>
@@ -620,9 +620,9 @@
             </div>
           </div>
           <div class="module-topics-body">
-            <div class="topic-row completed">
+            <div class="topic-row">
               <div class="topic-left-side">
-                <div class="custom-checkbox checked"></div>
+                <div class="custom-checkbox"></div>
                 <div class="topic-info-text">
                   <span class="topic-title-span">Monotonic Stack: Next Greater Element & Histogram Area <span class="topic-tag">STACKS</span></span>
                   <span class="topic-meta-sub">4.2h · LeetCode 84 & 739 · O(n) amortized scans</span>
@@ -634,9 +634,9 @@
               </div>
             </div>
 
-            <div class="topic-row completed">
+            <div class="topic-row">
               <div class="topic-left-side">
-                <div class="custom-checkbox checked"></div>
+                <div class="custom-checkbox"></div>
                 <div class="topic-info-text">
                   <span class="topic-title-span">Trie (Prefix Tree) & Bitwise XOR Maximum <span class="topic-tag">TREES</span></span>
                   <span class="topic-meta-sub">3.0h · Prefix lookup, autocomplete, LeetCode 421</span>
@@ -678,9 +678,9 @@
             </div>
           </div>
           <div class="module-topics-body">
-            <div class="topic-row completed">
+            <div class="topic-row">
               <div class="topic-left-side">
-                <div class="custom-checkbox checked"></div>
+                <div class="custom-checkbox"></div>
                 <div class="topic-info-text">
                   <span class="topic-title-span">Gradient Boosting Math: Residual Loss Minimization <span class="topic-tag">BOOSTING</span></span>
                   <span class="topic-meta-sub">6.5h · Pseudo residuals, Taylor series approximation</span>
@@ -692,9 +692,9 @@
               </div>
             </div>
 
-            <div class="topic-row completed">
+            <div class="topic-row">
               <div class="topic-left-side">
-                <div class="custom-checkbox checked"></div>
+                <div class="custom-checkbox"></div>
                 <div class="topic-info-text">
                   <span class="topic-title-span">Multi-Head Attention & Transformer Scaled Dot-Product <span class="topic-tag">ATTENTION</span></span>
                   <span class="topic-meta-sub">8.0h · Q, K, V projection matrices & softmax scaling</span>
