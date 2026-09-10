@@ -92,6 +92,14 @@ This document logs the comprehensive development trajectory, architectural miles
     * 3D Memory Palace card recall stabilities (`studyPulsePalaceStability`).
     * RPG XP and level progression (`studyPulseXP`).
 
+### Phase 7: Mobile Viewport & Native Horizontal Scroll Lock
+* **Challenge**: The screen wobbled or scrolled left and right on mobile touch and within the Android WebView due to wide desktop elements, header action bars exceeding 360px viewport bounds, negative offscreen drawer offsets (`right: -480px`), and default WebView rubberband overscroll.
+* **Resolution**:
+  * **Strict Viewport Containment**: Configured `html, body` with `overflow-x: hidden !important;`, `overscroll-behavior-x: none !important;`, and `touch-action: pan-y pinch-zoom;`.
+  * **WebView Hardening (`MainActivity.java`)**: Configured `webView.setHorizontalScrollBarEnabled(false);`, `webView.setOverScrollMode(View.OVER_SCROLL_NEVER);`, `s.setSupportZoom(false);`, and `s.setBuiltInZoomControls(false);`.
+  * **Responsive UI Re-architecting**: Wrapped flex rows (`.hero-btn-row`, `.pomo-controls-row`, `.filter-controls-row`), made buttons stack vertically on mobile, and reduced the mobile top header footprint on `<= 600px` screens.
+  * **Runtime Scroll Clamping (`studypulse.js`)**: Real-time event listener locking `window.scrollX` to 0 on scroll and touchmove events.
+
 ---
 
 ## 🏆 Key Architectural Principles

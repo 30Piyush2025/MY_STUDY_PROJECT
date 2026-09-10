@@ -78,7 +78,23 @@
   // DOM Elements
   let els = {};
 
+  // Horizontal Scroll Lockdown: Ensure screen never wobbles or pans left/right
+  function initHorizontalScrollLock() {
+    window.addEventListener('scroll', () => {
+      if (window.scrollX !== 0) {
+        window.scrollTo(0, window.scrollY);
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchmove', () => {
+      if (window.scrollX !== 0) {
+        window.scrollTo(0, window.scrollY);
+      }
+    }, { passive: true });
+  }
+
   function initApp() {
+    initHorizontalScrollLock();
     initTheme();
     cacheElements();
     bindEvents();

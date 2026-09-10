@@ -47,9 +47,22 @@
   padding: 0;
 }
 
-html, body {
+html {
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  overscroll-behavior-x: none !important;
+  position: relative;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
+  overflow-x: hidden !important;
+  overscroll-behavior-x: none !important;
+  position: relative;
+  touch-action: pan-y pinch-zoom;
   background-color: var(--bg-core);
   background-image: 
     radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.08), transparent),
@@ -228,9 +241,12 @@ html, body {
    Main Content Layout
    ========================================================================== */
 .main-container {
+  width: 100%;
   max-width: 1480px;
   margin: 1.5rem auto 4rem;
   padding: 0 1.5rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .view-section {
@@ -342,6 +358,7 @@ html, body {
 .hero-btn-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.75rem;
 }
 
@@ -582,6 +599,7 @@ html, body {
 .pomo-controls-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
 }
@@ -2078,9 +2096,9 @@ html, body {
 .peer-review-drawer {
   position: fixed;
   top: 0;
-  right: -480px;
+  right: 0;
   width: 440px;
-  max-width: 100vw;
+  max-width: 100%;
   height: 100vh;
   background: rgba(14, 20, 32, 0.96);
   backdrop-filter: blur(20px);
@@ -2090,11 +2108,12 @@ html, body {
   box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
-  transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(105%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .peer-review-drawer.open {
-  right: 0;
+  transform: translateX(0);
 }
 
 .drawer-header {
@@ -2340,6 +2359,7 @@ html, body {
 
 .chaos-stats-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
@@ -2561,6 +2581,8 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
   background: rgba(15, 23, 42, 0.8);
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-lg);
@@ -3087,11 +3109,12 @@ button:active, .android-nav-item:active, .android-sheet-tile:active {
   .header-meta-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    flex-shrink: 0;
   }
 
   .streak-pill {
-    display: none;
+    display: none !important;
   }
 
   .nav-timer-pill {
@@ -3108,10 +3131,15 @@ button:active, .android-nav-item:active, .android-sheet-tile:active {
     display: none;
   }
 
-  /* App Container Padding so bottom nav never overlaps content */
-  .app-container {
-    padding: 12px;
+  /* Main Container Padding & Width Strict Lockdown */
+  .main-container, .app-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 12px !important;
     padding-bottom: calc(82px + env(safe-area-inset-bottom, 16px)) !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
   }
 
   /* Full Width Single-Column Grids */
@@ -3122,6 +3150,7 @@ button:active, .android-nav-item:active, .android-sheet-tile:active {
 
   .metric-card {
     padding: 0.85rem !important;
+    min-width: 0 !important;
   }
 
   .metric-main-val {
@@ -3131,6 +3160,8 @@ button:active, .android-nav-item:active, .android-sheet-tile:active {
   .dashboard-hero {
     grid-template-columns: 1fr !important;
     gap: 12px !important;
+    padding: 1rem !important;
+    overflow: hidden !important;
   }
 
   .hero-timer-wrapper {
@@ -3161,6 +3192,106 @@ button:active, .android-nav-item:active, .android-sheet-tile:active {
   /* Chaos lab responsive */
   .chaos-main-grid {
     grid-template-columns: 1fr !important;
+  }
+}
+
+/* Specific Phone & Small Screen Lockdown (<= 600px) */
+@media (max-width: 600px) {
+  .nav-timer-pill {
+    display: none !important;
+  }
+  .user-profile-avatar {
+    display: none !important;
+  }
+  #nav-rpg-title {
+    display: none !important;
+  }
+  .rpg-level-pill {
+    padding: 2px 6px !important;
+    font-size: 0.68rem !important;
+  }
+  .hero-btn-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+  }
+  .hero-btn-row button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .checklist-top-banner {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 1.1rem !important;
+    gap: 1rem !important;
+  }
+  .matrix-header-title {
+    justify-content: center !important;
+    font-size: 1.15rem !important;
+  }
+  .gauge-circle-widget {
+    min-width: unset !important;
+    width: 100% !important;
+  }
+  .filter-controls-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+  .filter-controls-row select,
+  .filter-controls-row .search-input-box {
+    width: 100% !important;
+  }
+  .heatmap-card {
+    padding: 1rem !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .heatmap-grid {
+    grid-template-columns: repeat(14, 1fr) !important;
+    gap: 3px !important;
+  }
+  .pomo-controls-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .btn-pomo-action {
+    justify-content: center !important;
+    padding: 8px 6px !important;
+    font-size: 0.78rem !important;
+  }
+  .bookshelf-hud-overlay {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+    left: 8px !important;
+    right: 8px !important;
+  }
+  .hud-actions-row {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  .hud-actions-row .btn-hud {
+    font-size: 0.72rem !important;
+    padding: 4px 8px !important;
+  }
+  .fc-rating-panel {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+  .topic-row {
+    padding: 0.75rem 0.75rem !important;
+    gap: 6px !important;
+  }
+  .topic-title-span {
+    font-size: 0.82rem !important;
+    flex-wrap: wrap !important;
+    word-break: break-word !important;
+  }
+  .topic-meta-sub {
+    font-size: 0.68rem !important;
   }
 }
 
