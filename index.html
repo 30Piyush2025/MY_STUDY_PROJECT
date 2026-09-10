@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Piyush Tiwari • AI & Data Science Multi-Course Learning Hub</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tracker.css">
+</head>
+<body>
+
+  <!-- App Header & Navigation -->
+  <header class="app-header">
+    <div class="container">
+      <div class="header-top">
+        <div class="brand-section">
+          <div class="brand-badge">⚡</div>
+          <div class="brand-info">
+            <h1>AI Learning <span class="highlight">Intelligence Hub</span></h1>
+            <div class="brand-subtitle">
+              <span class="user-tag">PIYUSH TIWARI • AI/ML</span>
+              <span class="live-beacon"><i class="dot"></i> LIVE TRACKER</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- Active timer indicator in nav -->
+          <div id="nav-timer-indicator" style="display: none; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); padding: 4px 10px; border-radius: 999px; font-family: var(--font-mono); font-size: 0.78rem; color: #34d399;">
+            <span class="dot" style="width: 6px; height: 6px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
+            <span id="nav-timer-clock">00:00:00</span>
+          </div>
+
+          <button class="btn btn-primary btn-sm" id="btn-resume-next" title="Jump to the next pending lecture">
+            🎯 Next Lecture
+          </button>
+          <button class="btn btn-secondary btn-sm" id="btn-open-backup" title="Backup & Restore progress">
+            💾 Backup
+          </button>
+          <a href="https://30piyush2025.github.io/PORTPOLIO_WEBSITE/" target="_blank" class="btn btn-secondary btn-sm" title="Go to 3D Dossier Portfolio">
+            📁 3D Portfolio
+          </a>
+        </div>
+      </div>
+
+      <!-- Multi-Page Navigation Bar -->
+      <nav class="page-nav-bar" aria-label="Main Navigation">
+        <button class="nav-tab active" data-page="dashboard">
+          <span class="tab-icon">🏠</span> <span>Dashboard</span>
+        </button>
+        <button class="nav-tab" data-page="curriculum">
+          <span class="tab-icon">📚</span> <span>Curriculum & Lectures</span>
+        </button>
+        <button class="nav-tab" data-page="planner">
+          <span class="tab-icon">🎯</span> <span>Finish Estimator</span>
+        </button>
+        <button class="nav-tab" data-page="analytics">
+          <span class="tab-icon">📅</span> <span>Study Logs & Streaks</span>
+        </button>
+        <button class="nav-tab" data-page="notes">
+          <span class="tab-icon">📝</span> <span>Notes Vault</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ====================================================================
+         PAGE 1: DASHBOARD
+         ==================================================================== -->
+    <section class="app-page active" id="page-dashboard">
+      
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <div class="hero-text">
+          <h2>Welcome back, Piyush! 👋</h2>
+          <p>Track your multi-course mastery across Data Science, Machine Learning, Generative AI, MLOps, and Security.</p>
+        </div>
+        <div class="hero-stats-badge">
+          <div class="hero-stat-item">
+            <div class="num" id="dash-total-courses">7</div>
+            <div class="label">Courses</div>
+          </div>
+          <div style="width: 1px; height: 30px; background: var(--border-medium);"></div>
+          <div class="hero-stat-item">
+            <div class="num">488</div>
+            <div class="label">Lectures</div>
+          </div>
+          <div style="width: 1px; height: 30px; background: var(--border-medium);"></div>
+          <div class="hero-stat-item">
+            <div class="num">634.6h</div>
+            <div class="label">Total Hours</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Global Metrics Grid -->
+      <div class="metrics-grid">
+        <!-- Metric 1: Overall Completion -->
+        <div class="metric-card accent-blue">
+          <div class="metric-header">
+            <span class="metric-title">Overall Completion</span>
+            <span>🏆</span>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="dash-overall-percent">0%</span>
+            <span class="metric-subvalue">completed</span>
+            <span class="metric-badge badge-blue">Global</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="dash-overall-bar" style="width: 0%;"></div>
+          </div>
+          <div class="metric-footer-text">
+            <span id="dash-overall-sub">0 of 488 Lectures Done</span>
+            <span>All Courses</span>
+          </div>
+        </div>
+
+        <!-- Metric 2: Hours Left -->
+        <div class="metric-card accent-purple">
+          <div class="metric-header">
+            <span class="metric-title">Remaining Study Load</span>
+            <span>⏳</span>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="dash-total-hours-rem">634.6h</span>
+            <span class="metric-subvalue">left</span>
+            <span class="metric-badge badge-purple">Target</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width: 100%; background: linear-gradient(90deg, #8b5cf6, #c084fc);"></div>
+          </div>
+          <div class="metric-footer-text">
+            <span id="dash-hours-sub">0h of 634.6h finished</span>
+            <span>Hands-on Labs</span>
+          </div>
+        </div>
+
+        <!-- Metric 3: Today's Time -->
+        <div class="metric-card accent-amber">
+          <div class="metric-header">
+            <span class="metric-title">Today's Study Time</span>
+            <span>⏱️</span>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="dash-today-time">0h 0m</span>
+            <span class="metric-subvalue">today</span>
+            <span class="metric-badge badge-amber" id="dash-streak-badge">🔥 0-Day Streak</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width: 100%; background: linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+          </div>
+          <div class="metric-footer-text">
+            <span>Daily consistency tracker</span>
+            <span>Keep pushing!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Stopwatch HUD -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 22px; margin-bottom: 28px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+          <h3 style="font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+            <span>⏱️ Active Study Stopwatch & Quick Logger</span>
+          </h3>
+          <span style="font-size: 0.76rem; color: var(--text-muted);">Real-time learning session</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 18px; text-align: center;">
+            <div class="timer-clock" id="dash-timer-clock" style="font-size: 2.8rem; font-family: var(--font-mono); font-weight: 800; color: white;">00:00:00</div>
+            <div id="dash-timer-lecture-name" style="font-size: 0.82rem; color: var(--color-primary); margin: 6px 0 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">General Study Session</div>
+            <div class="timer-controls" style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+              <button class="btn btn-primary" id="btn-dash-timer-start">▶ Start</button>
+              <button class="btn btn-danger" id="btn-dash-timer-pause" style="display: none;">⏸ Pause</button>
+              <button class="btn btn-success" id="btn-dash-timer-save">💾 Save Log</button>
+              <button class="btn btn-secondary btn-sm" id="btn-dash-timer-reset">↺ Reset</button>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 10px;">
+            <label style="font-size: 0.78rem; color: var(--text-muted);">Link timer to a specific lecture (optional):</label>
+            <select class="form-select" id="dash-timer-select" style="background: var(--bg-input); border: 1px solid var(--border-medium); padding: 8px 12px; border-radius: var(--radius-md); color: white; outline: none;">
+              <option value="">-- Link to Lecture --</option>
+            </select>
+            <div style="margin-top: 4px;">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Quick Add Minutes:</span>
+              <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+                <button class="quick-add-btn" data-mins="30">+30m</button>
+                <button class="quick-add-btn" data-mins="45">+45m</button>
+                <button class="quick-add-btn" data-mins="60">+1h</button>
+                <button class="quick-add-btn" data-mins="90">+1.5h</button>
+                <button class="quick-add-btn" data-mins="120">+2h</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Multi-Course Hub Cards -->
+      <div class="courses-hub-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <span>📚</span>
+            <span>Your Courses & Roadmaps (7 Courses)</span>
+          </h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Click any course to open its full lecture breakdown</span>
+        </div>
+
+        <div class="courses-grid" id="dash-courses-grid">
+          <!-- Rendered dynamically by tracker.js -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         PAGE 2: CURRICULUM & LECTURES EXPLORER
+         ==================================================================== -->
+    <section class="app-page" id="page-curriculum">
+      
+      <!-- Course Selector Bar -->
+      <div class="course-selector-bar">
+        <div class="active-course-heading">
+          <div class="icon" id="curriculum-course-icon">🎓</div>
+          <div>
+            <h3 id="curriculum-course-title">CampusX Data Science Mentorship Program</h3>
+            <p id="curriculum-course-instructor">Instructor: Nitish Singh • 308.6 Hours</p>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <label style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Switch Course:</label>
+          <select class="course-dropdown-select" id="curriculum-course-select">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Active Course Progress Banner -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px 20px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div>
+          <span style="font-size: 0.76rem; color: var(--text-muted); text-transform: uppercase;">Course Progress</span>
+          <div style="font-size: 1.1rem; font-weight: 700; color: white;" id="course-curriculum-metric">0 / 213 Lectures (0%)</div>
+        </div>
+        <div style="flex: 1; min-width: 200px; max-width: 400px;">
+          <div class="progress-bar-wrap" style="height: 9px;">
+            <div class="progress-bar-fill" id="course-curriculum-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search, Status Filters & Action Bar -->
+      <div class="control-bar">
+        <div class="control-bar-inner">
+          <div class="search-box-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="curriculum-search-input" placeholder="Search lectures, topics (e.g. Pandas, LangChain, MLflow, AWS, LeetCode)...">
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div class="status-pill-group">
+              <button class="status-pill active" data-status="all">All</button>
+              <button class="status-pill" data-status="inprogress">In Progress</button>
+              <button class="status-pill" data-status="completed">Done</button>
+              <button class="status-pill" data-status="pending">Pending</button>
+            </div>
+
+            <button class="btn btn-secondary btn-sm" id="btn-expand-all">Expand All</button>
+            <button class="btn btn-secondary btn-sm" id="btn-collapse-all">Collapse All</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modules Accordion Container -->
+      <div class="curriculum-list" id="curriculum-modules-list">
+        <!-- Rendered dynamically by tracker.js -->
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         PAGE 3: FINISH ESTIMATOR & STUDY PLANNER ("Kitna Time Lagega")
+         ==================================================================== -->
+    <section class="app-page" id="page-planner">
+      
+      <div class="planner-hero">
+        <h2 style="font-size: 1.45rem; font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+          <span>🎯 Completion Estimator & Study Planner</span>
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 700px;">
+          Calculate exactly how many days and months you need to complete each course based on your daily study commitment.
+        </p>
+      </div>
+
+      <!-- Daily Pace Slider Box -->
+      <div class="planner-slider-box">
+        <div class="slider-label-row">
+          <h4>Your Daily Study Target:</h4>
+          <span style="font-family: var(--font-mono); font-size: 1.2rem; font-weight: 700; color: var(--color-primary);" id="planner-slider-val">2.5 hrs / day</span>
+        </div>
+        <input type="range" class="slider-large" id="planner-slider" min="0.5" max="8.0" step="0.5" value="2.5">
+        <div class="slider-ticks">
+          <span>0.5h (Casual)</span>
+          <span>2.0h (Consistent)</span>
+          <span>4.0h (Intensive)</span>
+          <span>8.0h (Full-time Bootcamp)</span>
+        </div>
+      </div>
+
+      <!-- Overview Forecast Stat Cards -->
+      <div class="metrics-grid" style="margin-bottom: 24px;">
+        <div class="metric-card accent-blue">
+          <div class="metric-header">
+            <span class="metric-title">Days Needed (All Courses)</span>
+            <span>📅</span>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="plan-days-total">254 Days</span>
+          </div>
+          <div class="metric-footer-text">
+            <span>At your selected daily pace</span>
+          </div>
+        </div>
+
+        <div class="metric-card accent-emerald">
+          <div class="metric-header">
+            <span class="metric-title">Projected Graduation Date</span>
+            <span>🎓</span>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="plan-finish-date" style="font-size: 1.4rem; color: #34d399;">Calculating...</span>
+          </div>
+          <div class="metric-footer-text">
+            <span>Target completion milestone</span>
+          </div>
+        </div>
+
+        <div class="metric-card accent-purple">
+          <div class="metric-header">
+            <span class="metric-title">Remaining Study Hours</span>
+            <span>⏳</span>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="plan-hours-total">634.6h</span>
+          </div>
+          <div class="metric-footer-text">
+            <span>Lectures + implementation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="forecast-summary-banner" id="plan-summary-banner" style="margin-bottom: 24px; padding: 14px 18px; border-radius: var(--radius-md);">
+        Calculating your study roadmap...
+      </div>
+
+      <!-- Course-by-Course Forecast Table -->
+      <div class="forecast-table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <h3 style="font-size: 1.1rem; font-weight: 700;">📊 Course-by-Course Timeline Breakdown</h3>
+          <span style="font-size: 0.76rem; color: var(--text-muted);">Dynamic projections</span>
+        </div>
+        <table class="forecast-table">
+          <thead>
+            <tr>
+              <th>Course</th>
+              <th>Total Duration</th>
+              <th>Remaining Hours</th>
+              <th>Days Needed</th>
+              <th>Estimated Finish Date</th>
+            </tr>
+          </thead>
+          <tbody id="plan-courses-table-body">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         PAGE 4: STUDY ANALYTICS & LOGS
+         ==================================================================== -->
+    <section class="app-page" id="page-analytics">
+      
+      <div class="analytics-grid">
+        <!-- Streak Card -->
+        <div class="streak-card">
+          <div class="streak-fire-icon">🔥</div>
+          <div class="streak-number" id="analytics-streak-num">0</div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: white; margin-bottom: 4px;">Active Study Streak</h3>
+          <p style="font-size: 0.82rem; color: var(--text-muted);">
+            Consecutive days studied. Keep your momentum alive every single day!
+          </p>
+        </div>
+
+        <!-- Today & All-time Stats -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 22px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 14px;">📈 Study Performance Summary</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                <span style="font-size: 0.74rem; color: var(--text-muted); text-transform: uppercase;">Today's Study</span>
+                <div style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono); color: white;" id="analytics-today-time">0h 0m</div>
+              </div>
+              <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                <span style="font-size: 0.74rem; color: var(--text-muted); text-transform: uppercase;">All-Time Logged</span>
+                <div style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono); color: var(--color-primary);" id="analytics-alltime-hours">0.0h</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-sub); margin-top: 14px;">
+            Tip: Consistency beats intensity. 2 hours every day is far more effective than 10 hours once a week.
+          </div>
+        </div>
+      </div>
+
+      <!-- Logs History Table Card -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; overflow-x: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <h3 style="font-size: 1.05rem; font-weight: 700;">📅 Detailed Study Session Logs</h3>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Auto-saved locally</span>
+        </div>
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Duration</th>
+              <th>Lecture / Session</th>
+              <th>Notes</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="analytics-logs-body">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         PAGE 5: REVISION NOTES VAULT
+         ==================================================================== -->
+    <section class="app-page" id="page-notes">
+      
+      <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 24px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+            <span>📝 Lecture Notes & Revision Vault</span>
+          </h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">
+            All your personal summaries, GitHub repositories, Google Colab notebooks, and interview questions in one place.
+          </p>
+        </div>
+      </div>
+
+      <div class="notes-vault-grid" id="notes-cards-container">
+        <!-- Populated dynamically -->
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Lecture Notes Modal -->
+  <div class="modal-backdrop" id="modal-notes">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-notes-title">Lecture Notes</h3>
+        <button class="modal-close-btn" id="btn-close-notes">&times;</button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label" for="modal-notes-textarea">Your personal revision notes, Google Colab / GitHub links, formulas, or questions:</label>
+        <textarea id="modal-notes-textarea" class="form-input" style="height: 180px; resize: vertical; line-height: 1.5;" placeholder="e.g. Completed assignment on GitHub. Formula for PSEUDO RESIDUALS: r_im = - [d L(y, F(x)) / d F(x)]..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="btn-save-notes">Save Notes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Backup & Restore Modal -->
+  <div class="modal-backdrop" id="modal-backup">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">💾 Backup & Restore Progress</h3>
+        <button class="modal-close-btn" id="btn-close-backup">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">
+          All your checklist items, study hours, notes, and dates are saved automatically in your device browser's <code>localStorage</code>. You can download a JSON backup file anytime to sync between your phone and PC!
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <button class="btn btn-primary" id="btn-export-json">
+            📥 Download Progress Backup (JSON)
+          </button>
+          
+          <div style="border-top: 1px solid var(--border-subtle); padding-top: 12px; margin-top: 6px;">
+            <label class="form-label" style="margin-bottom: 6px;">Restore from JSON Backup file:</label>
+            <input type="file" id="import-file-input" accept=".json" class="form-input" style="padding: 6px;">
+          </div>
+
+          <div style="border-top: 1px solid var(--border-subtle); padding-top: 12px; margin-top: 6px;">
+            <button class="btn btn-danger btn-sm" id="btn-reset-all" style="width: 100%;">
+              ⚠️ Reset All Progress
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('modal-backup').classList.remove('active')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Data & Application Logic Scripts -->
+  <script src="all_courses_data.js"></script>
+  <script src="tracker.js"></script>
+</body>
+</html>
