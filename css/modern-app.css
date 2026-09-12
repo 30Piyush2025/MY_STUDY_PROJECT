@@ -307,15 +307,18 @@ html, body {
 /* Habit Card (Modern Card Depth & Subtle Hover Glow) */
 .habits-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 16px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .habit-card {
   background: var(--bg-secondary);
   border: var(--border-card-subtle);
   border-radius: var(--radius-card-md);
-  padding: 20px 22px;
+  padding: 18px 20px;
   box-shadow: var(--shadow-elevation-2);
   box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
   transition: var(--fluid-smooth);
@@ -323,6 +326,10 @@ html, body {
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .habit-card:hover {
@@ -1041,6 +1048,11 @@ html, body {
 }
 
 .audio-fft-canvas {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 52px;
+  display: block;
+  box-sizing: border-box;
   border-radius: 16px;
   border: var(--border-card-subtle);
   background: var(--bg-primary);
@@ -1241,12 +1253,20 @@ html, body {
    12. POLISHED SEGMENTED CONTROLS & NAVIGATION TABS
    ========================================================================== */
 .pomo-mode-selector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   border-radius: var(--radius-pill);
   padding: 5px;
   background: rgba(140, 130, 122, 0.14);
   border: var(--border-card-subtle);
   box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.06);
-  gap: 4px;
+  gap: 6px;
+  width: 100%;
+  max-width: 580px;
+  margin: 0 auto 24px;
+  box-sizing: border-box;
 }
 
 [data-theme="dark"] .pomo-mode-selector {
@@ -1254,13 +1274,30 @@ html, body {
 }
 
 .pomo-tab {
-  min-height: 44px;
-  padding: 8px 22px;
+  flex: 1 1 auto;
+  min-width: 110px;
+  min-height: 42px;
+  padding: 8px 16px;
   border-radius: var(--radius-pill);
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
+  text-align: center;
   transition: var(--spring-bounce);
+  box-sizing: border-box;
+}
+
+@media (max-width: 540px) {
+  .pomo-mode-selector {
+    border-radius: 16px;
+  }
+  .pomo-tab {
+    flex: 1 1 calc(50% - 6px);
+    padding: 7px 8px;
+    font-size: 0.76rem;
+    min-height: 38px;
+    min-width: 0;
+  }
 }
 
 .pomo-tab.active {
@@ -1321,19 +1358,34 @@ html, body {
    13. DESK STATS & REGAIN CARDS
    ========================================================================== */
 .stats-counter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
   border: none;
-  gap: 16px;
+  gap: 12px;
   padding: 10px 0 22px 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .stats-counter-grid .stat-item {
   background: var(--bg-secondary);
   border: var(--border-card-subtle);
-  border-radius: 20px;
-  padding: 18px 20px;
+  border-radius: 18px;
+  padding: 16px 14px;
   box-shadow: var(--shadow-elevation-2);
   box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
   transition: var(--fluid-smooth);
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.stats-counter-grid .stat-item .stat-num {
+  font-size: clamp(1.2rem, 3.8vw, 1.85rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .stats-counter-grid .stat-item:hover {
@@ -1346,11 +1398,15 @@ html, body {
   background: var(--bg-secondary);
   border: var(--border-card-subtle);
   border-radius: var(--radius-card-md);
-  padding: 22px 26px;
+  padding: 20px 22px;
   box-shadow: var(--shadow-elevation-2);
   box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
   transition: var(--fluid-smooth);
   margin-top: 24px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .regain-tag-dist-card:hover {
@@ -1430,3 +1486,152 @@ a.btn-pomo-sec,
 .btn-pomo-sec:active {
   transform: scale(0.96);
 }
+
+/* ==========================================================================
+   16. DASHBOARD ZERO-BLEED LAYOUT & RESPONSIVE COLUMN CONTAINMENT
+   Guarantees 100% visibility, zero horizontal clipping, and fluid balance
+   ========================================================================== */
+#view-dashboard {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.dashboard-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1040px) {
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 40px;
+    align-items: start;
+  }
+}
+
+.dashboard-grid > div {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.hero-card,
+.focus-card,
+.milestone-widget-section,
+.habits-widget-section,
+.regain-routines-section,
+.audio-studio-card,
+.regain-tracker-panel {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.focuspro-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.focuspro-cycle-pill,
+.focuspro-score-pill {
+  max-width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.focuspro-advisor-card {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.focuspro-advisor-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.advisor-pill {
+  flex: 1 1 auto;
+  max-width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.dash-quick-access-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--surface-border-subtle);
+}
+
+@media (max-width: 480px) {
+  .dash-quick-access-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+#view-dashboard img,
+#view-dashboard canvas,
+#view-dashboard svg {
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .main-container {
+    padding: 16px 12px 32px 12px !important;
+    max-width: 100% !important;
+  }
+  
+  .focuspro-status-bar {
+    padding: 6px 10px !important;
+    gap: 6px !important;
+  }
+
+  .focuspro-cycle-pill,
+  .focuspro-score-pill {
+    font-size: 0.72rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .focuspro-advisor-card {
+    padding: 16px 14px !important;
+  }
+
+  .milestone-card {
+    padding: 16px 14px !important;
+  }
+
+  .habit-card {
+    padding: 14px 14px !important;
+  }
+
+  .regain-tag-dist-card {
+    padding: 16px 14px !important;
+  }
+}
+

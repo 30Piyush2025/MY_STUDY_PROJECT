@@ -687,16 +687,28 @@ body {
    VIEW 1: THE STUDY DESK (REGAIN FOCUS & ANALYTICS LAYOUT)
    ========================================================================== */
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @media (min-width: 1040px) {
   .dashboard-grid {
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 48px;
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 40px;
+    align-items: start;
   }
+}
+
+.dashboard-grid > div {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Editorial Welcome Section */
@@ -706,8 +718,11 @@ body {
   border-radius: 0;
   padding: 0 0 20px 0;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   box-shadow: none;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .hero-header {
@@ -891,17 +906,24 @@ body {
   align-items: center;
   text-align: center;
   box-shadow: none;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .pomo-mode-selector {
   display: flex;
   background: rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-full);
-  padding: 4px;
-  gap: 4px;
+  padding: 5px;
+  gap: 6px;
   margin-bottom: 26px;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  max-width: 580px;
+  box-sizing: border-box;
 }
 
 [data-theme="light"] .pomo-mode-selector {
@@ -911,13 +933,26 @@ body {
 .pomo-tab {
   background: transparent;
   border: none;
-  padding: 8px 18px;
+  padding: 8px 16px;
   border-radius: var(--radius-full);
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
   transition: var(--transition-fast);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+@media (max-width: 540px) {
+  .pomo-mode-selector {
+    border-radius: 16px;
+  }
+  .pomo-tab {
+    flex: 1 1 calc(50% - 6px);
+    padding: 7px 8px;
+    font-size: 0.76rem;
+  }
 }
 
 .pomo-tab.active {
