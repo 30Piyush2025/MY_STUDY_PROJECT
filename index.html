@@ -57,6 +57,9 @@
 
       <!-- Actions & Profile -->
       <div class="header-actions">
+        <div class="live-focus-badge" title="Engineering Focus Studio">
+          <span>🟢</span> <span>Focus Mode</span>
+        </div>
         <div class="streak-pill" title="Current Daily Streak">
           <span>🔥</span> <span id="header-streak-val">0 Days</span>
         </div>
@@ -90,7 +93,7 @@
         <div>
           <div class="hero-card">
             <div class="hero-header">
-              <h2 class="hero-title">Welcome to your Study Desk, <em>Piyush</em></h2>
+              <h2 class="hero-title">Welcome to your Study Desk, <span class="gradient-text">Piyush</span></h2>
               <p class="hero-subtitle">
                 A dedicated personal sanctum for mastering Data Science, Machine Learning, and Distributed Systems. Everything is tracked locally: your 7 core curricula, 1,014+ lectures, and 1,769 topics.
               </p>
@@ -119,14 +122,49 @@
               </div>
             </div>
 
-            <!-- Learning Milestone Progress -->
-            <div style="margin-top: 20px;">
-              <div style="display: flex; justify-content: space-between; font-size: 0.76rem; font-weight: 700; margin-bottom: 6px;">
-                <span style="color: var(--accent-gold); font-family: var(--font-mono);">STUDY MILESTONE</span>
-                <span id="dash-rpg-xp" style="font-family: var(--font-mono); color: var(--text-secondary);">0 XP</span>
+            <!-- Regain-Style Curriculum Tag Distribution -->
+            <div class="regain-tag-dist-card">
+              <div class="regain-tag-dist-header">
+                <span>Curriculum Focus Distribution</span>
+                <span style="font-family: var(--font-mono); font-size: 0.74rem; color: var(--accent-blue);">7 Flagship Programs • 634.6h</span>
               </div>
-              <div style="width: 100%; height: 6px; background: rgba(160, 140, 120, 0.15); border-radius: var(--radius-full); overflow: hidden;">
-                <div id="dash-rpg-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-sage)); transition: width 0.4s ease;"></div>
+              <div class="regain-tag-row">
+                <div class="regain-tag-info">
+                  <span>Data Science & Analytics</span>
+                  <span style="color: var(--accent-orange); font-family: var(--font-mono);">254.6h</span>
+                </div>
+                <div class="regain-tag-bar">
+                  <div class="regain-tag-fill orange" style="width: 40%;"></div>
+                </div>
+              </div>
+              <div class="regain-tag-row">
+                <div class="regain-tag-info">
+                  <span>Deep Learning & Foundation Models</span>
+                  <span style="color: var(--accent-blue); font-family: var(--font-mono);">212.0h</span>
+                </div>
+                <div class="regain-tag-bar">
+                  <div class="regain-tag-fill blue" style="width: 33%;"></div>
+                </div>
+              </div>
+              <div class="regain-tag-row">
+                <div class="regain-tag-info">
+                  <span>Distributed Systems & Production MLOps</span>
+                  <span style="color: #a78bfa; font-family: var(--font-mono);">168.0h</span>
+                </div>
+                <div class="regain-tag-bar">
+                  <div class="regain-tag-fill purple" style="width: 27%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Learning Milestone Progress -->
+            <div style="margin-top: 18px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.76rem; font-weight: 700; margin-bottom: 6px;">
+                <span style="color: var(--accent-orange); font-family: var(--font-mono);">STUDY MILESTONE</span>
+                <span id="dash-rpg-xp" style="font-family: var(--font-mono); color: var(--accent-blue);">0 XP</span>
+              </div>
+              <div style="width: 100%; height: 6px; background: rgba(148, 163, 184, 0.15); border-radius: var(--radius-full); overflow: hidden;">
+                <div id="dash-rpg-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-orange), var(--accent-blue)); transition: width 0.4s ease;"></div>
               </div>
             </div>
           </div>
@@ -146,6 +184,7 @@
                 <circle class="timer-progress" id="timer-svg-progress" cx="110" cy="110" r="100"></circle>
               </svg>
               <div class="timer-display">
+                <div class="regain-session-pill" onclick="window.switchView('curriculum')" title="Switch Curriculum Program">Study ▾</div>
                 <div class="timer-digits" id="timer-digits">25:00</div>
                 <div class="timer-status-pill" id="timer-status-pill">QUIET CONCENTRATION</div>
               </div>
@@ -446,11 +485,11 @@
             </div>
             <div style="display: flex; gap: 5px; align-items: center; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
               <span>Less</span>
-              <span style="width: 10px; height: 10px; background: rgba(160, 140, 120, 0.12); border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #78350f; border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #b45309; border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #d97706; border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #e5a93c; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: rgba(56, 189, 248, 0.12); border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #0284c7; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #38bdf8; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #ffa25b; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #ff8a3d; border-radius: 2px;"></span>
               <span>More</span>
             </div>
           </div>

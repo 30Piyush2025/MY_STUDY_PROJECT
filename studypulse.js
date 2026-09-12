@@ -680,7 +680,7 @@
 
       for (let i = 0; i < dataArray.length; i++) {
         const barHeight = (dataArray[i] / 255) * canvas.height;
-        ctx.fillStyle = state.audio.isPlaying ? '#00f2ff' : 'rgba(148, 163, 184, 0.25)';
+        ctx.fillStyle = state.audio.isPlaying ? '#ff8a3d' : 'rgba(148, 163, 184, 0.25)';
         ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
         x += barWidth;
       }
@@ -947,11 +947,11 @@
       const activity = state.dailyActivity[item.date] || { topics: 0, focusMinutes: 0 };
       const score = (activity.topics * 2) + Math.floor(activity.focusMinutes / 15);
 
-      let color = 'rgba(160, 140, 120, 0.12)';
-      if (score >= 8) color = '#e5a93c'; // Burnished Gold
-      else if (score >= 4) color = '#d97706'; // Warm Amber
-      else if (score >= 2) color = '#b45309'; // Ochre
-      else if (score >= 1) color = '#78350f'; // Subtle Walnut
+      let color = 'rgba(255, 255, 255, 0.06)';
+      if (score >= 8) color = '#ff8a3d'; // Light Orange
+      else if (score >= 4) color = '#ffa25b'; // Soft Tangerine
+      else if (score >= 2) color = '#38bdf8'; // Light Blue
+      else if (score >= 1) color = '#0284c7'; // Deep Azure
 
       const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       rect.setAttribute('x', x);
