@@ -1312,3 +1312,199 @@
   color: #fef2f2 !important;
 }
 
+/* ==========================================================================
+   CRIMSON VOID THEME: 4 FLAGSHIP FEATURES EXTENSIONS
+   ========================================================================== */
+
+/* 1. Header Feature Pills */
+[data-theme="crimson"] .btn-feature-pill {
+  background: #0a0808 !important;
+  border-color: rgba(239, 68, 68, 0.28) !important;
+  color: #fef2f2 !important;
+}
+
+[data-theme="crimson"] .btn-feature-pill:hover {
+  background: #dc2626 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.5) !important;
+}
+
+/* 2. Segmented Mode Switchers */
+[data-theme="crimson"] .bookshelf-segmented-bar,
+[data-theme="crimson"] .chaos-segmented-bar {
+  background: #0a0808 !important;
+  border-color: rgba(239, 68, 68, 0.22) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8) !important;
+}
+
+[data-theme="crimson"] .bookshelf-seg-btn,
+[data-theme="crimson"] .chaos-seg-btn {
+  color: #fca5a5 !important;
+}
+
+[data-theme="crimson"] .bookshelf-seg-btn:hover,
+[data-theme="crimson"] .chaos-seg-btn:hover {
+  color: #ffffff !important;
+  background: rgba(239, 68, 68, 0.12) !important;
+}
+
+[data-theme="crimson"] .bookshelf-seg-btn.active,
+[data-theme="crimson"] .chaos-seg-btn.active {
+  background: linear-gradient(135deg, #ef4444, #991b1b) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.5) !important;
+}
+
+/* 3. 3D Cosmic Galaxy Knowledge Constellation */
+[data-theme="crimson"] .galaxy-hud-panel {
+  background: #0a0808 !important;
+  border-color: rgba(239, 68, 68, 0.22) !important;
+}
+
+[data-theme="crimson"] .galaxy-hud-badge {
+  background: rgba(239, 68, 68, 0.16) !important;
+  color: #ef4444 !important;
+}
+
+[data-theme="crimson"] .galaxy-filter-pill {
+  background: #120d0e !important;
+  border-color: rgba(239, 68, 68, 0.22) !important;
+  color: #fca5a5 !important;
+}
+
+[data-theme="crimson"] .galaxy-filter-pill:hover {
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="crimson"] .galaxy-filter-pill.active {
+  background: #dc2626 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.55) !important;
+}
+
+[data-theme="crimson"] .galaxy-node-dossier {
+  background: rgba(10, 8, 8, 0.95) !important;
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.35) !important;
+}
+
+/* 4. Architecture Workbench & Capacity Math Engine */
+[data-theme="crimson"] .workbench-panel,
+[data-theme="crimson"] .boe-calculator-section {
+  background: #0a0808 !important;
+  border-color: rgba(239, 68, 68, 0.22) !important;
+}
+
+[data-theme="crimson"] .workbench-select,
+[data-theme="crimson"] .boe-number-input {
+  background: #120d0e !important;
+  border-color: rgba(239, 68, 68, 0.28) !important;
+  color: #fef2f2 !important;
+}
+
+[data-theme="crimson"] .workbench-canvas-container {
+  background: #000000 !important;
+  background-image: radial-gradient(rgba(239, 68, 68, 0.15) 1.5px, transparent 1.5px) !important;
+  border-color: rgba(239, 68, 68, 0.22) !important;
+}
+
+[data-theme="crimson"] .workbench-wire {
+  stroke: #ef4444 !important;
+}
+
+[data-theme="crimson"] .workbench-wire-label {
+  fill: #fca5a5 !important;
+}
+
+[data-theme="crimson"] .workbench-node-card {
+  background: #120d0e !important;
+  border-color: rgba(239, 68, 68, 0.28) !important;
+  color: #fef2f2 !important;
+}
+
+[data-theme="crimson"] .workbench-node-card:hover {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.4) !important;
+}
+
+[data-theme="crimson"] .workbench-node-card.selected {
+  border-color: #ff3b3b !important;
+  box-shadow: 0 0 20px rgba(255, 59, 59, 0.6) !important;
+}
+
+[data-theme="crimson"] .boe-input-card,
+[data-theme="crimson"] .boe-metric-pill {
+  background: #120d0e !important;
+  border-color: rgba(239, 68, 68, 0.18) !important;
+}
+
+[data-theme="crimson"] .boe-metric-pill.highlight {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+[data-theme="crimson"] .boe-slider {
+  accent-color: #ef4444 !important;
+}
+
+/* 5. Modals (Code Lab & Bar Raiser) */
+[data-theme="crimson"] .modal-overlay {
+  background: rgba(0, 0, 0, 0.88) !important;
+}
+
+[data-theme="crimson"] .code-sandbox-card,
+[data-theme="crimson"] .bar-raiser-modal-card {
+  background: #0a0808 !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.22) !important;
+  color: #fef2f2 !important;
+}
+
+[data-theme="crimson"] .sandbox-template-select,
+[data-theme="crimson"] .sandbox-timing-badge,
+[data-theme="crimson"] .btn-sandbox-action,
+[data-theme="crimson"] .sandbox-textarea,
+[data-theme="crimson"] .sandbox-stdout,
+[data-theme="crimson"] .sandbox-visualizer-box,
+[data-theme="crimson"] .bar-raiser-scenario-select,
+[data-theme="crimson"] .bar-raiser-scenario-box,
+[data-theme="crimson"] .bar-raiser-textarea,
+[data-theme="crimson"] .bar-raiser-results-card,
+[data-theme="crimson"] .bar-raiser-rubric-item,
+[data-theme="crimson"] .model-answer-pre {
+  background: #120d0e !important;
+  border-color: rgba(239, 68, 68, 0.22) !important;
+  color: #fef2f2 !important;
+}
+
+[data-theme="crimson"] .sandbox-textarea:focus,
+[data-theme="crimson"] .bar-raiser-textarea:focus {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.4) !important;
+}
+
+[data-theme="crimson"] .bar-raiser-track-pill {
+  background: #120d0e !important;
+  border-color: rgba(239, 68, 68, 0.22) !important;
+  color: #fca5a5 !important;
+}
+
+[data-theme="crimson"] .bar-raiser-track-pill.active {
+  background: #dc2626 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.45) !important;
+}
+
+[data-theme="crimson"] .bar-raiser-scenario-box {
+  border-left-color: #ef4444 !important;
+}
+
+[data-theme="crimson"] .btn-sandbox-run {
+  background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.4) !important;
+}
+

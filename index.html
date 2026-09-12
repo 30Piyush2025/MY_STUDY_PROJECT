@@ -77,6 +77,12 @@
           <span id="rpg-level-badge">LVL 1</span>
           <span id="rpg-title-badge" style="opacity: 0.85; font-size: 0.72rem;">Code Initiate</span>
         </div>
+        <button class="btn-feature-pill" onclick="window.openCodeSandbox()" title="Open Python & Numerical Code Lab">
+          <span>💻</span> <span>Code Lab</span>
+        </button>
+        <button class="btn-feature-pill" onclick="window.openBarRaiserModal()" title="Open Socratic System Design & Mock Interview Griller">
+          <span>🤖</span> <span>Bar Raiser</span>
+        </button>
         <button class="icon-btn" id="theme-toggle-btn" onclick="window.toggleAppTheme()" title="Toggle Dark/Light Mode">
           <span id="theme-toggle-icon">☀️</span>
         </button>
@@ -655,28 +661,71 @@
       <div class="module-accordion-list" id="module-accordion-list"></div>
     </section>
 
-    <!-- VIEW 3: 3D TACTILE BOOKSHELF & FULLSCREEN LIBRARY -->
+    <!-- VIEW 3: 3D TACTILE BOOKSHELF & COSMIC GALAXY -->
     <section class="view-panel" id="view-bookshelf">
-      <div class="bookshelf-container" id="bookshelf-container">
-        <div class="bookshelf-hud">
-          <div class="bookshelf-hud-left">
-            <div class="bookshelf-hud-badge">
-              <span>📚 3D REFERENCE SHELF • 18 VOLUMES</span>
+      <!-- Segmented Mode Switcher: 3D Bookshelf vs 3D Cosmic Galaxy -->
+      <div class="bookshelf-segmented-bar">
+        <button class="bookshelf-seg-btn active" id="tab-btn-bookshelf-3d" onclick="window.switchBookshelfMode('shelf')">
+          <span>📚</span> <span>3D Library Shelf (18 Volumes)</span>
+        </button>
+        <button class="bookshelf-seg-btn" id="tab-btn-galaxy-3d" onclick="window.switchBookshelfMode('galaxy')">
+          <span>🌌</span> <span>Cosmic Synapse Galaxy</span>
+        </button>
+      </div>
+
+      <!-- Mode A: 3D Bookshelf -->
+      <div id="bookshelf-shelf-wrapper">
+        <div class="bookshelf-container" id="bookshelf-container">
+          <div class="bookshelf-hud">
+            <div class="bookshelf-hud-left">
+              <div class="bookshelf-hud-badge">
+                <span>📚 3D REFERENCE SHELF • 18 VOLUMES</span>
+              </div>
+              <div class="bookshelf-hud-badge hint-badge">
+                <span>👆 Tap any book to inspect syllabus</span>
+              </div>
             </div>
-            <div class="bookshelf-hud-badge hint-badge">
-              <span>👆 Tap any book to inspect syllabus</span>
+            <div class="bookshelf-hud-right">
+              <button class="bookshelf-hud-btn" id="btn-bookshelf-fullscreen" onclick="window.toggleBookshelfFullscreen()" title="Toggle Fullscreen 3D View">
+                <span id="bookshelf-fs-icon">⛶</span> <span id="bookshelf-fs-label">Fullscreen</span>
+              </button>
+              <button class="bookshelf-hud-btn" onclick="window.bookshelf3DClose()" title="Reset Camera View">
+                <span>↺ Reset</span>
+              </button>
             </div>
           </div>
-          <div class="bookshelf-hud-right">
-            <button class="bookshelf-hud-btn" id="btn-bookshelf-fullscreen" onclick="window.toggleBookshelfFullscreen()" title="Toggle Fullscreen 3D View">
-              <span id="bookshelf-fs-icon">⛶</span> <span id="bookshelf-fs-label">Fullscreen</span>
+          <div id="bookshelf-3d-canvas-container"></div>
+        </div>
+      </div>
+
+      <!-- Mode B: 3D Cosmic Galaxy -->
+      <div id="bookshelf-galaxy-wrapper" style="display: none;">
+        <div class="galaxy-hud-panel">
+          <div class="galaxy-hud-header">
+            <div>
+              <div class="galaxy-hud-badge">🌌 3D KNOWLEDGE GALAXY • 32 CROSS-CURRICULUM SYNAPSES</div>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 3px 0 0 0;">Drag to rotate starfield • Tap glowing stars to inspect prerequisite paths</p>
+            </div>
+            <button class="btn-pomo-sec" style="padding: 6px 14px; font-size: 0.78rem;" onclick="window.init3DKnowledgeGalaxy('galaxy-3d-canvas')">
+              <span>↺ Reset View</span>
             </button>
-            <button class="bookshelf-hud-btn" onclick="window.bookshelf3DClose()" title="Reset Camera View">
-              <span>↺ Reset</span>
-            </button>
+          </div>
+
+          <div class="galaxy-filter-bar">
+            <button class="galaxy-filter-pill active" data-track="all" onclick="window.filterGalaxyByTrack('all')">All Synapses</button>
+            <button class="galaxy-filter-pill" data-track="MATH" onclick="window.filterGalaxyByTrack('MATH')">📐 Math</button>
+            <button class="galaxy-filter-pill" data-track="PYTHON" onclick="window.filterGalaxyByTrack('PYTHON')">💻 Python & DSA</button>
+            <button class="galaxy-filter-pill" data-track="MACHINE LEARNING" onclick="window.filterGalaxyByTrack('MACHINE LEARNING')">📈 Machine Learning</button>
+            <button class="galaxy-filter-pill" data-track="DEEP LEARNING" onclick="window.filterGalaxyByTrack('DEEP LEARNING')">🧠 Deep Learning</button>
+            <button class="galaxy-filter-pill" data-track="SYSTEMS" onclick="window.filterGalaxyByTrack('SYSTEMS')">⚡ Systems</button>
           </div>
         </div>
-        <div id="bookshelf-3d-canvas-container"></div>
+
+        <div class="galaxy-canvas-container" id="galaxy-3d-canvas-box" style="position: relative;">
+          <div id="galaxy-3d-canvas" style="width: 100%; height: 420px; border-radius: 20px; overflow: hidden; background: #060913;"></div>
+          <!-- Floating Cosmic Dossier Card -->
+          <div class="galaxy-node-dossier" id="galaxy-node-dossier-card" style="display: none;"></div>
+        </div>
       </div>
     </section>
 
@@ -695,43 +744,174 @@
       </div>
     </section>
 
-    <!-- VIEW 5: DISTRIBUTED SYSTEMS ARCHITECTURE LAB -->
+    <!-- VIEW 5: DISTRIBUTED SYSTEMS ARCHITECTURE LAB & WORKBENCH -->
     <section class="view-panel" id="view-chaos">
-      <div class="chaos-lab-panel">
-        <div class="chaos-top-bar">
-          <div>
-            <h2 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600; margin-bottom: 4px;">Distributed Systems Architecture Lab</h2>
-            <p style="font-size: 0.86rem; color: var(--text-secondary);">Interactive fault injection and resilience testing workbench</p>
+      <!-- Chaos View Segmented Mode Switcher -->
+      <div class="chaos-segmented-bar">
+        <button class="chaos-seg-btn active" id="tab-btn-chaos-sim" onclick="window.switchChaosTab('sim')">
+          <span>⚡</span> <span>Chaos Simulator</span>
+        </button>
+        <button class="chaos-seg-btn" id="tab-btn-chaos-arch" onclick="window.switchChaosTab('arch')">
+          <span>📐</span> <span>Architecture Workbench</span>
+        </button>
+      </div>
+
+      <!-- Mode 1: Chaos Simulator -->
+      <div id="chaos-simulator-wrapper">
+        <div class="chaos-lab-panel">
+          <div class="chaos-top-bar">
+            <div>
+              <h2 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600; margin-bottom: 4px;">Distributed Systems Architecture Lab</h2>
+              <p style="font-size: 0.86rem; color: var(--text-secondary);">Interactive fault injection and resilience testing workbench</p>
+            </div>
+            <div class="chaos-arch-tabs">
+              <button class="btn-arch-tab active" data-arch="gateway" onclick="window.loadChaosArchitecture('gateway')">API Gateway & Redis</button>
+              <button class="btn-arch-tab" data-arch="raft" onclick="window.loadChaosArchitecture('raft')">Raft Consensus Quorum</button>
+              <button class="btn-arch-tab" data-arch="kafka" onclick="window.loadChaosArchitecture('kafka')">Kafka Microservices</button>
+            </div>
           </div>
-          <div class="chaos-arch-tabs">
-            <button class="btn-arch-tab active" data-arch="gateway" onclick="window.loadChaosArchitecture('gateway')">API Gateway & Redis</button>
-            <button class="btn-arch-tab" data-arch="raft" onclick="window.loadChaosArchitecture('raft')">Raft Consensus Quorum</button>
-            <button class="btn-arch-tab" data-arch="kafka" onclick="window.loadChaosArchitecture('kafka')">Kafka Microservices</button>
+
+          <div class="chaos-canvas-wrapper" id="chaos-canvas-wrapper">
+            <canvas id="chaos-canvas"></canvas>
+          </div>
+
+          <!-- Action Grid -->
+          <div class="chaos-controls-grid">
+            <button class="btn-chaos-action surge" onclick="window.chaosInjectTrafficSpike()">
+              <span>💥</span> <span>100k RPS Surge</span>
+            </button>
+            <button class="btn-chaos-action kill" onclick="window.chaosKillLeaderNode()">
+              <span>☠️</span> <span>Terminate Leader</span>
+            </button>
+            <button class="btn-chaos-action" onclick="window.chaosInjectLatencyJitter()">
+              <span>⏱️</span> <span>300ms Jitter</span>
+            </button>
+            <button class="btn-chaos-action heal" onclick="window.chaosHealCluster()">
+              <span>💚</span> <span>Heal Cluster</span>
+            </button>
+          </div>
+
+          <div class="chaos-console-logs" id="chaos-console-logs">
+            <div class="chaos-log-line" style="color: #64748b;">[SYSTEM ONLINE] Distributed architecture running normally. Select an action to test resilience.</div>
           </div>
         </div>
+      </div>
 
-        <div class="chaos-canvas-wrapper" id="chaos-canvas-wrapper">
-          <canvas id="chaos-canvas"></canvas>
-        </div>
+      <!-- Mode 2: System Design Architecture Workbench & Capacity Math Engine -->
+      <div id="chaos-workbench-wrapper" style="display: none;">
+        <div class="workbench-panel">
+          <!-- Top Bar -->
+          <div class="workbench-top-bar">
+            <div class="workbench-title-box">
+              <div class="workbench-badge">📐 SYSTEM DESIGN WORKBENCH & CAPACITY ENGINE</div>
+              <h2 id="workbench-active-title" style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: 4px 0 2px 0;">High-Throughput Feature Store & Real-Time Triton Inference</h2>
+              <p id="workbench-active-desc" style="font-size: 0.84rem; color: var(--text-secondary); margin: 0;">Low-latency ML inference architecture with dual-layer caching and GPU model serving.</p>
+            </div>
+            <div class="workbench-controls-group">
+              <label for="workbench-blueprint-select" style="font-size: 0.82rem; font-weight: 600; color: var(--text-secondary);">Blueprint:</label>
+              <select id="workbench-blueprint-select" class="workbench-select"></select>
+              <button class="btn-pomo-sec" style="padding: 7px 14px; font-size: 0.82rem;" onclick="window.initSystemWorkbench()">
+                <span>↺ Reset</span>
+              </button>
+            </div>
+          </div>
 
-        <!-- Action Grid -->
-        <div class="chaos-controls-grid">
-          <button class="btn-chaos-action surge" onclick="window.chaosInjectTrafficSpike()">
-            <span>💥</span> <span>100k RPS Surge</span>
-          </button>
-          <button class="btn-chaos-action kill" onclick="window.chaosKillLeaderNode()">
-            <span>☠️</span> <span>Terminate Leader</span>
-          </button>
-          <button class="btn-chaos-action" onclick="window.chaosInjectLatencyJitter()">
-            <span>⏱️</span> <span>300ms Jitter</span>
-          </button>
-          <button class="btn-chaos-action heal" onclick="window.chaosHealCluster()">
-            <span>💚</span> <span>Heal Cluster</span>
-          </button>
-        </div>
+          <!-- Whiteboard Canvas Container -->
+          <div class="workbench-canvas-wrapper">
+            <div class="workbench-canvas-hint">
+              <span>💡 Drag components to rearrange topology • Tap a node to inspect • Magnetic links auto-route</span>
+            </div>
+            <div class="workbench-canvas-container" id="workbench-canvas-container">
+              <svg class="workbench-svg-layer" id="workbench-svg-layer"></svg>
+              <div class="workbench-nodes-layer" id="workbench-nodes-layer"></div>
+            </div>
+          </div>
 
-        <div class="chaos-console-logs" id="chaos-console-logs">
-          <div class="chaos-log-line" style="color: #64748b;">[SYSTEM ONLINE] Distributed architecture running normally. Select an action to test resilience.</div>
+          <!-- Back-of-the-Envelope Capacity Estimator -->
+          <div class="boe-calculator-section">
+            <div class="boe-header-row">
+              <div class="boe-title-box">
+                <span style="font-size: 1.2rem;">🧮</span>
+                <div>
+                  <h3 style="margin: 0; font-size: 1rem; font-weight: 700;">Back-of-the-Envelope Capacity Estimator</h3>
+                  <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: var(--text-secondary);">Real-time quantitative sizing for QPS, bandwidth, daily storage, hot RAM, and p99 latency</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Parameters Grid -->
+            <div class="boe-inputs-grid">
+              <div class="boe-input-card">
+                <div class="boe-input-label-row">
+                  <label for="boe-dau-input">Daily Active Users (DAU):</label>
+                  <span class="boe-val-badge" id="boe-dau-val">10M</span>
+                </div>
+                <input type="range" id="boe-dau-input" min="100000" max="100000000" step="500000" value="10000000" class="boe-slider">
+              </div>
+
+              <div class="boe-input-card">
+                <div class="boe-input-label-row">
+                  <label for="boe-rw-ratio-input">Read : Write Ratio:</label>
+                  <span class="boe-val-badge" id="boe-rw-ratio-val">20:1</span>
+                </div>
+                <input type="range" id="boe-rw-ratio-input" min="1" max="100" step="1" value="20" class="boe-slider">
+              </div>
+
+              <div class="boe-input-card">
+                <div class="boe-input-label-row">
+                  <label for="boe-payload-input">Avg Payload Size:</label>
+                  <span class="boe-val-badge" id="boe-payload-val">2.5 KB</span>
+                </div>
+                <input type="range" id="boe-payload-input" min="0.5" max="50" step="0.5" value="2.5" class="boe-slider">
+              </div>
+
+              <div class="boe-input-card">
+                <div class="boe-input-label-row">
+                  <label for="boe-retention-input">Retention Period (Days):</label>
+                </div>
+                <input type="number" id="boe-retention-input" min="30" max="3650" step="30" value="365" class="boe-number-input">
+              </div>
+
+              <div class="boe-input-card">
+                <div class="boe-input-label-row">
+                  <label for="boe-replication-input">Replication Factor:</label>
+                </div>
+                <input type="number" id="boe-replication-input" min="1" max="7" step="1" value="3" class="boe-number-input">
+              </div>
+            </div>
+
+            <!-- Calculated Output Metric Grid -->
+            <div class="boe-metrics-grid">
+              <div class="boe-metric-pill">
+                <span class="boe-metric-label">Average QPS</span>
+                <span class="boe-metric-val" id="boe-metric-avg-qps">-- RPS</span>
+              </div>
+              <div class="boe-metric-pill highlight">
+                <span class="boe-metric-label">Peak QPS (2.5x)</span>
+                <span class="boe-metric-val" id="boe-metric-peak-qps">-- RPS</span>
+              </div>
+              <div class="boe-metric-pill">
+                <span class="boe-metric-label">Daily Ingestion</span>
+                <span class="boe-metric-val" id="boe-metric-daily-storage">--</span>
+              </div>
+              <div class="boe-metric-pill">
+                <span class="boe-metric-label">Total Storage (Replicated)</span>
+                <span class="boe-metric-val" id="boe-metric-total-storage">--</span>
+              </div>
+              <div class="boe-metric-pill">
+                <span class="boe-metric-label">Peak Bandwidth</span>
+                <span class="boe-metric-val" id="boe-metric-bandwidth">-- Gbps</span>
+              </div>
+              <div class="boe-metric-pill">
+                <span class="boe-metric-label">Hot Cache RAM (80/20)</span>
+                <span class="boe-metric-val" id="boe-metric-cache-ram">-- GB</span>
+              </div>
+              <div class="boe-metric-pill latency">
+                <span class="boe-metric-label">Est. p99 Latency</span>
+                <span class="boe-metric-val" id="boe-metric-p99-latency">-- ms</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1125,6 +1305,147 @@
   </div>
 
   <!-- =========================================================================
+       CODE LAB & NUMERICAL SANDBOX MODAL (PulseNumPy)
+       ========================================================================= -->
+  <div class="modal-overlay" id="code-sandbox-modal-overlay">
+    <div class="modal-card code-sandbox-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span style="font-size: 1.4rem;">💻</span>
+          <div>
+            <div class="modal-title-text">StudyPulse Code Lab & Numerical Sandbox</div>
+            <div class="modal-subtitle-text">In-Browser PulseNumPy Runtime • Microsecond Benchmarks • 2D/3D Tensor Heatmap</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="window.closeCodeSandbox()" title="Close Code Lab">✕</button>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="sandbox-toolbar">
+        <div class="sandbox-toolbar-left">
+          <label class="sandbox-select-label" for="sandbox-template-select">Template:</label>
+          <select id="sandbox-template-select" class="sandbox-template-select"></select>
+          <span class="sandbox-template-name" id="sandbox-active-template-title">NumPy Vectorization</span>
+        </div>
+        <div class="sandbox-toolbar-right">
+          <span class="sandbox-timing-badge" id="sandbox-exec-time">0.00 ms</span>
+          <button class="btn-sandbox-action" onclick="window.clearCodeSandboxConsole()"><span>🧹</span> Clear</button>
+          <button class="btn-sandbox-run" onclick="window.runCodeSandbox()"><span>▶ Run Code</span> <kbd>Ctrl+↵</kbd></button>
+        </div>
+      </div>
+
+      <!-- Dual Pane: Code Editor + Stdout & Tensor Visualizer -->
+      <div class="sandbox-dual-pane">
+        <div class="sandbox-editor-pane">
+          <div class="pane-header">
+            <span>PYTHON / NUMERICAL REPL</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">PulseNumPy v1.0 • Offline</span>
+          </div>
+          <textarea id="sandbox-code-editor" class="sandbox-textarea" spellcheck="false" placeholder="# Enter Python / PulseNumPy code here..."></textarea>
+        </div>
+
+        <div class="sandbox-output-pane">
+          <div class="pane-header">
+            <span>CONSOLE STDOUT</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Captures console.log & execution stats</span>
+          </div>
+          <pre id="sandbox-stdout" class="sandbox-stdout">// Console output will appear here after execution...</pre>
+
+          <div class="pane-header" style="margin-top: 12px;">
+            <span>ARRAY & STRIDE MEMORY VISUALIZER</span>
+          </div>
+          <div id="sandbox-array-visualizer" class="sandbox-visualizer-box">
+            <div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 18px 0;">No active matrix to visualize</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SOCRATIC SYSTEM DESIGN & MOCK INTERVIEW GRILLER (The Bar Raiser)
+       ========================================================================= -->
+  <div class="modal-overlay" id="bar-raiser-modal-overlay">
+    <div class="modal-card bar-raiser-modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span style="font-size: 1.4rem;">🤖</span>
+          <div>
+            <div class="modal-title-text">The Bar Raiser: Socratic Technical Screener</div>
+            <div class="modal-subtitle-text">High-Stakes Staff & Senior Interview Simulation • 16+ Production Incidents</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="window.closeBarRaiserModal()" title="Close Bar Raiser">✕</button>
+      </div>
+
+      <!-- Track Tabs -->
+      <div class="bar-raiser-tracks-bar">
+        <button class="bar-raiser-track-pill active" onclick="window.filterBarRaiserTrack('all')">All Tracks</button>
+        <button class="bar-raiser-track-pill" onclick="window.filterBarRaiserTrack('distributed')">⚡ Distributed Systems</button>
+        <button class="bar-raiser-track-pill" onclick="window.filterBarRaiserTrack('deeplearning')">🧠 Deep Learning</button>
+        <button class="bar-raiser-track-pill" onclick="window.filterBarRaiserTrack('mlops')">⚙️ Production MLOps</button>
+        <button class="bar-raiser-track-pill" onclick="window.filterBarRaiserTrack('algorithms')">📊 Algorithms & DSA</button>
+      </div>
+
+      <!-- Scenario Selector -->
+      <div class="bar-raiser-scenario-selector-row">
+        <label for="bar-raiser-scenario-select" style="font-weight: 600; font-size: 0.84rem;">Incident Scenario:</label>
+        <select id="bar-raiser-scenario-select" class="bar-raiser-scenario-select"></select>
+      </div>
+
+      <!-- Incident Prompt Box -->
+      <div class="bar-raiser-scenario-box">
+        <div class="bar-raiser-scenario-meta">
+          <span class="badge-track" id="bar-raiser-track">Distributed Systems</span>
+          <span class="badge-difficulty" id="bar-raiser-difficulty">Hard (Staff Tier)</span>
+        </div>
+        <h3 id="bar-raiser-title" class="bar-raiser-scenario-title">Scenario Title</h3>
+        <p id="bar-raiser-prompt" class="bar-raiser-scenario-prompt">Scenario description and technical prompt...</p>
+      </div>
+
+      <!-- Candidate Response Area -->
+      <div class="bar-raiser-answer-section">
+        <div class="bar-raiser-answer-header">
+          <span style="font-weight: 700; font-size: 0.88rem;">Your Engineering Solution:</span>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button id="btn-bar-raiser-mic" class="btn-voice-mic" onclick="window.toggleBarRaiserVoice()" title="Dictate Answer using Speech-to-Text">
+              <span>🎙️</span> <span>Dictate</span>
+            </button>
+          </div>
+        </div>
+        <textarea id="bar-raiser-user-answer" class="bar-raiser-textarea" placeholder="Explain your architectural design, quorum conditions, failure modes, trade-offs, and mitigation strategies in detail..."></textarea>
+        <div class="bar-raiser-action-row">
+          <button class="btn-pomo-sec" onclick="window.closeBarRaiserModal()">Close</button>
+          <button class="btn-pomo-main" style="padding: 10px 24px; font-weight: 700;" onclick="window.evaluateBarRaiserAnswer()">
+            <span>🎯 Evaluate with Rubric</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Evaluation & Results Card -->
+      <div class="bar-raiser-results-card" id="bar-raiser-results-card" style="display: none;">
+        <div class="results-header-banner">
+          <div>
+            <div class="results-score-label">EVALUATION SCORE</div>
+            <div class="results-score-value" id="bar-raiser-score-num">0 / 100</div>
+          </div>
+          <div class="results-tier-badge" id="bar-raiser-tier-badge">L5 Senior Systems Engineer</div>
+        </div>
+
+        <div class="rubric-breakdown-section">
+          <h4 style="margin: 12px 0 8px 0; font-size: 0.92rem;">Concept & Rubric Breakdown:</h4>
+          <div id="bar-raiser-rubric-list" class="rubric-items-list"></div>
+        </div>
+
+        <div class="model-answer-section">
+          <h4 style="margin: 14px 0 8px 0; font-size: 0.92rem;">Staff Architect Model Answer:</h4>
+          <pre id="bar-raiser-model-answer" class="model-answer-pre"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
        MOBILE BOTTOM NAVIGATION (REGAIN COMPLETE BAR)
        ========================================================================= -->
   <nav class="bottom-nav" aria-label="Mobile Bottom Navigation">
@@ -1160,5 +1481,9 @@
   <script src="js/chaos-simulator.js"></script>
   <script src="studypulse.js"></script>
   <script src="js/stats-analytics.js"></script>
+  <script src="js/galaxy-3d.js"></script>
+  <script src="js/code-sandbox.js"></script>
+  <script src="js/system-workbench.js"></script>
+  <script src="js/bar-raiser-griller.js"></script>
 </body>
 </html>

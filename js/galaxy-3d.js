@@ -1,6 +1,13 @@
 /**
  * StudyPulse 3D Knowledge Galaxy Engine
- * Interactive Obsidian-Style 3D Constellation & Prerequisite Graph
+ * File: js/galaxy-3d.js
+ *
+ * Interactive 3D Cosmic Constellation & Prerequisite Graph
+ * - 32 Interconnected Cross-Curriculum Star Nodes across Math, Python, Algorithms, ML, DL, Systems
+ * - Glowing Prerequisite Laser Synapses
+ * - Dynamic Category Filtering (Math, Python, Algorithms, ML, Deep Learning, Systems)
+ * - Interactive Floating Cosmic Dossier Card
+ * - Segmented Sub-view Controller for 3D Bookshelf (Shelf vs Galaxy)
  */
 
 (function() {
@@ -15,7 +22,7 @@
     // Branch 2: Python & Data Engineering
     { id: "py-core", label: "CPython & Memory Internals", bookIdx: 1, x: -1.5, y: -0.5, z: 2.2, color: 0x10b981, track: "PYTHON", tier: 1, xp: 250, desc: "Reference counting, cyclic GC, dict hash table mechanics" },
     { id: "py-oop", label: "Advanced Python & Metaclasses", bookIdx: 2, x: -0.8, y: -1.4, z: 2.6, color: 0x10b981, track: "PYTHON", tier: 2, xp: 300, prereqs: ["py-core"], desc: "MRO C3 linearization, dunder methods, decorators" },
-    { id: "numpy-simd", label: "NumPy Vectorization & SIMD", bookIdx: 3, x: -1.8, y: 0.6, z: 1.5, color: 0x34d399, track: "NUMERICAL", tier: 2, xp: 280, prereqs: ["py-core", "math-linalg"], desc: "Strides, buffer protocol, broadcasting mechanics" },
+    { id: "numpy-simd", label: "NumPy Vectorization & SIMD", bookIdx: 3, x: -1.8, y: 0.6, z: 1.5, color: 0x34d399, track: "DATA", tier: 2, xp: 280, prereqs: ["py-core", "math-linalg"], desc: "Strides, buffer protocol, broadcasting mechanics" },
     { id: "pandas-etl", label: "Pandas Wrangling & MultiIndex", bookIdx: 4, x: -1.2, y: -0.2, z: 3.2, color: 0x34d399, track: "DATA", tier: 2, xp: 320, prereqs: ["numpy-simd"], desc: "Split-apply-combine, index alignment, ETL workflows" },
     { id: "sql-window", label: "SQL Relational & Window Analytics", bookIdx: 6, x: -0.2, y: -2.2, z: 1.8, color: 0xfacc15, track: "DATABASE", tier: 2, xp: 350, desc: "OVER (PARTITION BY), CTEs, B-Tree index optimization" },
 
@@ -60,9 +67,9 @@
   let isGalaxyInit = false;
   let isGalaxyDragging = false;
   let prevPos = { x: 0, y: 0 };
-  let galaxyOrbit = { yaw: 0, pitch: 0 };
   let hoveredGalaxyNode = null;
   let galaxyTooltipElem = null;
+  let activeTrackFilter = 'all';
 
   const galaxyRaycaster = new THREE.Raycaster();
   const galaxyMouse = new THREE.Vector2();
@@ -71,16 +78,20 @@
     galaxyContainer = document.getElementById(containerId);
     if (!galaxyContainer) return;
 
-    // Reset container if re-initializing
+    if (isGalaxyInit && galaxyRenderer) {
+      onGalaxyResize();
+      return;
+    }
+
     galaxyContainer.innerHTML = '';
     nodeMeshes = [];
     linkLines = [];
 
-    const width = galaxyContainer.clientWidth || 600;
-    const height = galaxyContainer.clientHeight || 260;
+    const width = galaxyContainer.clientWidth || 800;
+    const height = Math.max(340, galaxyContainer.clientHeight || 420);
 
     galaxyScene = new THREE.Scene();
-    galaxyScene.background = new THREE.Color(0x0a0f1d);
+    galaxyScene.background = new THREE.Color(0x060913);
 
     galaxyCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
     galaxyCamera.position.set(0, 0, 9.5);
@@ -91,29 +102,33 @@
     galaxyRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     galaxyContainer.appendChild(galaxyRenderer.domElement);
 
-    // Subtle Ambient & Star Light
-    const amb = new THREE.AmbientLight(0xffffff, 0.85);
+    // Subtle Ambient & Point Lights
+    const amb = new THREE.AmbientLight(0xffffff, 0.9);
     galaxyScene.add(amb);
 
-    const pt = new THREE.PointLight(0x38bdf8, 1.2, 20);
-    pt.position.set(0, 0, 5);
-    galaxyScene.add(pt);
+    const pt1 = new THREE.PointLight(0x38bdf8, 1.4, 25);
+    pt1.position.set(0, 4, 6);
+    galaxyScene.add(pt1);
+
+    const pt2 = new THREE.PointLight(0xf97316, 1.0, 20);
+    pt2.position.set(-4, -3, 5);
+    galaxyScene.add(pt2);
 
     // Background Celestial Stars Field
-    const starCount = 280;
+    const starCount = 350;
     const starGeo = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
     for (let i = 0; i < starCount * 3; i += 3) {
-      starPositions[i] = (Math.random() - 0.5) * 22;
-      starPositions[i + 1] = (Math.random() - 0.5) * 16;
-      starPositions[i + 2] = (Math.random() - 0.5) * 16;
+      starPositions[i] = (Math.random() - 0.5) * 26;
+      starPositions[i + 1] = (Math.random() - 0.5) * 18;
+      starPositions[i + 2] = (Math.random() - 0.5) * 18;
     }
     starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
     const starMat = new THREE.PointsMaterial({
       color: 0x94a3b8,
       size: 0.05,
       transparent: true,
-      opacity: 0.5
+      opacity: 0.55
     });
     const starField = new THREE.Points(starGeo, starMat);
     galaxyScene.add(starField);
@@ -122,7 +137,6 @@
     const galaxyPivot = new THREE.Group();
     galaxyScene.add(galaxyPivot);
 
-    // Create Map for quick ID lookup
     const nodeMap = {};
 
     // Build Node Meshes
@@ -131,8 +145,8 @@
       const sphereMat = new THREE.MeshStandardMaterial({
         color: n.color,
         emissive: n.color,
-        emissiveIntensity: 0.45,
-        roughness: 0.3,
+        emissiveIntensity: 0.5,
+        roughness: 0.25,
         metalness: 0.2
       });
 
@@ -144,12 +158,12 @@
       nodeMap[n.id] = nodeMesh;
 
       // Outer Glowing Ring / Halo
-      const ringGeo = new THREE.RingGeometry(0.26 + (n.tier * 0.03), 0.30 + (n.tier * 0.03), 24);
+      const ringGeo = new THREE.RingGeometry(0.26 + (n.tier * 0.03), 0.31 + (n.tier * 0.03), 24);
       const ringMat = new THREE.MeshBasicMaterial({
         color: n.color,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.3
+        opacity: 0.35
       });
       const halo = new THREE.Mesh(ringGeo, ringMat);
       nodeMesh.add(halo);
@@ -188,7 +202,7 @@
     galaxyTooltipElem.style.pointerEvents = 'none';
     galaxyContainer.appendChild(galaxyTooltipElem);
 
-    // Event Listeners for Interaction & 3D Orbit
+    // Pointer events
     galaxyContainer.addEventListener('pointerdown', e => {
       isGalaxyDragging = true;
       prevPos = { x: e.clientX, y: e.clientY };
@@ -201,7 +215,6 @@
 
     galaxyContainer.addEventListener('pointermove', onGalaxyPointerMove);
     galaxyContainer.addEventListener('click', onGalaxyClick);
-
     window.addEventListener('resize', onGalaxyResize);
 
     // Animation Loop
@@ -209,13 +222,11 @@
       galaxyAnimId = requestAnimationFrame(loop);
 
       if (!isGalaxyDragging) {
-        // Slow majestic galactic rotation
-        galaxyPivot.rotation.y += 0.0018;
-        galaxyPivot.rotation.x += 0.0006;
+        galaxyPivot.rotation.y += 0.0016;
+        galaxyPivot.rotation.x += 0.0005;
       }
 
-      starField.rotation.y += 0.0004;
-
+      starField.rotation.y += 0.0003;
       galaxyRenderer.render(galaxyScene, galaxyCamera);
     }
     loop();
@@ -246,7 +257,7 @@
         const hit = hits[0].object;
         if (hoveredGalaxyNode !== hit) {
           if (hoveredGalaxyNode) {
-            hoveredGalaxyNode.material.emissiveIntensity = 0.45;
+            hoveredGalaxyNode.material.emissiveIntensity = 0.5;
             hoveredGalaxyNode.scale.set(1, 1, 1);
           }
           hoveredGalaxyNode = hit;
@@ -255,14 +266,14 @@
           galaxyContainer.style.cursor = 'pointer';
 
           const d = hoveredGalaxyNode.userData;
-          galaxyTooltipElem.innerHTML = `🌌 <strong>${d.label}</strong> [Tier ${d.tier}] • +${d.xp} XP<br><span style="opacity:0.8; font-size:0.68rem;">${d.desc} (Click to inspect)</span>`;
+          galaxyTooltipElem.innerHTML = `🌌 <strong>${d.label}</strong> [${d.track}] • +${d.xp} XP<br><span style="opacity:0.85; font-size:0.70rem;">${d.desc}</span>`;
           galaxyTooltipElem.style.display = 'block';
         }
         galaxyTooltipElem.style.left = `${e.clientX - rect.left + 12}px`;
         galaxyTooltipElem.style.top = `${e.clientY - rect.top - 36}px`;
       } else {
         if (hoveredGalaxyNode) {
-          hoveredGalaxyNode.material.emissiveIntensity = 0.45;
+          hoveredGalaxyNode.material.emissiveIntensity = 0.5;
           hoveredGalaxyNode.scale.set(1, 1, 1);
         }
         hoveredGalaxyNode = null;
@@ -271,29 +282,127 @@
       }
     }
 
-    function onGalaxyClick(e) {
+    function onGalaxyClick() {
       if (hoveredGalaxyNode) {
         const d = hoveredGalaxyNode.userData;
-        if (typeof window.switchAppTab === 'function') {
-          window.switchAppTab('bookshelf');
-          setTimeout(() => {
-            if (typeof window.bookshelf3DOpenBook === 'function') {
-              window.bookshelf3DOpenBook(d.bookIdx);
-            }
-          }, 150);
-        }
+        showCosmicDossier(d);
       }
     }
 
     function onGalaxyResize() {
       if (!galaxyContainer || !galaxyRenderer || !galaxyCamera) return;
-      const w = galaxyContainer.clientWidth || 600;
-      const h = galaxyContainer.clientHeight || 260;
+      const w = galaxyContainer.clientWidth || 800;
+      const h = Math.max(340, galaxyContainer.clientHeight || 420);
       galaxyCamera.aspect = w / h;
       galaxyCamera.updateProjectionMatrix();
       galaxyRenderer.setSize(w, h);
     }
   }
 
+  function showCosmicDossier(nodeData) {
+    const card = document.getElementById('galaxy-node-dossier-card');
+    if (!card) return;
+
+    // Find prereqs and downstream
+    const prereqs = (nodeData.prereqs || []).map(pid => {
+      const p = GALAXY_NODES.find(n => n.id === pid);
+      return p ? p.label : pid;
+    });
+
+    const unlocks = GALAXY_NODES.filter(n => n.prereqs && n.prereqs.includes(nodeData.id)).map(n => n.label);
+
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+        <div>
+          <span class="cosmic-badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">${nodeData.track} · TIER ${nodeData.tier}</span>
+          <h4 style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; margin: 4px 0 0 0; color: var(--text-primary);">${escapeHtml(nodeData.label)}</h4>
+        </div>
+        <button class="icon-btn" style="min-width: 32px; min-height: 32px; font-size: 0.8rem;" onclick="document.getElementById('galaxy-node-dossier-card').style.display='none'">✕</button>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45; margin-bottom: 12px;">${escapeHtml(nodeData.desc)}</p>
+
+      <div style="font-size: 0.74rem; margin-bottom: 8px;">
+        <strong style="color: var(--accent-orange);">Prerequisites:</strong> 
+        <span>${prereqs.length > 0 ? escapeHtml(prereqs.join(', ')) : 'None (Core Foundation)'}</span>
+      </div>
+
+      <div style="font-size: 0.74rem; margin-bottom: 14px;">
+        <strong style="color: #10b981;">Unlocks Downstream:</strong> 
+        <span>${unlocks.length > 0 ? escapeHtml(unlocks.join(', ')) : 'Advanced Specialization'}</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="btn-pomo-main" style="padding: 6px 16px; font-size: 0.78rem;" onclick="window.openGalaxyBook(${nodeData.bookIdx})">
+          <span>📖 Open Volume ${nodeData.bookIdx + 1}</span>
+        </button>
+      </div>
+    `;
+
+    card.style.display = 'block';
+  }
+
+  function filterGalaxyByTrack(track) {
+    activeTrackFilter = track;
+
+    // Update filter pills UI
+    document.querySelectorAll('.galaxy-filter-pill').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.track === track);
+    });
+
+    nodeMeshes.forEach(mesh => {
+      const d = mesh.userData;
+      const matches = (track === 'all' || d.track.includes(track) || (track === 'SYSTEMS' && (d.track.includes('DISTRIBUTED') || d.track.includes('BIG DATA') || d.track.includes('MLOPS'))));
+      mesh.visible = matches;
+    });
+
+    linkLines.forEach(line => {
+      const fromNode = GALAXY_NODES.find(n => n.id === line.userData.from);
+      const toNode = GALAXY_NODES.find(n => n.id === line.userData.to);
+      const visible = fromNode && toNode && 
+        (activeTrackFilter === 'all' || 
+         (fromNode.track.includes(activeTrackFilter) && toNode.track.includes(activeTrackFilter)));
+      line.visible = visible;
+    });
+  }
+
+  function switchBookshelfMode(mode) {
+    const shelfWrapper = document.getElementById('bookshelf-shelf-wrapper');
+    const galaxyWrapper = document.getElementById('bookshelf-galaxy-wrapper');
+    const tabBtnShelf = document.getElementById('tab-btn-bookshelf-3d');
+    const tabBtnGalaxy = document.getElementById('tab-btn-galaxy-3d');
+
+    if (mode === 'galaxy') {
+      if (shelfWrapper) shelfWrapper.style.display = 'none';
+      if (galaxyWrapper) galaxyWrapper.style.display = 'block';
+      if (tabBtnShelf) tabBtnShelf.classList.remove('active');
+      if (tabBtnGalaxy) tabBtnGalaxy.classList.add('active');
+      init3DKnowledgeGalaxy('galaxy-3d-canvas');
+    } else {
+      if (shelfWrapper) shelfWrapper.style.display = 'block';
+      if (galaxyWrapper) galaxyWrapper.style.display = 'none';
+      if (tabBtnShelf) tabBtnShelf.classList.add('active');
+      if (tabBtnGalaxy) tabBtnGalaxy.classList.remove('active');
+    }
+  }
+
+  function openGalaxyBook(bookIdx) {
+    switchBookshelfMode('shelf');
+    setTimeout(() => {
+      if (typeof window.bookshelf3DOpenBook === 'function') {
+        window.bookshelf3DOpenBook(bookIdx);
+      }
+    }, 120);
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
   window.init3DKnowledgeGalaxy = init3DKnowledgeGalaxy;
+  window.switchBookshelfMode = switchBookshelfMode;
+  window.filterGalaxyByTrack = filterGalaxyByTrack;
+  window.openGalaxyBook = openGalaxyBook;
 })();
