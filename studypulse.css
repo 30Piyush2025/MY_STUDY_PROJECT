@@ -3130,3 +3130,629 @@ body {
   color: var(--text-muted);
   pointer-events: none;
 }
+
+/* ==========================================================================
+   FOCUSPRO AI PRODUCTIVITY & AUTO-FLOW CYCLE (Play Store FocusPro AI)
+   ========================================================================== */
+.focuspro-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-full);
+}
+
+.focuspro-cycle-pill,
+.focuspro-score-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.focuspro-cycle-pill {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.focuspro-cycle-pill:hover {
+  background: var(--surface-border-active);
+  transform: translateY(-1px);
+}
+
+.focuspro-score-pill {
+  color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+  border: 1px solid var(--accent-orange-border);
+}
+
+.focuspro-score-pill:hover {
+  box-shadow: var(--accent-orange-glow);
+  transform: translateY(-1px);
+}
+
+/* FocusPro AI Advisor Cockpit Card */
+.focuspro-advisor-card {
+  margin-top: 22px;
+  padding: 16px 18px;
+  background: var(--bg-primary);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 18px rgba(60, 45, 30, 0.04);
+  transition: var(--transition-fast);
+  text-align: left;
+}
+
+[data-theme="dark"] .focuspro-advisor-card {
+  box-shadow: 0 6px 20px rgba(18, 14, 12, 0.4);
+}
+
+.focuspro-advisor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.focuspro-advisor-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.advisor-robot-icon {
+  font-size: 1.15rem;
+}
+
+.advisor-title-text {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.advisor-live-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+  border: 1px solid var(--accent-orange-border);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.05em;
+}
+
+.btn-advisor-action {
+  background: transparent;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: var(--transition-fast);
+}
+
+.btn-advisor-action:hover {
+  color: var(--accent-orange);
+}
+
+.focuspro-advisor-body {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.focuspro-advisor-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.advisor-pill {
+  background: var(--bg-secondary);
+  border: 1px solid var(--surface-border);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.advisor-pill:hover {
+  background: var(--accent-orange-soft);
+  border-color: var(--accent-orange-border);
+  color: var(--accent-orange);
+}
+
+/* ==========================================================================
+   HABIT TRACKER: DAILY ROUTINE & GOALS (Play Store Integration)
+   ========================================================================== */
+.habits-widget-section {
+  margin-top: 32px;
+  margin-bottom: 28px;
+}
+
+.habits-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.habits-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.habits-title-icon {
+  font-size: 1.35rem;
+}
+
+.habits-title-text {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.habits-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 3px;
+  margin-bottom: 0;
+}
+
+.habits-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.habits-progress-pill {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+  border: 1px solid var(--accent-orange-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.btn-add-habit {
+  background: var(--bg-secondary);
+  border: 1px solid var(--surface-border);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.80rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-fast);
+}
+
+.btn-add-habit:hover {
+  background: var(--accent-orange);
+  color: #ffffff;
+  border-color: var(--accent-orange);
+  box-shadow: var(--accent-orange-glow);
+}
+
+/* Routine Linear Progress Bar */
+.habits-progress-wrap {
+  margin-bottom: 18px;
+}
+
+.habits-progress-track {
+  width: 100%;
+  height: 7px;
+  background: rgba(140, 130, 122, 0.16);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .habits-progress-track {
+  background: rgba(245, 235, 224, 0.10);
+}
+
+.habits-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-orange), var(--accent-blue));
+  border-radius: var(--radius-full);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.habits-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* Habits Grid */
+.habits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+/* Habit Card */
+.habit-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  box-shadow: 0 4px 18px rgba(60, 45, 30, 0.05);
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+[data-theme="dark"] .habit-card {
+  box-shadow: 0 6px 20px rgba(18, 14, 12, 0.4);
+}
+
+.habit-card:hover {
+  border-color: var(--surface-border-active);
+  transform: translateY(-2px);
+}
+
+.habit-card.completed {
+  border-color: rgba(5, 150, 105, 0.35);
+  background: rgba(5, 150, 105, 0.04);
+}
+
+[data-theme="dark"] .habit-card.completed {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.06);
+}
+
+.habit-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.habit-category-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.habit-streak-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+}
+
+.habit-card-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.habit-icon-wrap {
+  font-size: 1.7rem;
+  line-height: 1;
+  flex-shrink: 0;
+  padding: 4px;
+}
+
+.habit-text-wrap {
+  min-width: 0;
+}
+
+.habit-title {
+  font-family: var(--font-sans);
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 3px 0;
+  line-height: 1.35;
+}
+
+.habit-card.completed .habit-title {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.habit-target-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.habit-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--surface-border-subtle);
+  gap: 8px;
+}
+
+/* 7-Day History Mini-Dots (Habit Tracker Daily Routine Feature) */
+.habit-history-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.history-dot-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.history-dot-letter {
+  font-family: var(--font-mono);
+  font-size: 0.60rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.history-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  background: rgba(140, 130, 122, 0.20);
+  border: 0.5px solid rgba(68, 54, 42, 0.10);
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .history-dot {
+  background: rgba(245, 235, 224, 0.10);
+  border-color: rgba(245, 235, 224, 0.05);
+}
+
+.history-dot.active {
+  background: var(--accent-orange);
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 8px rgba(217, 119, 6, 0.4);
+}
+
+/* Checkmark Toggle Button */
+.btn-habit-toggle {
+  background: var(--bg-primary);
+  border: 1.5px solid var(--surface-border);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.btn-habit-toggle:hover {
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+}
+
+.btn-habit-toggle.done {
+  background: var(--accent-sage);
+  border-color: var(--accent-sage);
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(5, 150, 105, 0.3);
+}
+
+[data-theme="dark"] .btn-habit-toggle.done {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+/* Habit Modal & Icon Selector */
+.habit-modal-card {
+  max-width: 480px;
+}
+
+.habit-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.habit-field.full-width {
+  grid-column: span 2;
+}
+
+@media (max-width: 600px) {
+  .habit-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .habit-field.full-width {
+    grid-column: span 1;
+  }
+}
+
+.habit-icon-selector {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-icon-opt {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  border: 1.5px solid var(--surface-border);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.btn-icon-opt:hover {
+  border-color: var(--accent-orange);
+  transform: scale(1.08);
+}
+
+.btn-icon-opt.active {
+  border-color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+  box-shadow: var(--accent-orange-glow);
+}
+
+/* FocusPro AI Advisor Modal */
+.focuspro-ai-modal-card {
+  max-width: 520px;
+}
+
+.focuspro-metric-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 480px) {
+  .focuspro-metric-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.focuspro-metric-pill {
+  background: var(--bg-primary);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  text-align: center;
+}
+
+.focuspro-metric-pill .lbl {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.focuspro-metric-pill .val {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--accent-orange);
+}
+
+.focuspro-feed-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.focuspro-feed-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+
+.focuspro-feed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+  margin-bottom: 4px;
+}
+
+.focuspro-feed-header .rec-time {
+  font-size: 0.60rem;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+
+.focuspro-feed-card p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.48;
+  margin: 0;
+}
+
+.focuspro-quick-prompts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-prompt-chip {
+  background: var(--bg-secondary);
+  border: 1px solid var(--surface-border);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-prompt-chip:hover {
+  background: var(--accent-orange-soft);
+  border-color: var(--accent-orange-border);
+  color: var(--accent-orange);
+}

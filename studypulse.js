@@ -19,7 +19,9 @@
     THEME: 'studypulse_theme_v3',
     XP: 'studypulse_xp_v2',
     FSRS: 'studypulse_fsrs_v2',
-    MILESTONES: 'studypulse_milestones_v2'
+    MILESTONES: 'studypulse_milestones_v2',
+    HABITS: 'studypulse_habits_v2',
+    FOCUSPRO_STEP: 'studypulse_focuspro_step_v2'
   };
 
   const DEFAULT_MILESTONES = {
@@ -28,6 +30,74 @@
     examTitle: "Data Science & Distributed Systems Mastery",
     targetDate: "2026-11-15"
   };
+
+  const DEFAULT_HABITS = [
+    {
+      id: 'habit_morning_deep_work',
+      title: 'Morning Deep Work Sprint',
+      category: 'DEEP FOCUS',
+      icon: '🌅',
+      target: '45m deep focus algorithmic study',
+      streak: 3,
+      history: {}
+    },
+    {
+      id: 'habit_dsa_problem',
+      title: 'Solve 1 LeetCode / DSA Problem',
+      category: 'ALGORITHMS',
+      icon: '🧩',
+      target: 'Graph, Tree, or Dynamic Programming',
+      streak: 4,
+      history: {}
+    },
+    {
+      id: 'habit_system_design',
+      title: 'Study 1 System Design / AI Topic',
+      category: 'SYSTEMS & ML',
+      icon: '🏛️',
+      target: 'Raft, MLOps, or Transformers',
+      streak: 2,
+      history: {}
+    },
+    {
+      id: 'habit_paper_reading',
+      title: 'Research Paper / ArXiv Deep Read',
+      category: 'RESEARCH',
+      icon: '📄',
+      target: '20m reading & note taking',
+      streak: 1,
+      history: {}
+    },
+    {
+      id: 'habit_hydration_wellness',
+      title: 'Hydration & Posture Reset',
+      category: 'WELLBEING',
+      icon: '💧',
+      target: '3L water & mobility stretches',
+      streak: 5,
+      history: {}
+    },
+    {
+      id: 'habit_nightly_review',
+      title: 'Nightly Reflection & Journal Log',
+      category: 'DAILY ROUTINE',
+      icon: '🌙',
+      target: 'FSRS flashcard review & sync notes',
+      streak: 3,
+      history: {}
+    }
+  ];
+
+  const FOCUSPRO_CYCLE_STEPS = [
+    { step: 1, name: 'Deep Work', durationMins: 25, mode: 'pomo', type: 'focus', prompt: 'Deep cognitive sprint on core algorithmic concepts.' },
+    { step: 2, name: 'Restorative Pause', durationMins: 5, mode: 'short', type: 'break', prompt: 'Stand up, hydrate, and relax optical focus.' },
+    { step: 3, name: 'Deep Work', durationMins: 25, mode: 'pomo', type: 'focus', prompt: 'Active coding and distributed systems synthesis.' },
+    { step: 4, name: 'Restorative Pause', durationMins: 5, mode: 'short', type: 'break', prompt: 'Quick breathwork and neck/shoulder stretch.' },
+    { step: 5, name: 'Extended Mastery', durationMins: 50, mode: 'deep', type: 'focus', prompt: 'High-leverage project implementation and deep learning.' },
+    { step: 6, name: 'Restorative Pause', durationMins: 5, mode: 'short', type: 'break', prompt: 'Re-hydrate and prepare cognitive workspace.' },
+    { step: 7, name: 'Deep Work', durationMins: 25, mode: 'pomo', type: 'focus', prompt: 'System design review and test-case edge testing.' },
+    { step: 8, name: 'Long Recovery', durationMins: 15, mode: 'long', type: 'break', prompt: 'Consolidate memory, review journal, walk away from screen.' }
+  ];
 
   const RPG_LEVELS = [
     { lvl: 1, title: 'Code Initiate', minXp: 0, maxXp: 450 },
@@ -65,6 +135,9 @@
     xp: 0,
     fsrs: {},
     milestones: { ...DEFAULT_MILESTONES },
+    habits: [],
+    focusProStep: 1,
+    selectedHabitIcon: '🌅',
     
     // Pomodoro Timer State
     timer: {
@@ -133,6 +206,22 @@
         state.milestones = { ...DEFAULT_MILESTONES };
       }
 
+      const savedHabits = localStorage.getItem(STORAGE_KEYS.HABITS);
+      if (savedHabits) {
+        try {
+          state.habits = JSON.parse(savedHabits);
+        } catch (e) {
+          state.habits = JSON.parse(JSON.stringify(DEFAULT_HABITS));
+        }
+      } else {
+        state.habits = JSON.parse(JSON.stringify(DEFAULT_HABITS));
+      }
+
+      const savedStep = localStorage.getItem(STORAGE_KEYS.FOCUSPRO_STEP);
+      if (savedStep) {
+        state.focusProStep = parseInt(savedStep, 10) || 1;
+      }
+
       // Remove stale dummy data: if user hasn't studied yet, reset streak to 0
       if (state.completedTopics.size === 0 && state.totalFocusSeconds === 0 && (!state.dailyActivity || Object.keys(state.dailyActivity).length === 0)) {
         state.streak = { count: 0, lastActive: null };
@@ -173,6 +262,12 @@
       }
       if (!key || key === STORAGE_KEYS.MILESTONES) {
         localStorage.setItem(STORAGE_KEYS.MILESTONES, JSON.stringify(state.milestones));
+      }
+      if (!key || key === STORAGE_KEYS.HABITS) {
+        localStorage.setItem(STORAGE_KEYS.HABITS, JSON.stringify(state.habits));
+      }
+      if (!key || key === STORAGE_KEYS.FOCUSPRO_STEP) {
+        localStorage.setItem(STORAGE_KEYS.FOCUSPRO_STEP, String(state.focusProStep));
       }
     } catch (e) {
       console.warn('[StudyPulse] Error saving to localStorage:', e);
@@ -555,11 +650,14 @@
       const xpEarned = state.timer.mode === 'deep' ? 200 : 100;
       addXP(xpEarned, 'Flow State Sprint Completed');
       showToast(`🎯 Session Completed! +${xpEarned} XP Awarded.`);
-      setTimerMode('short');
+      advanceAutoFlowStep(true);
     } else {
       showToast(`⚡ Break Finished! Ready for next sprint.`);
-      setTimerMode('pomo');
+      advanceAutoFlowStep(true);
     }
+
+    calculateProductivityScore();
+    generateFocusProAdvice();
   }
 
   function updateTimerDisplay() {
@@ -1246,6 +1344,9 @@
     updateRPGStatus();
     updateMilestoneWidget();
     updateJournalStats();
+    renderHabitsGrid();
+    calculateProductivityScore();
+    generateFocusProAdvice();
   }
 
   function updateJournalStats() {
@@ -1760,6 +1861,410 @@
   window.updateMilestoneWidget = updateMilestoneWidget;
 
   // =========================================================================
+  // FOCUSPRO AI ADVISOR & AUTO-FLOW CYCLE ENGINE (Focus Pro AI App Integration)
+  // =========================================================================
+  function initFocusProAutoFlow() {
+    if (!state.focusProStep || state.focusProStep < 1 || state.focusProStep > 8) {
+      state.focusProStep = 1;
+    }
+    const stepConfig = FOCUSPRO_CYCLE_STEPS[state.focusProStep - 1] || FOCUSPRO_CYCLE_STEPS[0];
+    const stepTextEl = document.getElementById('focuspro-step-text');
+    if (stepTextEl) {
+      stepTextEl.textContent = `Step ${stepConfig.step}/8 · ${stepConfig.name} (${stepConfig.durationMins}m)`;
+    }
+    calculateProductivityScore();
+    generateFocusProAdvice();
+  }
+
+  function advanceAutoFlowStep(silent = false) {
+    state.focusProStep = (state.focusProStep % 8) + 1;
+    savePersistedState(STORAGE_KEYS.FOCUSPRO_STEP);
+
+    const stepConfig = FOCUSPRO_CYCLE_STEPS[state.focusProStep - 1];
+    setTimerMode(stepConfig.mode);
+
+    const stepTextEl = document.getElementById('focuspro-step-text');
+    if (stepTextEl) {
+      stepTextEl.textContent = `Step ${stepConfig.step}/8 · ${stepConfig.name} (${stepConfig.durationMins}m)`;
+    }
+
+    calculateProductivityScore();
+    generateFocusProAdvice();
+
+    if (!silent) {
+      playNotificationChime();
+      hapticFeedback([40, 20, 40]);
+      showToast(`⚡ FocusPro Flow: Step ${stepConfig.step}/8 — ${stepConfig.name}`);
+    }
+  }
+
+  function calculateProductivityScore() {
+    const today = getTodayDateString();
+    const todayFocusMins = state.dailyActivity[today]?.focus || Math.floor(state.totalFocusSeconds / 60);
+
+    // 1. Focus time component (up to 40 pts, target: 90 mins)
+    const focusPts = Math.min(40, Math.round((todayFocusMins / 90) * 40));
+
+    // 2. Habits completion rate (up to 35 pts)
+    const completedHabits = (state.habits || []).filter(h => h.history && h.history[today] === true).length;
+    const totalHabits = (state.habits || []).length || 1;
+    const habitRate = completedHabits / totalHabits;
+    const habitPts = Math.round(habitRate * 35);
+
+    // 3. Streak momentum (up to 15 pts)
+    const streakPts = Math.min(15, (state.streak.count || 0) * 3);
+
+    // 4. Curriculum mastery (up to 10 pts)
+    const masteryPts = Math.min(10, Math.round((state.completedTopics.size / 30) * 10));
+
+    // Total score (min 20, max 100)
+    const totalScore = Math.min(100, Math.max(20, Math.round(10 + focusPts + habitPts + streakPts + masteryPts)));
+
+    let status = 'Priming Flow';
+    if (totalScore >= 85) status = 'Peak Flow';
+    else if (totalScore >= 70) status = 'Optimal Flow';
+    else if (totalScore >= 50) status = 'Steady Rhythm';
+
+    // Update Status Bar Pill
+    const scoreTextEl = document.getElementById('focuspro-score-text');
+    if (scoreTextEl) {
+      scoreTextEl.textContent = `AI Score: ${totalScore}/100 · ${status}`;
+    }
+
+    // Update Modal Metrics
+    const modalScoreEl = document.getElementById('modal-ai-score');
+    if (modalScoreEl) modalScoreEl.textContent = `${totalScore} / 100`;
+
+    const modalStatusEl = document.getElementById('modal-ai-status');
+    if (modalStatusEl) modalStatusEl.textContent = status;
+
+    const modalRoutineEl = document.getElementById('modal-ai-routine-rate');
+    if (modalRoutineEl) modalRoutineEl.textContent = `${Math.round(habitRate * 100)}% Done`;
+
+    return totalScore;
+  }
+
+  function generateFocusProAdvice() {
+    const today = getTodayDateString();
+    const hour = new Date().getHours();
+    const stepConfig = FOCUSPRO_CYCLE_STEPS[(state.focusProStep - 1) % 8] || FOCUSPRO_CYCLE_STEPS[0];
+    const pendingHabits = (state.habits || []).filter(h => !h.history || !h.history[today]);
+    const completedHabits = (state.habits || []).filter(h => h.history && h.history[today]).length;
+    const totalHabits = (state.habits || []).length;
+    const remaining = totalHabits - completedHabits;
+
+    let timeContext = '';
+    if (hour >= 5 && hour < 12) {
+      timeContext = 'Morning high-neuroplasticity window active.';
+    } else if (hour >= 12 && hour < 17) {
+      timeContext = 'Afternoon peak analytical capacity.';
+    } else if (hour >= 17 && hour < 22) {
+      timeContext = 'Evening deep synthesis window.';
+    } else {
+      timeContext = 'Late hours — cognitive consolidation & memory pacing.';
+    }
+
+    let habitContext = remaining === 0
+      ? 'All daily disciplines accomplished! 100% routine consistency reached today.'
+      : `${remaining} habit${remaining > 1 ? 's' : ''} left today. Recommended next: "${(pendingHabits[0] || {}).title || 'Deep Work Sprint'}".`;
+
+    const advice = `${timeContext} Currently in Step ${stepConfig.step}/8 (${stepConfig.name}). ${habitContext}`;
+
+    const adviceEl = document.getElementById('focuspro-advice-text');
+    if (adviceEl) adviceEl.textContent = advice;
+
+    const modalInsight = document.getElementById('focuspro-modal-insight-text');
+    if (modalInsight) modalInsight.textContent = `${advice} Recommended: Maintain uninterrupted attention for ${stepConfig.durationMins} minutes.`;
+
+    const topicRec = document.getElementById('focuspro-modal-topic-recommendation');
+    if (topicRec) {
+      const activeTopics = [
+        'MIT 6.824 · Raft Consensus & State Machine Replication',
+        'CS197 · Transformer Multi-Head Attention Internals',
+        'Stanford CS229 · Gradient Boosting & Loss Landscapes',
+        'System Design · Distributed Rate Limiter & Token Bucket Architecture',
+        'CMU 15-445 · B+ Tree Concurrency & Buffer Pool Management'
+      ];
+      const topicIndex = (state.focusProStep + state.completedTopics.size) % activeTopics.length;
+      topicRec.textContent = `${activeTopics[topicIndex]}. High exam weightage and aligns with your Weekly Milestone Goal.`;
+    }
+
+    const recoveryEl = document.getElementById('focuspro-modal-recovery-text');
+    if (recoveryEl) {
+      if (stepConfig.type === 'break') {
+        recoveryEl.textContent = `Active Break (${stepConfig.durationMins}m): Disengage optical focus, hydrate with 250ml water, and reset neck posture before starting Step ${(state.focusProStep % 8) + 1}.`;
+      } else {
+        recoveryEl.textContent = `Pacing cadence: After completing this ${stepConfig.name} session, take a 5m pause with 40Hz binaural beats to prevent cognitive fatigue.`;
+      }
+    }
+  }
+
+  function openFocusProAIModal(topic) {
+    calculateProductivityScore();
+    generateFocusProAdvice();
+    if (topic) {
+      askFocusProQuestion(topic);
+    }
+    const overlay = document.getElementById('focuspro-ai-modal-overlay');
+    if (overlay) overlay.style.display = 'flex';
+    hapticFeedback(10);
+  }
+
+  function closeFocusProAIModal() {
+    const overlay = document.getElementById('focuspro-ai-modal-overlay');
+    if (overlay) overlay.style.display = 'none';
+    hapticFeedback(10);
+  }
+
+  function askFocusProQuestion(topic) {
+    const adviceEl = document.getElementById('focuspro-advice-text');
+    const modalInsight = document.getElementById('focuspro-modal-insight-text');
+
+    let answer = '';
+    if (topic === 'schedule') {
+      answer = '⚡ Schedule Optimization: Partition today into 3 deep blocks (25m Deep Work, 5m Pause, 50m Extended Mastery). Tackle the heaviest distributed systems logic before 2 PM when focus capacity is highest.';
+    } else if (topic === 'algorithm') {
+      answer = '💻 DSA Practice Recommendation: Focus on Graph Traversal (BFS/DFS) and Topological Sort today. Verify edge cases (empty graphs, disjoint components, and cyclic dependencies).';
+    } else if (topic === 'fatigue') {
+      answer = '🧘 Anti-Burnout Protocol: Activate 40Hz binaural beats, keep 20-20-20 visual pauses, drink 300ml water every hour, and wind down with a nightly review by 10:30 PM.';
+    } else if (topic === 'strategy') {
+      answer = '🧠 Study Strategy: Apply active recall using FSRS flashcards after reading, then write runnable code in Systems Lab before moving to the next topic.';
+    } else {
+      answer = `AI Insight: Maintain steady momentum on Step ${state.focusProStep}/8. Consistency beats intensity over long horizons.`;
+    }
+
+    if (adviceEl) adviceEl.textContent = answer;
+    if (modalInsight) modalInsight.textContent = answer;
+    hapticFeedback(12);
+    showToast('🤖 FocusPro AI Coach updated advice');
+  }
+
+  // =========================================================================
+  // DAILY ROUTINE & HABIT TRACKER ENGINE (Habit Tracker Daily Routine App Integration)
+  // =========================================================================
+  function renderHabitsGrid() {
+    const grid = document.getElementById('habits-grid');
+    if (!grid) return;
+
+    if (!Array.isArray(state.habits) || state.habits.length === 0) {
+      state.habits = JSON.parse(JSON.stringify(DEFAULT_HABITS));
+    }
+
+    const today = getTodayDateString();
+    const todayDate = new Date();
+
+    // 7-day contribution dots (last 7 days, M-T-W-T-F-S-S)
+    const last7Days = [];
+    const dayLetters = ['S', 'M', 'T', 'W', 'T', 'F', 'S']; // getDay() 0=Sun..6=Sat
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(todayDate);
+      d.setDate(d.getDate() - i);
+      const dStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      last7Days.push({
+        dateStr: dStr,
+        letter: dayLetters[d.getDay()],
+        isToday: i === 0
+      });
+    }
+
+    let completedCount = 0;
+    const totalCount = (state.habits || []).length;
+
+    grid.innerHTML = '';
+
+    (state.habits || []).forEach(habit => {
+      const isDoneToday = habit.history && habit.history[today] === true;
+      if (isDoneToday) completedCount += 1;
+
+      const card = document.createElement('div');
+      card.className = `habit-card ${isDoneToday ? 'completed' : ''}`;
+      card.id = `habit-card-${habit.id}`;
+
+      const dotsHtml = last7Days.map(day => {
+        const isDone = habit.history && habit.history[day.dateStr] === true;
+        return `
+          <div class="history-dot-wrap">
+            <span class="history-dot-letter" style="${day.isToday ? 'color: var(--accent-orange); font-weight: 700;' : ''}">${day.letter}</span>
+            <div class="history-dot ${isDone ? 'active' : ''}" title="${day.dateStr}: ${isDone ? 'Completed' : 'Pending'}"></div>
+          </div>
+        `;
+      }).join('');
+
+      card.innerHTML = `
+        <div class="habit-card-top">
+          <span class="habit-category-tag">${escapeHtml(habit.category || 'DAILY ROUTINE')}</span>
+          <span class="habit-streak-badge">🔥 ${habit.streak || 0}d</span>
+        </div>
+        <div class="habit-card-body">
+          <div class="habit-icon-wrap">${habit.icon || '🔥'}</div>
+          <div class="habit-text-wrap">
+            <h4 class="habit-title">${escapeHtml(habit.title)}</h4>
+            <div class="habit-target-desc">${escapeHtml(habit.target || 'Daily Goal')}</div>
+          </div>
+        </div>
+        <div class="habit-card-bottom">
+          <div class="habit-history-dots">
+            ${dotsHtml}
+          </div>
+          <button class="btn-habit-toggle ${isDoneToday ? 'done' : ''}" onclick="window.toggleHabitCheck('${habit.id}')" title="Toggle routine completion">
+            <span>${isDoneToday ? '✓' : '○'}</span>
+            <span>${isDoneToday ? 'Done' : 'Mark'}</span>
+          </button>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    const pct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+    const pill = document.getElementById('habits-routine-pill');
+    if (pill) pill.textContent = `${completedCount}/${totalCount} Done · ${pct}%`;
+
+    const fill = document.getElementById('habits-progress-fill');
+    if (fill) fill.style.width = `${pct}%`;
+
+    const label = document.getElementById('habits-progress-label-text');
+    if (label) label.textContent = `${completedCount} of ${totalCount} routines completed today`;
+
+    const streakLabel = document.getElementById('habits-streak-label');
+    if (streakLabel) {
+      const maxStreak = (state.habits || []).reduce((acc, h) => Math.max(acc, h.streak || 0), 0);
+      streakLabel.textContent = `🔥 ${maxStreak} Day Routine Streak`;
+    }
+  }
+
+  function toggleHabitCheck(habitId) {
+    const habit = (state.habits || []).find(h => h.id === habitId);
+    if (!habit) return;
+
+    if (!habit.history) habit.history = {};
+    const today = getTodayDateString();
+    const wasDone = habit.history[today] === true;
+
+    if (wasDone) {
+      habit.history[today] = false;
+      habit.streak = Math.max(0, (habit.streak || 1) - 1);
+      showToast(`Routine "${habit.title}" unmarked.`);
+    } else {
+      habit.history[today] = true;
+      habit.streak = (habit.streak || 0) + 1;
+      addXP(25, `Routine Done: ${habit.title}`);
+      recordActivity('habit', 1);
+      playNotificationChime();
+      hapticFeedback([40, 30, 40]);
+      showToast(`🔥 Discipline Maintained! "${habit.title}" (+25 XP)`);
+    }
+
+    savePersistedState(STORAGE_KEYS.HABITS);
+    renderHabitsGrid();
+    calculateProductivityScore();
+    generateFocusProAdvice();
+  }
+
+  function openAddHabitModal() {
+    const overlay = document.getElementById('add-habit-modal-overlay');
+    if (!overlay) return;
+    overlay.style.display = 'flex';
+    const titleInput = document.getElementById('habit-input-title');
+    if (titleInput) {
+      titleInput.value = '';
+      titleInput.focus();
+    }
+    const targetInput = document.getElementById('habit-input-target');
+    if (targetInput) targetInput.value = '';
+    state.selectedHabitIcon = '🌅';
+    updateIconSelectorUI();
+    hapticFeedback(10);
+  }
+
+  function closeAddHabitModal() {
+    const overlay = document.getElementById('add-habit-modal-overlay');
+    if (overlay) overlay.style.display = 'none';
+    hapticFeedback(10);
+  }
+
+  function selectHabitIcon(icon) {
+    state.selectedHabitIcon = icon;
+    updateIconSelectorUI();
+    hapticFeedback(8);
+  }
+
+  function updateIconSelectorUI() {
+    document.querySelectorAll('.btn-icon-opt').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.icon === state.selectedHabitIcon);
+    });
+  }
+
+  function saveNewHabit() {
+    const titleInput = document.getElementById('habit-input-title');
+    const categorySelect = document.getElementById('habit-input-category');
+    const targetInput = document.getElementById('habit-input-target');
+
+    const title = titleInput ? titleInput.value.trim() : '';
+    if (!title) {
+      showToast('Please enter a habit name.');
+      if (titleInput) titleInput.focus();
+      return;
+    }
+
+    const category = categorySelect ? categorySelect.options[categorySelect.selectedIndex].text : 'DAILY ROUTINE';
+    const target = targetInput && targetInput.value.trim() ? targetInput.value.trim() : 'Daily consistency';
+
+    const newHabit = {
+      id: 'habit_' + Date.now(),
+      title: title,
+      category: category,
+      icon: state.selectedHabitIcon || '🔥',
+      target: target,
+      streak: 1,
+      history: {}
+    };
+
+    const today = getTodayDateString();
+    newHabit.history[today] = true;
+
+    state.habits.push(newHabit);
+    addXP(25, `New Habit Created: ${title}`);
+    recordActivity('habit', 1);
+    savePersistedState(STORAGE_KEYS.HABITS);
+
+    renderHabitsGrid();
+    calculateProductivityScore();
+    generateFocusProAdvice();
+    closeAddHabitModal();
+
+    playNotificationChime();
+    hapticFeedback([40, 40, 60]);
+    showToast(`✨ Habit "${title}" created and logged for today! (+25 XP)`);
+  }
+
+  function jumpToHabitsSection() {
+    toggleRegainDrawer(false);
+    switchView('dashboard');
+    const el = document.getElementById('habits-widget-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    hapticFeedback(10);
+  }
+
+  // Expose FocusPro AI & Habit Tracker to window
+  window.advanceAutoFlowStep = advanceAutoFlowStep;
+  window.calculateProductivityScore = calculateProductivityScore;
+  window.generateFocusProAdvice = generateFocusProAdvice;
+  window.openFocusProAIModal = openFocusProAIModal;
+  window.closeFocusProAIModal = closeFocusProAIModal;
+  window.askFocusProQuestion = askFocusProQuestion;
+  window.renderHabitsGrid = renderHabitsGrid;
+  window.toggleHabitCheck = toggleHabitCheck;
+  window.openAddHabitModal = openAddHabitModal;
+  window.closeAddHabitModal = closeAddHabitModal;
+  window.selectHabitIcon = selectHabitIcon;
+  window.saveNewHabit = saveNewHabit;
+  window.jumpToHabitsSection = jumpToHabitsSection;
+
+  // =========================================================================
   // INITIALIZATION ON DOM READY
   // =========================================================================
   document.addEventListener('DOMContentLoaded', () => {
@@ -1771,6 +2276,8 @@
     updateDashboardUI();
     renderActivityHeatmap();
     updateStudyPaceForecast(2.5);
+    renderHabitsGrid();
+    initFocusProAutoFlow();
 
     // Attach search input listener
     const searchInput = document.getElementById('curriculum-search-input');

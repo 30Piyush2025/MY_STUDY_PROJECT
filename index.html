@@ -177,8 +177,18 @@
             </div>
           </div>
 
-          <!-- Focus Sprints & Reading Timer (Regain Signature Architecture) -->
+          <!-- Focus Sprints & Reading Timer (Regain Signature Architecture & FocusPro AI Integration) -->
           <div class="focus-card" style="margin-top: 24px;">
+            <!-- FocusPro AI Productivity & Auto-Flow Bar -->
+            <div class="focuspro-status-bar">
+              <div class="focuspro-cycle-pill" id="focuspro-cycle-indicator" onclick="window.advanceAutoFlowStep()" title="FocusPro AI 8-Step Auto-Flow Cycle (Click for Next Step)">
+                <span class="focuspro-ai-spark">⚡</span> <span id="focuspro-step-text">Step 1/8 · Deep Work (25m)</span>
+              </div>
+              <div class="focuspro-score-pill" id="focuspro-score-badge" onclick="window.openFocusProAIModal()" title="AI Productivity Score — Click for Insights">
+                <span class="focuspro-ai-icon">🤖</span> <span id="focuspro-score-text">AI Score: 88/100 · Flow</span>
+              </div>
+            </div>
+
             <div class="pomo-mode-selector">
               <button class="pomo-tab active" data-mode="pomo" onclick="window.setTimerMode('pomo')">Deep Work (25m)</button>
               <button class="pomo-tab" data-mode="deep" onclick="window.setTimerMode('deep')">Extended Study (50m)</button>
@@ -252,6 +262,28 @@
                 <span>⏭</span> <span>Skip</span>
               </button>
             </div>
+
+            <!-- FocusPro AI Advisor Card -->
+            <div class="focuspro-advisor-card" id="focuspro-advisor-card">
+              <div class="focuspro-advisor-header">
+                <div class="focuspro-advisor-title">
+                  <span class="advisor-robot-icon">🤖</span>
+                  <span class="advisor-title-text">FocusPro AI Coach</span>
+                  <span class="advisor-live-tag">LIVE ADVISOR</span>
+                </div>
+                <button class="btn-advisor-action" onclick="window.openFocusProAIModal()" title="Open FocusPro AI Advisor">
+                  <span>Insights</span> <span>↗</span>
+                </button>
+              </div>
+              <div class="focuspro-advisor-body" id="focuspro-advice-text">
+                Analyzing your cognitive rhythm... High morning neuroplasticity detected. Recommended: start with 25m core algorithm derivation.
+              </div>
+              <div class="focuspro-advisor-pills">
+                <button class="advisor-pill" onclick="window.advanceAutoFlowStep()">⚡ Next Auto-Flow Step</button>
+                <button class="advisor-pill" onclick="window.openFocusProAIModal('schedule')">🎯 Optimize Schedule</button>
+                <button class="advisor-pill" onclick="window.openFocusProAIModal('strategy')">🧠 Study Strategy</button>
+              </div>
+            </div>
           </div>
 
           <!-- =========================================================================
@@ -319,6 +351,43 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- =========================================================================
+               HABIT TRACKER: DAILY ROUTINE & GOALS (Play Store Integration)
+               ========================================================================= -->
+          <div class="habits-widget-section" id="habits-widget-section">
+            <div class="habits-header-row">
+              <div>
+                <div class="habits-title-group">
+                  <span class="habits-title-icon">🔥</span>
+                  <span class="habits-title-text">Daily Routine & Habit Tracker</span>
+                </div>
+                <p class="habits-subtitle">Build daily engineering disciplines, track habits, and achieve 100% consistency</p>
+              </div>
+              <div class="habits-header-actions">
+                <span class="habits-progress-pill" id="habits-routine-pill">0/6 Done · 0%</span>
+                <button class="btn-add-habit" onclick="window.openAddHabitModal()" title="Add Custom Habit">
+                  <span>+</span> <span>New Habit</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Today's Routine Completion Progress Bar -->
+            <div class="habits-progress-wrap">
+              <div class="habits-progress-track">
+                <div class="habits-progress-fill" id="habits-progress-fill" style="width: 0%;"></div>
+              </div>
+              <div class="habits-progress-labels">
+                <span id="habits-progress-label-text">0 of 6 routines completed today</span>
+                <span id="habits-streak-label" style="color: var(--accent-orange); font-weight: 700;">🔥 Daily Momentum</span>
+              </div>
+            </div>
+
+            <!-- Interactive Habit Cards Grid -->
+            <div class="habits-grid" id="habits-grid">
+              <!-- Dynamically populated by renderHabitsGrid() -->
             </div>
           </div>
 
@@ -764,6 +833,12 @@
         <button class="drawer-item active" onclick="window.switchView('dashboard'); window.toggleRegainDrawer(false);">
           <span>⏱</span> <span>Focus Console</span>
         </button>
+        <button class="drawer-item" onclick="window.jumpToHabitsSection(); window.toggleRegainDrawer(false);">
+          <span>🔥</span> <span>Daily Routine & Habits</span>
+        </button>
+        <button class="drawer-item" onclick="window.openFocusProAIModal(); window.toggleRegainDrawer(false);">
+          <span>🤖</span> <span>FocusPro AI Advisor</span>
+        </button>
         <button class="drawer-item" onclick="window.switchView('curriculum'); window.toggleRegainDrawer(false);">
           <span>📋</span> <span>7 Master Curricula</span>
         </button>
@@ -843,6 +918,151 @@
       <div class="notes-footer" style="margin-top: 24px;">
         <button class="btn-pomo-sec" onclick="window.closeMilestoneModal()">Cancel</button>
         <button class="btn-pomo-main" style="padding: 9px 24px; font-size: 0.88rem;" onclick="window.saveMilestoneGoal()">Save Targets</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Habit Modal (Habit Tracker: Daily Routine) -->
+  <div class="notes-modal-overlay" id="add-habit-modal-overlay">
+    <div class="notes-card habit-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div>
+          <div style="font-size: 0.72rem; font-family: var(--font-mono); font-weight: 700; color: var(--accent-orange); letter-spacing: 0.08em; text-transform: uppercase;">
+            DAILY ROUTINE ARCHITECTURE
+          </div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.3rem; font-weight: 700; margin: 2px 0 0 0; color: var(--text-primary);">
+            Add New Habit & Routine
+          </h3>
+        </div>
+        <button class="icon-btn" onclick="window.closeAddHabitModal()">✕</button>
+      </div>
+
+      <div class="habit-form-grid">
+        <div class="habit-field full-width">
+          <label for="habit-input-title" class="milestone-label">Habit Name / Routine</label>
+          <input type="text" id="habit-input-title" class="milestone-form-input" placeholder="e.g., Solve 2 LeetCode Graph Problems">
+        </div>
+
+        <div class="habit-field">
+          <label for="habit-input-category" class="milestone-label">Category</label>
+          <select id="habit-input-category" class="milestone-form-input" style="cursor: pointer;">
+            <option value="ALGORITHMS">💻 Algorithms & DSA</option>
+            <option value="DEEP FOCUS">🌅 Deep Focus Sprints</option>
+            <option value="SYSTEMS & ML">🧠 Systems & ML</option>
+            <option value="RESEARCH">📖 Research & Docs</option>
+            <option value="WELLBEING">💧 Health & Focus</option>
+            <option value="DAILY ROUTINE">🌙 Daily Routine</option>
+          </select>
+        </div>
+
+        <div class="habit-field">
+          <label for="habit-input-target" class="milestone-label">Daily Target Description</label>
+          <input type="text" id="habit-input-target" class="milestone-form-input" placeholder="e.g., 45 mins or 1 concept">
+        </div>
+
+        <div class="habit-field full-width">
+          <label class="milestone-label">Choose Habit Icon</label>
+          <div class="habit-icon-selector">
+            <button type="button" class="btn-icon-opt active" data-icon="🌅" onclick="window.selectHabitIcon('🌅')">🌅</button>
+            <button type="button" class="btn-icon-opt" data-icon="💻" onclick="window.selectHabitIcon('💻')">💻</button>
+            <button type="button" class="btn-icon-opt" data-icon="🧠" onclick="window.selectHabitIcon('🧠')">🧠</button>
+            <button type="button" class="btn-icon-opt" data-icon="📖" onclick="window.selectHabitIcon('📖')">📖</button>
+            <button type="button" class="btn-icon-opt" data-icon="⚡" onclick="window.selectHabitIcon('⚡')">⚡</button>
+            <button type="button" class="btn-icon-opt" data-icon="💧" onclick="window.selectHabitIcon('💧')">💧</button>
+            <button type="button" class="btn-icon-opt" data-icon="🌙" onclick="window.selectHabitIcon('🌙')">🌙</button>
+            <button type="button" class="btn-icon-opt" data-icon="🎯" onclick="window.selectHabitIcon('🎯')">🎯</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes-footer" style="margin-top: 20px;">
+        <button class="btn-pomo-sec" onclick="window.closeAddHabitModal()">Cancel</button>
+        <button class="btn-pomo-main" style="padding: 10px 24px; font-size: 0.88rem;" onclick="window.saveNewHabit()">
+          <span>✓</span> <span>Save Habit</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FocusPro AI Advisor & Productivity Intelligence Modal -->
+  <div class="notes-modal-overlay" id="focuspro-ai-modal-overlay">
+    <div class="notes-card focuspro-ai-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.5rem;">🤖</span>
+          <div>
+            <div style="font-size: 0.70rem; font-family: var(--font-mono); font-weight: 700; color: var(--accent-orange); letter-spacing: 0.08em; text-transform: uppercase;">
+              PRODUCTIVITY INTELLIGENCE
+            </div>
+            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+              FocusPro AI Advisor
+            </h3>
+          </div>
+        </div>
+        <button class="icon-btn" onclick="window.closeFocusProAIModal()">✕</button>
+      </div>
+
+      <!-- Live Metric Badges -->
+      <div class="focuspro-metric-row">
+        <div class="focuspro-metric-pill">
+          <span class="lbl">AI FLOW SCORE</span>
+          <span class="val" id="modal-ai-score">88 / 100</span>
+        </div>
+        <div class="focuspro-metric-pill">
+          <span class="lbl">FLOW STATUS</span>
+          <span class="val" id="modal-ai-status">Deep Momentum</span>
+        </div>
+        <div class="focuspro-metric-pill">
+          <span class="lbl">ROUTINE RATE</span>
+          <span class="val" id="modal-ai-routine-rate">67% Done</span>
+        </div>
+      </div>
+
+      <!-- FocusPro AI Recommendations Feed -->
+      <div class="focuspro-feed-container">
+        <div class="focuspro-feed-card" id="focuspro-primary-insight">
+          <div class="focuspro-feed-header">
+            <span>⚡ COGNITIVE FLOW OPTIMIZATION</span>
+            <span class="rec-time">LIVE</span>
+          </div>
+          <p id="focuspro-modal-insight-text">
+            Based on your deep focus sessions and completed habits, your neural state is primed for challenging architectural reasoning. Recommended: complete your next sprint on Distributed Systems.
+          </p>
+        </div>
+
+        <div class="focuspro-feed-card">
+          <div class="focuspro-feed-header">
+            <span>🎯 HIGH-YIELD STUDY RECOMMENDATION</span>
+            <span class="rec-time">FSRS-4.5</span>
+          </div>
+          <p id="focuspro-modal-topic-recommendation">
+            MIT 6.824 · Raft Consensus & Log Replication. High exam weightage and aligns with your Weekly Milestone Goal.
+          </p>
+        </div>
+
+        <div class="focuspro-feed-card">
+          <div class="focuspro-feed-header">
+            <span>☕ RECOVERY & FATIGUE PACING</span>
+            <span class="rec-time">SCHEDULE</span>
+          </div>
+          <p id="focuspro-modal-recovery-text">
+            After 2 more 25m sprints, take a 15-minute restorative break with 40Hz binaural beats and 300ml hydration.
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive AI Prompts -->
+      <div class="focuspro-quick-prompts">
+        <button class="btn-prompt-chip" onclick="window.askFocusProQuestion('schedule')">💡 How to optimize today?</button>
+        <button class="btn-prompt-chip" onclick="window.askFocusProQuestion('algorithm')">💻 Next DSA practice focus?</button>
+        <button class="btn-prompt-chip" onclick="window.askFocusProQuestion('fatigue')">🧘 How to avoid burnout?</button>
+      </div>
+
+      <div class="notes-footer" style="margin-top: 18px;">
+        <button class="btn-pomo-sec" onclick="window.closeFocusProAIModal()">Close</button>
+        <button class="btn-pomo-main" style="padding: 9px 24px; font-size: 0.88rem;" onclick="window.advanceAutoFlowStep(); window.closeFocusProAIModal();">
+          <span>⚡ Advance Auto-Flow Step</span>
+        </button>
       </div>
     </div>
   </div>
