@@ -53,7 +53,7 @@
     topicNotes: {},
     totalFocusSeconds: 0,
     dailyActivity: {},
-    streak: { count: 1, lastActive: getTodayDateString() },
+    streak: { count: 0, lastActive: null },
     xp: 0,
     fsrs: {},
     
@@ -116,6 +116,12 @@
 
       const savedFsrs = localStorage.getItem(STORAGE_KEYS.FSRS);
       if (savedFsrs) state.fsrs = JSON.parse(savedFsrs);
+
+      // Remove stale dummy data: if user hasn't studied yet, reset streak to 0
+      if (state.completedTopics.size === 0 && state.totalFocusSeconds === 0 && (!state.dailyActivity || Object.keys(state.dailyActivity).length === 0)) {
+        state.streak = { count: 0, lastActive: null };
+        savePersistedState(STORAGE_KEYS.STREAK);
+      }
     } catch (e) {
       console.warn('[StudyPulse] Error loading localStorage state:', e);
     }
@@ -158,10 +164,13 @@
   // STREAK & LOGGING
   // =========================================================================
   function validateStreak() {
+    if (!state.streak || typeof state.streak.count !== 'number' || !state.streak.lastActive) {
+      state.streak = { count: 0, lastActive: null };
+      return;
+    }
+
     const today = getTodayDateString();
-    if (!state.streak || !state.streak.lastActive) {
-      state.streak = { count: 1, lastActive: today };
-      savePersistedState(STORAGE_KEYS.STREAK);
+    if (state.streak.lastActive === today) {
       return;
     }
 
@@ -170,11 +179,11 @@
     const diffDays = Math.round((curr - last) / (1000 * 60 * 60 * 24));
 
     if (diffDays === 1) {
-      // Perfect streak continuation
+      // Streak intact from yesterday, waiting for today's study session
     } else if (diffDays > 1) {
-      // Streak broken, reset to 1
-      state.streak.count = 1;
-      state.streak.lastActive = today;
+      // Streak broken, reset to 0
+      state.streak.count = 0;
+      state.streak.lastActive = null;
       savePersistedState(STORAGE_KEYS.STREAK);
     }
   }
@@ -193,7 +202,7 @@
 
     // Update streak if not updated today
     if (state.streak.lastActive !== today) {
-      state.streak.count += 1;
+      state.streak.count = (state.streak.count || 0) + 1;
       state.streak.lastActive = today;
       savePersistedState(STORAGE_KEYS.STREAK);
     }
