@@ -112,6 +112,18 @@ This document logs the comprehensive development trajectory, architectural miles
   * **Interactive Target Modal**: Full modal dialog (`#milestone-modal-overlay`) to configure weekly study hours, sprint target topics, exam title, and target exam date, with client-side persistence in `studypulse_milestones_v2`.
   * Fully rebuilt, signed with v2/v3 schemes, and verified `StudyPulse.apk`.
 
+### Phase 9: Mobile Header Overlap Elimination & Senior UI/UX Subagent Audit
+* **Zero-Overlap Header & Heading Hardening**:
+  * Resolved critical collisions between brand identity ("Piyush Tiwari") and action controls on narrow viewports (320px–414px) by wrapping `.header-brand-group` with `min-width: 0; flex-shrink: 1;` and hiding redundant action pills on mobile.
+  * Added responsive `flex-wrap: wrap; gap: 8px;` to `.milestone-header-row`, `.audio-header`, and `.forecaster-slider-labels` to prevent horizontal clipping.
+  * Configured tablet action tiering (681px–1040px) hiding secondary badges to preserve full monogram and daily streak visibility.
+* **Senior UI/UX Subagent Audit Implementation**:
+  * **Daylight Contrast Correction**: Rewrote `.regain-tag-popover` and `.regain-speech-bubble` to dynamically adapt with `var(--bg-secondary)` and `var(--text-primary)`, eliminating dark-on-dark contrast failure in daylight mode.
+  * **Memory Palace Holographic Card Fix**: Removed duplicate `#palace-card-modal` from `index.html`, unified DOM binding in `js/memory-palace-3d.js`, and added explicit `✕ Close` controls on card faces.
+  * **Toast Navigation Collision Fix**: Re-anchored `showToast()` to `bottom: calc(var(--bottom-nav-height) + 16px);` so notifications always float cleanly above gesture insets and bottom nav.
+  * **Accessible Touch Ergonomics**: Sized `.icon-btn` with 46px touch boundary, wrapped curriculum items in `<label class="topic-left">` for full-line tap-to-complete, expanded `.btn-topic-note` to 40px+ hit area, and adapted `.pomo-mode-selector` on `< 480px`.
+  * **PWA & 3D Palette Leak Cleanup**: Updated `manifest.json` (`#faf7f2`), crafted warm terracotta PT monogram in `favicon.svg`, and replaced residual blue book spines in `bookshelf-3d.js` with warm leather tones.
+
 ---
 
 
