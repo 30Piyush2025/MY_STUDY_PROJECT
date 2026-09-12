@@ -10,8 +10,8 @@
       "title": "CampusX Data Science Mentorship Program (DSMP)",
       "short_title": "CampusX DSMP",
       "instructor": "Nitish Singh (CampusX)",
-      "badge": "🎓 Flagship DSMP",
-      "icon": "🎓",
+      "badge": "\ud83c\udf93 Flagship DSMP",
+      "icon": "\ud83c\udf93",
       "category": "Full Data Science & ML",
       "focus": "End-to-End Data Science, Classical ML, Math, SQL & Industry Capstone",
       "total_modules": 40,
@@ -24,7 +24,7 @@
           "title": "Week 1 :Basics of Python Programming",
           "phase": "Phase 1: Python Programming Mastery",
           "phase_id": "python",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "lec_1",
@@ -44,55 +44,55 @@
                 },
                 {
                   "id": "top_2",
-                  "title": "About Python (7:00 – 24:30)",
+                  "title": "About Python (7:00 \u2013 24:30)",
                   "timestamp": "7:00 - 24:30",
                   "duration_min": 18
                 },
                 {
                   "id": "top_3",
-                  "title": "Python Output/print function (24:30 – 38:37)",
+                  "title": "Python Output/print function (24:30 \u2013 38:37)",
                   "timestamp": "24:30 - 38:37",
                   "duration_min": 14
                 },
                 {
                   "id": "top_4",
-                  "title": "Python Data Types (38:37 – 51:25)",
+                  "title": "Python Data Types (38:37 \u2013 51:25)",
                   "timestamp": "38:37 - 51:25",
                   "duration_min": 13
                 },
                 {
                   "id": "top_5",
-                  "title": "Python Variables (51:25 – 1:04:49)",
+                  "title": "Python Variables (51:25 \u2013 1:04:49)",
                   "timestamp": "51:25 - 1:04:49",
                   "duration_min": 13
                 },
                 {
                   "id": "top_6",
-                  "title": "Python comments (1:04:49 – 1:09:09)",
+                  "title": "Python comments (1:04:49 \u2013 1:09:09)",
                   "timestamp": "1:04:49 - 1:09:09",
                   "duration_min": 4
                 },
                 {
                   "id": "top_7",
-                  "title": "Python Keywords and Identifiers (1:09:09 – 1:22:38)",
+                  "title": "Python Keywords and Identifiers (1:09:09 \u2013 1:22:38)",
                   "timestamp": "1:09:09 - 1:22:38",
                   "duration_min": 13
                 },
                 {
                   "id": "top_8",
-                  "title": "Python User Input (1:22:38 – 1:35:00)",
+                  "title": "Python User Input (1:22:38 \u2013 1:35:00)",
                   "timestamp": "1:22:38 - 1:35:00",
                   "duration_min": 12
                 },
                 {
                   "id": "top_9",
-                  "title": "Python Type conversion (1:35:00– 1:47:29)",
+                  "title": "Python Type conversion (1:35:00\u2013 1:47:29)",
                   "timestamp": "1:35:00 - 1:47:29",
                   "duration_min": 12
                 },
                 {
                   "id": "top_10",
-                  "title": "Python Literals(1:47:29 – 2:10:22)",
+                  "title": "Python Literals(1:47:29 \u2013 2:10:22)",
                   "timestamp": "1:47:29 - 2:10:22",
                   "duration_min": 23
                 }
@@ -110,37 +110,37 @@
               "topics": [
                 {
                   "id": "top_11",
-                  "title": "Start of the session (00:00:00 – 00:09:02)",
+                  "title": "Start of the session (00:00:00 \u2013 00:09:02)",
                   "timestamp": "00:00:00 - 00:09:02",
                   "duration_min": 9
                 },
                 {
                   "id": "top_12",
-                  "title": "Python Operators (00:09:02 – 00:43:00)",
+                  "title": "Python Operators (00:09:02 \u2013 00:43:00)",
                   "timestamp": "00:09:02 - 00:43:00",
                   "duration_min": 34
                 },
                 {
                   "id": "top_13",
-                  "title": "Python if-else(00:43:00 – 01:14:50)",
+                  "title": "Python if-else(00:43:00 \u2013 01:14:50)",
                   "timestamp": "00:43:00 - 01:14:50",
                   "duration_min": 32
                 },
                 {
                   "id": "top_14",
-                  "title": "Python Modules (01:14:50– 01:24:48)",
+                  "title": "Python Modules (01:14:50\u2013 01:24:48)",
                   "timestamp": "01:14:50 - 01:24:48",
                   "duration_min": 10
                 },
                 {
                   "id": "top_15",
-                  "title": "Python While Loop (01:24:48 – 01:48:03)",
+                  "title": "Python While Loop (01:24:48 \u2013 01:48:03)",
                   "timestamp": "01:24:48 - 01:48:03",
                   "duration_min": 23
                 },
                 {
                   "id": "top_16",
-                  "title": "Python forloop (01:48:03 – 02:11:34)",
+                  "title": "Python forloop (01:48:03 \u2013 02:11:34)",
                   "timestamp": "01:48:03 - 02:11:34",
                   "duration_min": 24
                 }
@@ -158,55 +158,55 @@
               "topics": [
                 {
                   "id": "top_17",
-                  "title": "Introduction (00:00:00 – 00:09:08)",
+                  "title": "Introduction (00:00:00 \u2013 00:09:08)",
                   "timestamp": "00:00:00 - 00:09:08",
                   "duration_min": 9
                 },
                 {
                   "id": "top_18",
-                  "title": "Solving Loop problems (00:00:08 – 00:47:10)",
+                  "title": "Solving Loop problems (00:00:08 \u2013 00:47:10)",
                   "timestamp": "00:00:08 - 00:47:10",
                   "duration_min": 47
                 },
                 {
                   "id": "top_19",
-                  "title": "Break, continue, pass statement inloops (00:47:10 – 01:06:42)",
+                  "title": "Break, continue, pass statement inloops (00:47:10 \u2013 01:06:42)",
                   "timestamp": "00:47:10 - 01:06:42",
                   "duration_min": 20
                 },
                 {
                   "id": "top_20",
-                  "title": "Strings (01:06:42 – 1:14:15)",
+                  "title": "Strings (01:06:42 \u2013 1:14:15)",
                   "timestamp": "01:06:42 - 1:14:15",
                   "duration_min": 8
                 },
                 {
                   "id": "top_21",
-                  "title": "String indexing (01:14:15– 01:18:14)",
+                  "title": "String indexing (01:14:15\u2013 01:18:14)",
                   "timestamp": "01:14:15 - 01:18:14",
                   "duration_min": 4
                 },
                 {
                   "id": "top_22",
-                  "title": "String slicing (01:18:14– 01:27:06)",
+                  "title": "String slicing (01:18:14\u2013 01:27:06)",
                   "timestamp": "01:18:14 - 01:27:06",
                   "duration_min": 9
                 },
                 {
                   "id": "top_23",
-                  "title": "Edit and delete a string (01:27:06 – 01:32:14)",
+                  "title": "Edit and delete a string (01:27:06 \u2013 01:32:14)",
                   "timestamp": "01:27:06 - 01:32:14",
                   "duration_min": 5
                 },
                 {
                   "id": "top_24",
-                  "title": "Operations on String (01:32:14– 01:47:24)",
+                  "title": "Operations on String (01:32:14\u2013 01:47:24)",
                   "timestamp": "01:32:14 - 01:47:24",
                   "duration_min": 15
                 },
                 {
                   "id": "top_25",
-                  "title": "Common String functions (01:47:14– 02:22:53)",
+                  "title": "Common String functions (01:47:14\u2013 02:22:53)",
                   "timestamp": "01:47:14 - 02:22:53",
                   "duration_min": 36
                 }
@@ -224,7 +224,7 @@
               "topics": [
                 {
                   "id": "top_26",
-                  "title": "Start of the Session (00:00:00 – 00:11:22)",
+                  "title": "Start of the Session (00:00:00 \u2013 00:11:22)",
                   "timestamp": "00:00:00 - 00:11:22",
                   "duration_min": 11
                 },
@@ -236,13 +236,13 @@
                 },
                 {
                   "id": "top_28",
-                  "title": "Orders of Growth) (00:11:22 – 01:12:30)",
+                  "title": "Orders of Growth) (00:11:22 \u2013 01:12:30)",
                   "timestamp": "00:11:22 - 01:12:30",
                   "duration_min": 61
                 },
                 {
                   "id": "top_29",
-                  "title": "Examples (01:12:30 – 01:42:00)",
+                  "title": "Examples (01:12:30 \u2013 01:42:00)",
                   "timestamp": "01:12:30 - 01:42:00",
                   "duration_min": 30
                 }
@@ -266,7 +266,7 @@
           "title": "Week 2: Python Data Types",
           "phase": "Phase 1: Python Programming Mastery",
           "phase_id": "python",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "lec_6",
@@ -680,7 +680,7 @@
           "title": "Week 3: Object Oriented Programming (OOP)",
           "phase": "Phase 1: Python Programming Mastery",
           "phase_id": "python",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "lec_12",
@@ -736,7 +736,7 @@
                 },
                 {
                   "id": "top_93",
-                  "title": "Concept of ‘self’",
+                  "title": "Concept of \u2018self\u2019",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -975,7 +975,7 @@
           "title": "Week 4: Advanced Python:",
           "phase": "Phase 1: Python Programming Mastery",
           "phase_id": "python",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "lec_18",
@@ -1324,7 +1324,7 @@
           "title": "Week 5: Numpy",
           "phase": "Phase 2: NumPy & Pandas Data Wrangling",
           "phase_id": "wrangling",
-          "phase_icon": "🐼",
+          "phase_icon": "\ud83d\udc3c",
           "sessions": [
             {
               "id": "lec_26",
@@ -1531,7 +1531,7 @@
           "title": "Week 6: Pandas",
           "phase": "Phase 2: NumPy & Pandas Data Wrangling",
           "phase_id": "wrangling",
-          "phase_icon": "🐼",
+          "phase_icon": "\ud83d\udc3c",
           "sessions": [
             {
               "id": "lec_30",
@@ -1641,7 +1641,7 @@
                 },
                 {
                   "id": "top_202",
-                  "title": "Dataframe function – astype()",
+                  "title": "Dataframe function \u2013 astype()",
                   "timestamp": null,
                   "duration_min": null
                 }
@@ -1725,7 +1725,7 @@
           "title": "Week 7: Advanced Pandas",
           "phase": "Phase 2: NumPy & Pandas Data Wrangling",
           "phase_id": "wrangling",
-          "phase_icon": "🐼",
+          "phase_icon": "\ud83d\udc3c",
           "sessions": [
             {
               "id": "lec_35",
@@ -1829,7 +1829,7 @@
                 },
                 {
                   "id": "top_220",
-                  "title": "Mini-project on Indian Startup Funding Dataset using Streamlit – Part 1",
+                  "title": "Mini-project on Indian Startup Funding Dataset using Streamlit \u2013 Part 1",
                   "timestamp": null,
                   "duration_min": null
                 }
@@ -1853,7 +1853,7 @@
                 },
                 {
                   "id": "top_222",
-                  "title": "the Dashboard made by Streamlit – Part 2",
+                  "title": "the Dashboard made by Streamlit \u2013 Part 2",
                   "timestamp": null,
                   "duration_min": null
                 }
@@ -1980,7 +1980,7 @@
           "title": "Week 8: Advanced Pandas Continued",
           "phase": "Phase 2: NumPy & Pandas Data Wrangling",
           "phase_id": "wrangling",
-          "phase_icon": "🐼",
+          "phase_icon": "\ud83d\udc3c",
           "sessions": [
             {
               "id": "lec_41",
@@ -2087,7 +2087,7 @@
             {
               "id": "lec_43",
               "number": 3,
-              "title": "Session on Pandas Case Study – time Series analysis",
+              "title": "Session on Pandas Case Study \u2013 time Series analysis",
               "module_id": "mod_8",
               "module_title": "Week 8: Advanced Pandas Continued",
               "phase": "Phase 2: NumPy & Pandas Data Wrangling",
@@ -2098,7 +2098,7 @@
             {
               "id": "lec_44",
               "number": 4,
-              "title": "Session on Pandas Case Study – Working with textual data",
+              "title": "Session on Pandas Case Study \u2013 Working with textual data",
               "module_id": "mod_8",
               "module_title": "Week 8: Advanced Pandas Continued",
               "phase": "Phase 2: NumPy & Pandas Data Wrangling",
@@ -2113,7 +2113,7 @@
           "title": "Week 9: Data Visualization",
           "phase": "Phase 3: Data Visualization & EDA Process",
           "phase_id": "eda",
-          "phase_icon": "📊",
+          "phase_icon": "\ud83d\udcca",
           "sessions": [
             {
               "id": "lec_45",
@@ -2335,7 +2335,7 @@
           "title": "Week 10: Data Visualization Continued",
           "phase": "Phase 3: Data Visualization & EDA Process",
           "phase_id": "eda",
-          "phase_icon": "📊",
+          "phase_icon": "\ud83d\udcca",
           "sessions": [
             {
               "id": "lec_53",
@@ -2415,7 +2415,7 @@
                 },
                 {
                   "id": "top_280",
-                  "title": "Figure levelfunction — catplot",
+                  "title": "Figure levelfunction \u2014 catplot",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -2445,7 +2445,7 @@
                 },
                 {
                   "id": "top_285",
-                  "title": "Categorical Estimate Plot — forcentral tendency",
+                  "title": "Categorical Estimate Plot \u2014 forcentral tendency",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -2538,7 +2538,7 @@
             {
               "id": "lec_55",
               "number": 3,
-              "title": "Session on Open-Source Software – Part 1",
+              "title": "Session on Open-Source Software \u2013 Part 1",
               "module_id": "mod_10",
               "module_title": "Week 10: Data Visualization Continued",
               "phase": "Phase 3: Data Visualization & EDA Process",
@@ -2549,7 +2549,7 @@
             {
               "id": "lec_56",
               "number": 4,
-              "title": "Session on Open-Source Software – Part 1",
+              "title": "Session on Open-Source Software \u2013 Part 1",
               "module_id": "mod_10",
               "module_title": "Week 10: Data Visualization Continued",
               "phase": "Phase 3: Data Visualization & EDA Process",
@@ -2564,7 +2564,7 @@
           "title": "Week 11: Data Analysis Process - Part1",
           "phase": "Phase 3: Data Visualization & EDA Process",
           "phase_id": "eda",
-          "phase_icon": "📊",
+          "phase_icon": "\ud83d\udcca",
           "sessions": [
             {
               "id": "lec_57",
@@ -2720,17 +2720,17 @@
         },
         {
           "id": "mod_12",
-          "title": "Week 12: Data Analysis Process – Part 2",
+          "title": "Week 12: Data Analysis Process \u2013 Part 2",
           "phase": "Phase 3: Data Visualization & EDA Process",
           "phase_id": "eda",
-          "phase_icon": "📊",
+          "phase_icon": "\ud83d\udcca",
           "sessions": [
             {
               "id": "lec_61",
               "number": 1,
-              "title": "Session on Data Cleaning Case Study – Smartphone dataset",
+              "title": "Session on Data Cleaning Case Study \u2013 Smartphone dataset",
               "module_id": "mod_12",
-              "module_title": "Week 12: Data Analysis Process – Part 2",
+              "module_title": "Week 12: Data Analysis Process \u2013 Part 2",
               "phase": "Phase 3: Data Visualization & EDA Process",
               "phase_id": "eda",
               "estimated_minutes": 60,
@@ -2760,7 +2760,7 @@
               "number": 2,
               "title": "Session 29: Exploratory Data Analysis (EDA)",
               "module_id": "mod_12",
-              "module_title": "Week 12: Data Analysis Process – Part 2",
+              "module_title": "Week 12: Data Analysis Process \u2013 Part 2",
               "phase": "Phase 3: Data Visualization & EDA Process",
               "phase_id": "eda",
               "estimated_minutes": 90,
@@ -2806,16 +2806,16 @@
             {
               "id": "lec_63",
               "number": 3,
-              "title": "Session on Data Cleaning – Part 2",
+              "title": "Session on Data Cleaning \u2013 Part 2",
               "module_id": "mod_12",
-              "module_title": "Week 12: Data Analysis Process – Part 2",
+              "module_title": "Week 12: Data Analysis Process \u2013 Part 2",
               "phase": "Phase 3: Data Visualization & EDA Process",
               "phase_id": "eda",
               "estimated_minutes": 45,
               "topics": [
                 {
                   "id": "top_326",
-                  "title": "Data Cleaning on Smartphone Dataset – Continued",
+                  "title": "Data Cleaning on Smartphone Dataset \u2013 Continued",
                   "timestamp": null,
                   "duration_min": null
                 }
@@ -2824,9 +2824,9 @@
             {
               "id": "lec_64",
               "number": 4,
-              "title": "Session on EDA Case Study – Smartphone Dataset",
+              "title": "Session on EDA Case Study \u2013 Smartphone Dataset",
               "module_id": "mod_12",
-              "module_title": "Week 12: Data Analysis Process – Part 2",
+              "module_title": "Week 12: Data Analysis Process \u2013 Part 2",
               "phase": "Phase 3: Data Visualization & EDA Process",
               "phase_id": "eda",
               "estimated_minutes": 45,
@@ -2839,7 +2839,7 @@
           "title": "Week 13: SQL Basics",
           "phase": "Phase 4: SQL & Relational Databases",
           "phase_id": "sql",
-          "phase_icon": "🗄️",
+          "phase_icon": "\ud83d\uddc4\ufe0f",
           "sessions": [
             {
               "id": "lec_65",
@@ -2934,7 +2934,7 @@
             {
               "id": "lec_67",
               "number": 3,
-              "title": "Session on Tableau – Olympics Dataset (Part 1)",
+              "title": "Session on Tableau \u2013 Olympics Dataset (Part 1)",
               "module_id": "mod_13",
               "module_title": "Week 13: SQL Basics",
               "phase": "Phase 4: SQL & Relational Databases",
@@ -2971,17 +2971,17 @@
         },
         {
           "id": "mod_14",
-          "title": "Week 14: SQL Continued – Part 1",
+          "title": "Week 14: SQL Continued \u2013 Part 1",
           "phase": "Phase 4: SQL & Relational Databases",
           "phase_id": "sql",
-          "phase_icon": "🗄️",
+          "phase_icon": "\ud83d\uddc4\ufe0f",
           "sessions": [
             {
               "id": "lec_68",
               "number": 1,
               "title": "Session 32:SQL DML commands",
               "module_id": "mod_14",
-              "module_title": "Week 14: SQL Continued – Part 1",
+              "module_title": "Week 14: SQL Continued \u2013 Part 1",
               "phase": "Phase 4: SQL & Relational Databases",
               "phase_id": "sql",
               "estimated_minutes": 90,
@@ -3029,7 +3029,7 @@
               "number": 2,
               "title": "Session 33: SQL Grouping and Sorting",
               "module_id": "mod_14",
-              "module_title": "Week 14: SQL Continued – Part 1",
+              "module_title": "Week 14: SQL Continued \u2013 Part 1",
               "phase": "Phase 4: SQL & Relational Databases",
               "phase_id": "sql",
               "estimated_minutes": 90,
@@ -3075,9 +3075,9 @@
             {
               "id": "lec_70",
               "number": 3,
-              "title": "Session on Tableau – Part 2",
+              "title": "Session on Tableau \u2013 Part 2",
               "module_id": "mod_14",
-              "module_title": "Week 14: SQL Continued – Part 1",
+              "module_title": "Week 14: SQL Continued \u2013 Part 1",
               "phase": "Phase 4: SQL & Relational Databases",
               "phase_id": "sql",
               "estimated_minutes": 150,
@@ -3175,7 +3175,7 @@
           "title": "Week 15: SQL Continued - Part 2",
           "phase": "Phase 4: SQL & Relational Databases",
           "phase_id": "sql",
-          "phase_icon": "🗄️",
+          "phase_icon": "\ud83d\uddc4\ufe0f",
           "sessions": [
             {
               "id": "lec_71",
@@ -3234,7 +3234,7 @@
             {
               "id": "lec_72",
               "number": 2,
-              "title": "Session on SQL Case Study 1– Zomato Dataset",
+              "title": "Session on SQL Case Study 1\u2013 Zomato Dataset",
               "module_id": "mod_15",
               "module_title": "Week 15: SQL Continued - Part 2",
               "phase": "Phase 4: SQL & Relational Databases",
@@ -3318,7 +3318,7 @@
             {
               "id": "lec_75",
               "number": 5,
-              "title": "Session on SQL Interview Questions – Part 1",
+              "title": "Session on SQL Interview Questions \u2013 Part 1",
               "module_id": "mod_15",
               "module_title": "Week 15: SQL Continued - Part 2",
               "phase": "Phase 4: SQL & Relational Databases",
@@ -3412,7 +3412,7 @@
           "title": "Week 16: Advanced SQL",
           "phase": "Phase 4: SQL & Relational Databases",
           "phase_id": "sql",
-          "phase_icon": "🗄️",
+          "phase_icon": "\ud83d\uddc4\ufe0f",
           "sessions": [
             {
               "id": "lec_76",
@@ -3606,13 +3606,13 @@
                 },
                 {
                   "id": "top_418",
-                  "title": "Categorical – Categorical Analysis",
+                  "title": "Categorical \u2013 Categorical Analysis",
                   "timestamp": null,
                   "duration_min": null
                 },
                 {
                   "id": "top_419",
-                  "title": "Numerical – Numerical Analysis",
+                  "title": "Numerical \u2013 Numerical Analysis",
                   "timestamp": null,
                   "duration_min": null
                 }
@@ -3625,7 +3625,7 @@
           "title": "Week 17: Descriptive Statistics",
           "phase": "Phase 5: Statistics & Probability for Data Science",
           "phase_id": "stats",
-          "phase_icon": "📈",
+          "phase_icon": "\ud83d\udcc8",
           "sessions": [
             {
               "id": "lec_81",
@@ -3699,19 +3699,19 @@
                 },
                 {
                   "id": "top_430",
-                  "title": "Categorical – Categorical Analysis",
+                  "title": "Categorical \u2013 Categorical Analysis",
                   "timestamp": null,
                   "duration_min": null
                 },
                 {
                   "id": "top_431",
-                  "title": "Numerical – Numerical Analysis",
+                  "title": "Numerical \u2013 Numerical Analysis",
                   "timestamp": null,
                   "duration_min": null
                 },
                 {
                   "id": "top_432",
-                  "title": "Categorical – Numerical Analysis",
+                  "title": "Categorical \u2013 Numerical Analysis",
                   "timestamp": null,
                   "duration_min": null
                 }
@@ -3783,7 +3783,7 @@
                 },
                 {
                   "id": "top_442",
-                  "title": "Case Study – Flights",
+                  "title": "Case Study \u2013 Flights",
                   "timestamp": null,
                   "duration_min": null
                 }
@@ -3796,7 +3796,7 @@
           "title": "Week 18: Descriptive Statistics continued",
           "phase": "Phase 5: Statistics & Probability for Data Science",
           "phase_id": "stats",
-          "phase_icon": "📈",
+          "phase_icon": "\ud83d\udcc8",
           "sessions": [
             {
               "id": "lec_83",
@@ -3978,7 +3978,7 @@
           "title": "Week 19: Probability Distributions",
           "phase": "Phase 5: Statistics & Probability for Data Science",
           "phase_id": "stats",
-          "phase_icon": "📈",
+          "phase_icon": "\ud83d\udcc8",
           "sessions": [
             {
               "id": "lec_87",
@@ -4209,7 +4209,7 @@
           "title": "Week 20: Inferential Statistics",
           "phase": "Phase 5: Statistics & Probability for Data Science",
           "phase_id": "stats",
-          "phase_icon": "📈",
+          "phase_icon": "\ud83d\udcc8",
           "sessions": [
             {
               "id": "lec_91",
@@ -4391,7 +4391,7 @@
           "title": "Week 21: Hypothesis Testing",
           "phase": "Phase 5: Statistics & Probability for Data Science",
           "phase_id": "stats",
-          "phase_icon": "📈",
+          "phase_icon": "\ud83d\udcc8",
           "sessions": [
             {
               "id": "lec_94",
@@ -4537,7 +4537,7 @@
               "topics": [
                 {
                   "id": "top_534",
-                  "title": "Chi – square distribution (Definition and Properties)",
+                  "title": "Chi \u2013 square distribution (Definition and Properties)",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -4621,7 +4621,7 @@
                 },
                 {
                   "id": "top_546",
-                  "title": "Post – Hoc test",
+                  "title": "Post \u2013 Hoc test",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -4646,7 +4646,7 @@
           "title": "Week 22: Linear Algebra",
           "phase": "Phase 6: Linear Algebra & Math for ML",
           "phase_id": "math",
-          "phase_icon": "📐",
+          "phase_icon": "\ud83d\udcd0",
           "sessions": [
             {
               "id": "lec_98",
@@ -4931,7 +4931,7 @@
           "title": "Week 23: Linear Regression",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_102",
@@ -5444,7 +5444,7 @@
           "title": "Week 24: Gradient Descent",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_107",
@@ -5650,7 +5650,7 @@
           "title": "Week 25: Regression Analysis",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_112",
@@ -5676,7 +5676,7 @@
                 },
                 {
                   "id": "top_686",
-                  "title": "What’s the Statistic connection with Regression analysis?",
+                  "title": "What\u2019s the Statistic connection with Regression analysis?",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -5742,7 +5742,7 @@
                 },
                 {
                   "id": "top_695",
-                  "title": "T – Statistic",
+                  "title": "T \u2013 Statistic",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -5935,7 +5935,7 @@
           "title": "Week 26: Feature Selection",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_117",
@@ -6112,7 +6112,7 @@
           "title": "Week 27: Regularization",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_120",
@@ -6401,7 +6401,7 @@
           "title": "Week 28: K Nearest Neighbors",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_130",
@@ -6636,7 +6636,7 @@
           "title": "Week 29: PCA",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_136",
@@ -6805,7 +6805,7 @@
                 },
                 {
                   "id": "top_813",
-                  "title": "Intuition– Axis of rotation",
+                  "title": "Intuition\u2013 Axis of rotation",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -6992,7 +6992,7 @@
           "title": "Week 30: Model Evaluation & Selection",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_143",
@@ -7006,7 +7006,7 @@
               "topics": [
                 {
                   "id": "top_839",
-                  "title": "a. ROC AUC Curve and it’srequirements",
+                  "title": "a. ROC AUC Curve and it\u2019srequirements",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -7224,7 +7224,7 @@
                 },
                 {
                   "id": "top_858",
-                  "title": "b. Why the word “hyper” inthe term",
+                  "title": "b. Why the word \u201chyper\u201d inthe term",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -7261,7 +7261,7 @@
           "title": "Week 31: Naive Bayse",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_153",
@@ -7611,7 +7611,7 @@
           "title": "Week 32 :Logistics Regression",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_159",
@@ -7871,7 +7871,7 @@
                 },
                 {
                   "id": "top_943",
-                  "title": "iii. Why does the loss function exist,why don’t we maximize",
+                  "title": "iii. Why does the loss function exist,why don\u2019t we maximize",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -7943,7 +7943,7 @@
           "title": "Week 33 : Support Vector Machines (SVM)",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_164",
@@ -8077,7 +8077,7 @@
                 },
                 {
                   "id": "top_968",
-                  "title": "b. Kernel’s Intuition",
+                  "title": "b. Kernel\u2019s Intuition",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -8227,7 +8227,7 @@
                 },
                 {
                   "id": "top_989",
-                  "title": "f. Relationship Between RBF and Polynomial К...",
+                  "title": "f. Relationship Between RBF and Polynomial \u041a...",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -8516,7 +8516,7 @@
           "title": "Week 34 : Decision Trees",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_172",
@@ -8705,7 +8705,7 @@
           "title": "Week 35 :Ensemble Methods - Introduction",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_176",
@@ -8936,7 +8936,7 @@
           "title": "Week 36 :Gradient Boosting",
           "phase": "Phase 7: Machine Learning Core Algorithms",
           "phase_id": "ml",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "lec_182",
@@ -9155,7 +9155,7 @@
           "title": "Capstone Project:",
           "phase": "Phase 8: End-to-End Industry Capstone Project",
           "phase_id": "capstone",
-          "phase_icon": "🚀",
+          "phase_icon": "\ud83d\ude80",
           "sessions": [
             {
               "id": "lec_187",
@@ -9639,7 +9639,7 @@
           "title": "Extreme Gradient Boosting(XGBoost)",
           "phase": "Phase 9: Advanced ML & Unsupervised Clustering",
           "phase_id": "advanced",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "lec_204",
@@ -9822,7 +9822,7 @@
           "title": "KMeans Clustering",
           "phase": "Phase 9: Advanced ML & Unsupervised Clustering",
           "phase_id": "advanced",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "lec_208",
@@ -9986,7 +9986,7 @@
               "topics": [
                 {
                   "id": "top_1190",
-                  "title": "a. K-Means Mathematical Formulation (Loyd’s Algorithm)",
+                  "title": "a. K-Means Mathematical Formulation (Loyd\u2019s Algorithm)",
                   "timestamp": null,
                   "duration_min": null
                 },
@@ -10059,7 +10059,7 @@
           "title": "Other Clustering Algorithms",
           "phase": "Phase 9: Advanced ML & Unsupervised Clustering",
           "phase_id": "advanced",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "lec_212",
@@ -10213,15 +10213,19 @@
             }
           ]
         }
-      ]
+      ],
+      "sections_count": 40,
+      "video_lectures_count": 213,
+      "roadmap_sessions_count": 213,
+      "topics_count": 1219
     },
     {
       "id": "kn_genai_langchain",
       "title": "Complete Generative AI Course With LangChain and HuggingFace",
       "short_title": "Generative AI & LLMs",
       "instructor": "Krish Naik",
-      "badge": "🤖 GenAI & LLMs",
-      "icon": "🤖",
+      "badge": "\ud83e\udd16 GenAI & LLMs",
+      "icon": "\ud83e\udd16",
       "category": "Generative AI",
       "focus": "56 sections | 258 lectures | ~70 hours | RAG, LangChain, HuggingFace, Agents & AWS",
       "total_modules": 12,
@@ -10234,7 +10238,7 @@
           "title": "Module 1: Python Refresher for Generative AI",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_1",
@@ -10339,7 +10343,7 @@
           "title": "Module 2: Streamlit Basics for ML/AI Web Apps",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_5",
@@ -10444,7 +10448,7 @@
           "title": "Module 3: NLP Prerequisites & Classical Foundations",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_9",
@@ -10549,7 +10553,7 @@
           "title": "Module 4: Text Vectorization Techniques",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_13",
@@ -10654,7 +10658,7 @@
           "title": "Module 5: Word Embeddings & Semantic Spaces",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_17",
@@ -10759,7 +10763,7 @@
           "title": "Module 6: Introduction to LangChain Framework",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_21",
@@ -10864,7 +10868,7 @@
           "title": "Module 7: HuggingFace Model Integration",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_25",
@@ -10969,7 +10973,7 @@
           "title": "Module 8: Fine-Tuning & Customizing Open-Source Models",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_29",
@@ -11074,7 +11078,7 @@
           "title": "Module 9: Building Retrieval-Augmented Generation (RAG) Pipelines",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_33",
@@ -11203,7 +11207,7 @@
           "title": "Module 10: Deployment Strategies for GenAI Applications",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_38",
@@ -11308,7 +11312,7 @@
           "title": "Module 11: Real-World GenAI Industry Projects",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_42",
@@ -11413,7 +11417,7 @@
           "title": "Module 12: Monitoring and Optimizing Deployed GenAI Applications",
           "phase": "Generative AI",
           "phase_id": "kn_genai_langchain",
-          "phase_icon": "🤖",
+          "phase_icon": "\ud83e\udd16",
           "sessions": [
             {
               "id": "kn_genai_langchain_lec_46",
@@ -11513,15 +11517,19 @@
             }
           ]
         }
-      ]
+      ],
+      "sections_count": 56,
+      "video_lectures_count": 258,
+      "roadmap_sessions_count": 49,
+      "topics_count": 98
     },
     {
       "id": "kn_mlops_bootcamp",
       "title": "Complete MLOps Bootcamp With 10+ End-to-End ML Projects",
       "short_title": "MLOps Bootcamp (10+ Projects)",
       "instructor": "Krish Naik",
-      "badge": "⚙️ MLOps & Production",
-      "icon": "⚙️",
+      "badge": "\u2699\ufe0f MLOps & Production",
+      "icon": "\u2699\ufe0f",
       "category": "MLOps & Systems",
       "focus": "24 sections | 180 lectures | ~51 hours | MLflow, DVC, Docker, Airflow, CI/CD, AWS SageMaker",
       "total_modules": 17,
@@ -11534,7 +11542,7 @@
           "title": "Module 1: Python Prerequisites & Professional Coding Setup",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_1",
@@ -11639,7 +11647,7 @@
           "title": "Module 2: IDE Setup & Developer Environments",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_5",
@@ -11744,7 +11752,7 @@
           "title": "Module 3: Flask Framework for ML APIs",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_9",
@@ -11849,7 +11857,7 @@
           "title": "Module 4: Git & GitHub Version Control Mastery",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_13",
@@ -11954,7 +11962,7 @@
           "title": "Module 5: MLflow Experiment Tracking & Model Registry",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_17",
@@ -12059,7 +12067,7 @@
           "title": "Module 6: ML Project Integration with MLflow",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_21",
@@ -12164,7 +12172,7 @@
           "title": "Module 7: Deep Learning (ANN) Integration with MLflow",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_25",
@@ -12245,7 +12253,7 @@
           "title": "Module 8: DVC (Data Version Control) for Datasets & Models",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_28",
@@ -12350,7 +12358,7 @@
           "title": "Module 9: DagsHub Collaboration Platform",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_32",
@@ -12431,7 +12439,7 @@
           "title": "Module 10: Docker Containerization for ML Models",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_35",
@@ -12536,7 +12544,7 @@
           "title": "Module 11: Apache Airflow with Astronomer: ETL Pipeline Automation",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_39",
@@ -12641,7 +12649,7 @@
           "title": "Module 12: CI/CD Pipelines Using GitHub Actions",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_43",
@@ -12746,7 +12754,7 @@
           "title": "Module 13: End-to-End ML Projects (10+ Projects)",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_47",
@@ -12875,7 +12883,7 @@
           "title": "Module 14: End-to-End NLP Project with HuggingFace",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_52",
@@ -12956,7 +12964,7 @@
           "title": "Module 15: AWS SageMaker: Cloud Model Training & Deployment",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_55",
@@ -13061,7 +13069,7 @@
           "title": "Module 16: Generative AI Deployment on AWS Cloud",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_59",
@@ -13142,7 +13150,7 @@
           "title": "Module 17: Monitoring with Grafana & PostgreSQL",
           "phase": "MLOps & Systems",
           "phase_id": "kn_mlops_bootcamp",
-          "phase_icon": "⚙️",
+          "phase_icon": "\u2699\ufe0f",
           "sessions": [
             {
               "id": "kn_mlops_bootcamp_lec_62",
@@ -13242,15 +13250,19 @@
             }
           ]
         }
-      ]
+      ],
+      "sections_count": 24,
+      "video_lectures_count": 180,
+      "roadmap_sessions_count": 65,
+      "topics_count": 130
     },
     {
       "id": "kn_ai_security",
       "title": "AI Security Bootcamp - Guardrails, LLM Gateways, Observability",
       "short_title": "AI Security & Guardrails",
       "instructor": "Krish Naik",
-      "badge": "🛡️ AI Security & Safety",
-      "icon": "🛡️",
+      "badge": "\ud83d\udee1\ufe0f AI Security & Safety",
+      "icon": "\ud83d\udee1\ufe0f",
       "category": "AI Safety & Ops",
       "focus": "31 sections | 261 lectures | ~75 hours | NeMo, LangGraph, Bedrock, DeepEval, Red Teaming",
       "total_modules": 16,
@@ -13263,7 +13275,7 @@
           "title": "Module 1: LangChain Fundamentals: Agents, Tools & Middleware",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_1",
@@ -13368,7 +13380,7 @@
           "title": "Module 2: Human-in-the-Loop Middleware",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_5",
@@ -13449,7 +13461,7 @@
           "title": "Module 3: Building AI Agents with LangGraph",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_8",
@@ -13554,7 +13566,7 @@
           "title": "Module 4: Multi-Agent Systems & Architectures",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_12",
@@ -13659,7 +13671,7 @@
           "title": "Module 5: MCP (Model Context Protocol) Implementation",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_16",
@@ -13764,7 +13776,7 @@
           "title": "Module 6: AI Observability Fundamentals",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_20",
@@ -13845,7 +13857,7 @@
           "title": "Module 7: Observability with LangSmith",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_23",
@@ -13950,7 +13962,7 @@
           "title": "Module 8: Observability with Pydantic Logfire",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_27",
@@ -14031,7 +14043,7 @@
           "title": "Module 9: NVIDIA NeMo Guardrails",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_30",
@@ -14136,7 +14148,7 @@
           "title": "Module 10: Guardrails AI Framework",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_34",
@@ -14217,7 +14229,7 @@
           "title": "Module 11: AWS Bedrock Guardrails",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_37",
@@ -14322,7 +14334,7 @@
           "title": "Module 12: LLM Gateways: Portkey & TensorZero",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_41",
@@ -14451,7 +14463,7 @@
           "title": "Module 13: LLM Evaluation Using DeepEval",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_46",
@@ -14556,7 +14568,7 @@
           "title": "Module 14: AI Red Teaming & Jailbreak Defense with PyRIT",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_50",
@@ -14661,7 +14673,7 @@
           "title": "Module 15: Semantic Caching with Redis",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_54",
@@ -14742,7 +14754,7 @@
           "title": "Module 16: Building Deep Agents & Coding Assistants with Claude Code",
           "phase": "AI Safety & Ops",
           "phase_id": "kn_ai_security",
-          "phase_icon": "🛡️",
+          "phase_icon": "\ud83d\udee1\ufe0f",
           "sessions": [
             {
               "id": "kn_ai_security_lec_57",
@@ -14818,15 +14830,19 @@
             }
           ]
         }
-      ]
+      ],
+      "sections_count": 31,
+      "video_lectures_count": 261,
+      "roadmap_sessions_count": 59,
+      "topics_count": 118
     },
     {
       "id": "kn_python_dsa",
       "title": "Complete Python With DSA Bootcamp + LEETCODE Exercises",
       "short_title": "Python + DSA Bootcamp",
       "instructor": "Krish Naik",
-      "badge": "🐍 Python + DSA",
-      "icon": "🐍",
+      "badge": "\ud83d\udc0d Python + DSA",
+      "icon": "\ud83d\udc0d",
       "category": "Programming & Algorithms",
       "focus": "Python fundamentals + Data Structures & Algorithms + interview coding practice",
       "total_modules": 10,
@@ -14839,7 +14855,7 @@
           "title": "Module 1: Python Syntax, Data Types & Control Structures",
           "phase": "Programming & Algorithms",
           "phase_id": "kn_python_dsa",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "kn_python_dsa_lec_1",
@@ -14944,7 +14960,7 @@
           "title": "Module 2: Core Data Structures: Arrays & Strings",
           "phase": "Programming & Algorithms",
           "phase_id": "kn_python_dsa",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "kn_python_dsa_lec_5",
@@ -15049,7 +15065,7 @@
           "title": "Module 3: Linked Lists (Singly, Doubly, Circular)",
           "phase": "Programming & Algorithms",
           "phase_id": "kn_python_dsa",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "kn_python_dsa_lec_9",
@@ -15154,7 +15170,7 @@
           "title": "Module 4: Stacks & Queues",
           "phase": "Programming & Algorithms",
           "phase_id": "kn_python_dsa",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "kn_python_dsa_lec_13",
@@ -15259,7 +15275,7 @@
           "title": "Module 5: Trees, Binary Search Trees & Heaps",
           "phase": "Programming & Algorithms",
           "phase_id": "kn_python_dsa",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "kn_python_dsa_lec_17",
@@ -15364,7 +15380,7 @@
           "title": "Module 6: Sorting Algorithms",
           "phase": "Programming & Algorithms",
           "phase_id": "kn_python_dsa",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "kn_python_dsa_lec_21",
@@ -15469,7 +15485,7 @@
           "title": "Module 7: Searching Algorithms & Binary Search",
           "phase": "Programming & Algorithms",
           "phase_id": "kn_python_dsa",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "kn_python_dsa_lec_25",
@@ -15550,7 +15566,7 @@
           "title": "Module 8: Recursion & Backtracking Basics",
           "phase": "Programming & Algorithms",
           "phase_id": "kn_python_dsa",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "kn_python_dsa_lec_28",
@@ -15631,7 +15647,7 @@
           "title": "Module 9: Time and Space Complexity Analysis",
           "phase": "Programming & Algorithms",
           "phase_id": "kn_python_dsa",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "kn_python_dsa_lec_31",
@@ -15712,7 +15728,7 @@
           "title": "Module 10: Practical App-Building Project & Interview Prep",
           "phase": "Programming & Algorithms",
           "phase_id": "kn_python_dsa",
-          "phase_icon": "🐍",
+          "phase_icon": "\ud83d\udc0d",
           "sessions": [
             {
               "id": "kn_python_dsa_lec_34",
@@ -15788,15 +15804,19 @@
             }
           ]
         }
-      ]
+      ],
+      "sections_count": 10,
+      "video_lectures_count": 36,
+      "roadmap_sessions_count": 36,
+      "topics_count": 72
     },
     {
       "id": "kn_math_ds",
       "title": "Mathematics - Basics to Advanced for Data Science and GenAI",
       "short_title": "Mathematics for DS & GenAI",
       "instructor": "Krish Naik",
-      "badge": "📐 Math Foundations",
-      "icon": "📐",
+      "badge": "\ud83d\udcd0 Math Foundations",
+      "icon": "\ud83d\udcd0",
       "category": "Foundations",
       "focus": "Math foundations underlying ML/DL algorithms: Linear Algebra, Calculus, Stats, Probability",
       "total_modules": 8,
@@ -15809,7 +15829,7 @@
           "title": "Module 1: Linear Algebra: Vectors & Matrices",
           "phase": "Foundations",
           "phase_id": "kn_math_ds",
-          "phase_icon": "📐",
+          "phase_icon": "\ud83d\udcd0",
           "sessions": [
             {
               "id": "kn_math_ds_lec_1",
@@ -15914,7 +15934,7 @@
           "title": "Module 2: Linear Algebra Applications in ML & AI",
           "phase": "Foundations",
           "phase_id": "kn_math_ds",
-          "phase_icon": "📐",
+          "phase_icon": "\ud83d\udcd0",
           "sessions": [
             {
               "id": "kn_math_ds_lec_5",
@@ -16019,7 +16039,7 @@
           "title": "Module 3: Descriptive Statistics for Data Science",
           "phase": "Foundations",
           "phase_id": "kn_math_ds",
-          "phase_icon": "📐",
+          "phase_icon": "\ud83d\udcd0",
           "sessions": [
             {
               "id": "kn_math_ds_lec_9",
@@ -16124,7 +16144,7 @@
           "title": "Module 4: Inferential Statistics & Hypothesis Testing",
           "phase": "Foundations",
           "phase_id": "kn_math_ds",
-          "phase_icon": "📐",
+          "phase_icon": "\ud83d\udcd0",
           "sessions": [
             {
               "id": "kn_math_ds_lec_13",
@@ -16229,7 +16249,7 @@
           "title": "Module 5: Probability Theory for ML",
           "phase": "Foundations",
           "phase_id": "kn_math_ds",
-          "phase_icon": "📐",
+          "phase_icon": "\ud83d\udcd0",
           "sessions": [
             {
               "id": "kn_math_ds_lec_17",
@@ -16334,7 +16354,7 @@
           "title": "Module 6: Differential Calculus",
           "phase": "Foundations",
           "phase_id": "kn_math_ds",
-          "phase_icon": "📐",
+          "phase_icon": "\ud83d\udcd0",
           "sessions": [
             {
               "id": "kn_math_ds_lec_21",
@@ -16439,7 +16459,7 @@
           "title": "Module 7: Integral Calculus & Optimization",
           "phase": "Foundations",
           "phase_id": "kn_math_ds",
-          "phase_icon": "📐",
+          "phase_icon": "\ud83d\udcd0",
           "sessions": [
             {
               "id": "kn_math_ds_lec_25",
@@ -16544,7 +16564,7 @@
           "title": "Module 8: Application of Math to ML/DL Models",
           "phase": "Foundations",
           "phase_id": "kn_math_ds",
-          "phase_icon": "📐",
+          "phase_icon": "\ud83d\udcd0",
           "sessions": [
             {
               "id": "kn_math_ds_lec_29",
@@ -16644,15 +16664,19 @@
             }
           ]
         }
-      ]
+      ],
+      "sections_count": 8,
+      "video_lectures_count": 32,
+      "roadmap_sessions_count": 32,
+      "topics_count": 64
     },
     {
       "id": "kn_bigdata_eng",
       "title": "Big Data Engineering Bootcamp with GCP and Azure Cloud",
       "short_title": "Big Data & Cloud Engineering",
       "instructor": "Krish Naik",
-      "badge": "⚡ Big Data & Cloud",
-      "icon": "⚡",
+      "badge": "\u26a1 Big Data & Cloud",
+      "icon": "\u26a1",
       "category": "Data Engineering",
       "focus": "Zero-to-expert big data engineering track: Spark, Kafka, Flink, Hadoop, GCP, Azure",
       "total_modules": 10,
@@ -16665,7 +16689,7 @@
           "title": "Module 1: Big Data Fundamentals & Core Concepts",
           "phase": "Data Engineering",
           "phase_id": "kn_bigdata_eng",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "kn_bigdata_eng_lec_1",
@@ -16746,7 +16770,7 @@
           "title": "Module 2: SQL & MySQL for Data Engineering",
           "phase": "Data Engineering",
           "phase_id": "kn_bigdata_eng",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "kn_bigdata_eng_lec_4",
@@ -16851,7 +16875,7 @@
           "title": "Module 3: Python Scripting for Data Pipelines",
           "phase": "Data Engineering",
           "phase_id": "kn_bigdata_eng",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "kn_bigdata_eng_lec_8",
@@ -16932,7 +16956,7 @@
           "title": "Module 4: Hadoop Ecosystem",
           "phase": "Data Engineering",
           "phase_id": "kn_bigdata_eng",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "kn_bigdata_eng_lec_11",
@@ -17037,7 +17061,7 @@
           "title": "Module 5: Apache Spark & PySpark Processing",
           "phase": "Data Engineering",
           "phase_id": "kn_bigdata_eng",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "kn_bigdata_eng_lec_15",
@@ -17142,7 +17166,7 @@
           "title": "Module 6: Apache Kafka: Real-Time Streaming",
           "phase": "Data Engineering",
           "phase_id": "kn_bigdata_eng",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "kn_bigdata_eng_lec_19",
@@ -17247,7 +17271,7 @@
           "title": "Module 7: Apache Flink Stream Processing",
           "phase": "Data Engineering",
           "phase_id": "kn_bigdata_eng",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "kn_bigdata_eng_lec_23",
@@ -17328,7 +17352,7 @@
           "title": "Module 8: Stream vs Batch Pipeline Architectures",
           "phase": "Data Engineering",
           "phase_id": "kn_bigdata_eng",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "kn_bigdata_eng_lec_26",
@@ -17409,7 +17433,7 @@
           "title": "Module 9: Cloud Data Engineering on GCP & Azure",
           "phase": "Data Engineering",
           "phase_id": "kn_bigdata_eng",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "kn_bigdata_eng_lec_29",
@@ -17490,7 +17514,7 @@
           "title": "Module 10: Scalable End-to-End Big Data Project",
           "phase": "Data Engineering",
           "phase_id": "kn_bigdata_eng",
-          "phase_icon": "⚡",
+          "phase_icon": "\u26a1",
           "sessions": [
             {
               "id": "kn_bigdata_eng_lec_32",
@@ -17566,7 +17590,19 @@
             }
           ]
         }
-      ]
+      ],
+      "sections_count": 10,
+      "video_lectures_count": 34,
+      "roadmap_sessions_count": 34,
+      "topics_count": 68
     }
-  ]
+  ],
+  "grand_totals": {
+    "total_courses": 7,
+    "total_modules": 113,
+    "total_video_lectures": 1014,
+    "total_roadmap_sessions": 488,
+    "total_topics": 1769,
+    "total_hours": 634.6
+  }
 }

@@ -709,13 +709,27 @@
     const course = window.ALL_COURSES_DATA.courses.find(c => c.id === state.activeCourseId);
     if (!course) return;
 
-    // Update Course Header Summary
+    // Update Course Header Summary with Researched Metadata
     const titleEl = document.getElementById('active-course-title');
     const descEl = document.getElementById('active-course-desc');
-    const countEl = document.getElementById('active-course-stats');
+    const pillsEl = document.getElementById('active-course-pills');
     if (titleEl) titleEl.textContent = course.title;
     if (descEl) descEl.textContent = course.focus;
-    if (countEl) countEl.textContent = `${course.total_lectures} Lectures • ${course.total_topics} Topics • ${course.estimated_hours}h Content`;
+    if (pillsEl) {
+      const instructor = course.instructor || (course.id === 'campusx_dsmp' ? 'Nitish Singh (CampusX)' : 'Krish Naik');
+      const sections = course.sections_count || course.total_modules;
+      const videoLec = course.video_lectures_count || course.total_lectures;
+      const topicsCnt = course.topics_count || course.total_topics;
+      const hours = course.estimated_hours;
+
+      pillsEl.innerHTML = `
+        <span class="meta-pill highlight">👨‍🏫 ${escapeHtml(instructor)}</span>
+        <span class="meta-pill">📁 ${sections} ${course.sections_count ? 'Sections' : 'Modules'}</span>
+        <span class="meta-pill">🎥 ${videoLec} Lectures</span>
+        <span class="meta-pill">🏷️ ${topicsCnt} Topics</span>
+        <span class="meta-pill highlight">⏱️ ${hours} Hours Total</span>
+      `;
+    }
 
     listEl.innerHTML = '';
     const query = state.searchQuery.toLowerCase().trim();
@@ -1017,6 +1031,121 @@
   window.saveTopicNote = saveTopicNote;
   window.closeTopicNoteModal = closeTopicNoteModal;
 
+  // =========================================================================
+  // STUDY PACE & COMPLETION FORECASTER ("KITNA TIME LAGEGA?")
+  // =========================================================================
+  let currentStudyPace = 2.5;
+
+  function updateStudyPaceForecast(paceVal) {
+    currentStudyPace = parseFloat(paceVal) || 2.5;
+
+    const badge = document.getElementById('pace-display-badge');
+    if (badge) badge.textContent = `${currentStudyPace.toFixed(1)} hrs/day`;
+
+    const totalHours = 634.6;
+    const completedHours = parseFloat((state.totalFocusSeconds / 3600).toFixed(1));
+    const remainingHours = Math.max(0, totalHours - completedHours);
+
+    const totalDays = Math.ceil(remainingHours / currentStudyPace);
+    const targetDate = new Date(Date.now() + totalDays * 86400000);
+    const targetMonthYear = targetDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+    const totalDaysEl = document.getElementById('forecaster-total-days');
+    const targetDateEl = document.getElementById('forecaster-target-date');
+    const completedHoursEl = document.getElementById('forecaster-completed-hours');
+    const weeklyHoursEl = document.getElementById('forecaster-weekly-hours');
+
+    if (totalDaysEl) totalDaysEl.textContent = `${totalDays} Days`;
+    if (targetDateEl) targetDateEl.textContent = targetMonthYear;
+    if (completedHoursEl) completedHoursEl.textContent = `${completedHours}h / ${totalHours}h`;
+    if (weeklyHoursEl) weeklyHoursEl.textContent = `${(currentStudyPace * 7).toFixed(1)}h/wk`;
+
+    renderForecasterTable();
+  }
+
+  function toggleForecasterTable() {
+    const wrapper = document.getElementById('forecaster-table-wrapper');
+    const txt = document.getElementById('forecaster-table-toggle-txt');
+    if (!wrapper) return;
+
+    const isHidden = wrapper.style.display === 'none';
+    wrapper.style.display = isHidden ? 'block' : 'none';
+    if (txt) txt.textContent = isHidden ? 'Hide Research Table' : 'View Research Table';
+    if (isHidden) renderForecasterTable();
+    hapticFeedback(8);
+  }
+
+  function renderForecasterTable() {
+    const tbody = document.getElementById('forecaster-table-body');
+    if (!tbody || !window.ALL_COURSES_DATA) return;
+
+    tbody.innerHTML = '';
+    let cumulativeHours = 0;
+
+    window.ALL_COURSES_DATA.courses.forEach((c, idx) => {
+      const hours = c.estimated_hours || 0;
+      cumulativeHours += hours;
+      const daysForThis = Math.ceil(hours / currentStudyPace);
+      const daysCumulative = Math.ceil(cumulativeHours / currentStudyPace);
+      const finishDate = new Date(Date.now() + daysCumulative * 86400000);
+      const finishStr = finishDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-gold);">${idx + 1}</td>
+        <td>
+          <div style="font-weight: 600; color: var(--text-primary);">${escapeHtml(c.short_title || c.title)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(c.focus || '')}</div>
+        </td>
+        <td><span class="meta-pill" style="padding: 2px 8px; font-size: 0.72rem;">${escapeHtml(c.instructor || '')}</span></td>
+        <td style="font-family: var(--font-mono); font-weight: 600;">${c.sections_count || c.total_modules}</td>
+        <td style="font-family: var(--font-mono); font-weight: 600; color: var(--accent-sage);">${c.video_lectures_count || c.total_lectures}</td>
+        <td style="font-family: var(--font-mono);">${c.topics_count || c.total_topics}</td>
+        <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-gold);">${hours.toFixed(1)}h</td>
+        <td style="font-family: var(--font-mono);">${daysForThis} Days</td>
+        <td style="font-family: var(--font-mono); font-weight: 600; color: var(--accent-gold);">${finishStr}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // Grand Totals Row
+    const trTotal = document.createElement('tr');
+    trTotal.style.background = 'rgba(160, 140, 120, 0.08)';
+    trTotal.style.fontWeight = '700';
+    const totalDaysAll = Math.ceil(cumulativeHours / currentStudyPace);
+    const finalFinishDate = new Date(Date.now() + totalDaysAll * 86400000).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+    trTotal.innerHTML = `
+      <td colspan="3" style="font-family: var(--font-serif); font-size: 0.92rem; color: var(--accent-gold);">
+        GRAND TOTAL (ALL 7 PROGRAMS)
+      </td>
+      <td style="font-family: var(--font-mono);">113</td>
+      <td style="font-family: var(--font-mono); color: var(--accent-sage);">1,014+</td>
+      <td style="font-family: var(--font-mono);">1,769</td>
+      <td style="font-family: var(--font-mono); color: var(--accent-gold);">${cumulativeHours.toFixed(1)}h</td>
+      <td style="font-family: var(--font-mono);">${totalDaysAll} Days</td>
+      <td style="font-family: var(--font-mono); color: var(--accent-gold);">${finalFinishDate}</td>
+    `;
+    tbody.appendChild(trTotal);
+  }
+
+  // Global Exports
+  window.switchView = switchView;
+  window.toggleAppTheme = toggleAppTheme;
+  window.toggleTimer = toggleTimer;
+  window.resetTimer = resetTimer;
+  window.skipTimer = skipTimer;
+  window.setTimerMode = setTimerMode;
+  window.toggleAudioSynthesizer = toggleAudioSynthesizer;
+  window.setChannelVolume = setChannelVolume;
+  window.toggleModuleAccordion = toggleModuleAccordion;
+  window.toggleTopicCheck = toggleTopicCheck;
+  window.openTopicNoteModal = openTopicNoteModal;
+  window.saveTopicNote = saveTopicNote;
+  window.closeTopicNoteModal = closeTopicNoteModal;
+  window.updateStudyPaceForecast = updateStudyPaceForecast;
+  window.toggleForecasterTable = toggleForecasterTable;
+
   // External Action Bridges
   window.launchStudySession = (topicName) => {
     switchView('dashboard');
@@ -1045,6 +1174,7 @@
     renderCurriculumMatrix();
     updateDashboardUI();
     renderActivityHeatmap();
+    updateStudyPaceForecast(2.5);
 
     // Attach search input listener
     const searchInput = document.getElementById('curriculum-search-input');

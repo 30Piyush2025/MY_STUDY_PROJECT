@@ -244,13 +244,11 @@
         <!-- Horizontal Course Switcher -->
         <div class="course-selector-scroll" id="course-selector-container"></div>
 
-        <!-- Selected Course Overview -->
+        <!-- Selected Course Overview with Researched Meta Pills -->
         <div style="margin-bottom: 18px;">
           <h2 id="active-course-title" style="font-family: var(--font-serif); font-size: 1.55rem; font-weight: 600; margin-bottom: 4px;">CampusX DSMP</h2>
-          <p id="active-course-desc" style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 6px;">End-to-End Data Science & Machine Learning</p>
-          <div id="active-course-stats" style="font-size: 0.78rem; font-weight: 700; color: var(--accent-gold); font-family: var(--font-mono);">
-            40 Modules • 213 Lectures • 1,219 Topics
-          </div>
+          <p id="active-course-desc" style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px;">End-to-End Data Science & Machine Learning</p>
+          <div class="course-meta-pills" id="active-course-pills"></div>
         </div>
 
         <!-- Search & Filter Controls -->
@@ -264,6 +262,75 @@
             <button class="course-chip filter-chip" data-filter="pending">Pending</button>
             <button class="course-chip filter-chip" data-filter="completed">Mastered</button>
           </div>
+        </div>
+      </div>
+
+      <!-- 7-Course Deep Research & Completion Forecaster ("Kitna Time Lagega?") -->
+      <div class="forecaster-card">
+        <div class="forecaster-header">
+          <div>
+            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; margin-bottom: 4px;">
+              📊 7 Flagship Programs Overview & Pace Forecaster
+            </h3>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">
+              Total: 113 Modules • 1,014+ Video Lectures • 1,769 Topics • 634.6 Hours of engineering curriculum
+            </p>
+          </div>
+          <button class="btn-pomo-sec" id="btn-toggle-forecaster-table" onclick="window.toggleForecasterTable()">
+            <span>📋</span> <span id="forecaster-table-toggle-txt">View Research Table</span>
+          </button>
+        </div>
+
+        <!-- Interactive Pace Slider -->
+        <div class="forecaster-slider-box">
+          <div class="forecaster-slider-labels">
+            <div>
+              <span style="font-weight: 600; font-size: 0.88rem;">Daily Study Velocity</span>
+              <div style="font-size: 0.74rem; color: var(--text-muted);">Adjust your hours to see projected completion dates</div>
+            </div>
+            <span class="pace-val-badge" id="pace-display-badge">2.5 hrs/day</span>
+          </div>
+          <input type="range" class="audio-slider" id="study-pace-slider" min="0.5" max="8.0" step="0.5" value="2.5" 
+                 oninput="window.updateStudyPaceForecast(this.value)">
+
+          <div class="forecaster-metric-grid">
+            <div class="stat-item">
+              <div class="stat-num" id="forecaster-total-days">254 Days</div>
+              <div class="stat-label">Estimated Time</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num" id="forecaster-target-date" style="font-size: 1.15rem;">May 2027</div>
+              <div class="stat-label">Projected Finish</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num" id="forecaster-completed-hours">0.0h / 634.6h</div>
+              <div class="stat-label">Hours Remaining</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num" id="forecaster-weekly-hours">17.5h/wk</div>
+              <div class="stat-label">Weekly Velocity</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deep Research Comparison Table (Collapsible) -->
+        <div class="forecaster-table-wrapper" id="forecaster-table-wrapper" style="display: none;">
+          <table class="forecaster-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Course Program</th>
+                <th>Instructor</th>
+                <th>Modules</th>
+                <th>Lectures</th>
+                <th>Topics</th>
+                <th>Hours</th>
+                <th>At Current Pace</th>
+                <th>Est. Completion</th>
+              </tr>
+            </thead>
+            <tbody id="forecaster-table-body"></tbody>
+          </table>
         </div>
       </div>
 

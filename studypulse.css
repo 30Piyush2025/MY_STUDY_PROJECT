@@ -1509,3 +1509,127 @@ body {
   justify-content: flex-end;
   gap: 10px;
 }
+
+/* ==========================================================================
+   RESEARCH OVERVIEW & PACE FORECASTER ("KITNA TIME LAGEGA?")
+   ========================================================================== */
+.forecaster-card {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 22px;
+}
+
+.forecaster-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.forecaster-slider-box {
+  background: rgba(160, 140, 120, 0.04);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.forecaster-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.pace-val-badge {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+  border: 1px solid var(--accent-gold-border);
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+}
+
+.forecaster-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+@media (min-width: 640px) {
+  .forecaster-metric-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.forecaster-table-wrapper {
+  overflow-x: auto;
+  margin-top: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--surface-border);
+}
+
+.forecaster-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.forecaster-table th {
+  background: rgba(160, 140, 120, 0.08);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  padding: 12px 14px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--surface-border);
+  white-space: nowrap;
+}
+
+.forecaster-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--surface-border);
+  color: var(--text-secondary);
+}
+
+.forecaster-table tr:last-child td {
+  border-bottom: none;
+}
+
+.forecaster-table tr:hover td {
+  background: rgba(160, 140, 120, 0.04);
+}
+
+.course-meta-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.meta-pill {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(160, 140, 120, 0.06);
+  border: 1px solid var(--surface-border);
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.meta-pill.highlight {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold-border);
+  background: var(--accent-gold-soft);
+}
+
