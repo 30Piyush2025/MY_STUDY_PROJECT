@@ -913,11 +913,11 @@
                   const hasNote = !!state.topicNotes[top.id];
                   return `
                     <div class="topic-row ${isDone ? 'completed' : ''}" id="row-${top.id}">
-                      <div class="topic-left">
+                      <label class="topic-left" style="cursor: pointer; -webkit-tap-highlight-color: transparent;">
                         <input type="checkbox" class="topic-checkbox" ${isDone ? 'checked' : ''} 
                                onchange="window.toggleTopicCheck('${top.id}', this.checked)">
                         <div class="topic-title">${escapeHtml(top.title)}</div>
-                      </div>
+                      </label>
                       <div class="topic-actions">
                         <button class="btn-topic-note" onclick="window.openTopicNoteModal('${top.id}', '${escapeAttr(top.title)}')" title="Study Notes">
                           ${hasNote ? '📝' : '✏️'}
@@ -1307,7 +1307,7 @@
       toast.id = 'studypulse-toast';
       toast.style.cssText = `
         position: fixed;
-        bottom: 84px;
+        bottom: calc(var(--bottom-nav-height) + 16px);
         left: 50%;
         transform: translateX(-50%);
         background: rgba(28, 25, 23, 0.96);

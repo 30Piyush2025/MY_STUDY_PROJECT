@@ -317,9 +317,12 @@
           
           <!-- Front Face -->
           <div class="palace-card-face palace-card-front">
-            <div class="palace-card-header">
-              <span class="topic-tag" id="palace-card-cat">DISTRIBUTED SYSTEMS</span>
-              <span class="palace-stab-pill" id="palace-card-stab">STABILITY: 92%</span>
+            <div class="palace-card-header" style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="topic-tag" id="palace-card-cat">DISTRIBUTED SYSTEMS</span>
+                <span class="palace-stab-pill" id="palace-card-stab">STABILITY: 92%</span>
+              </div>
+              <button class="btn-hud-glass" style="padding: 4px 10px; font-size: 0.82rem; cursor: pointer;" onclick="window.palaceCloseCard()" title="Close Card">✕</button>
             </div>
             <h3 class="palace-card-title" id="palace-card-q-title">Raft Leader Election</h3>
             <p class="palace-card-prompt" id="palace-card-prompt">Question prompt...</p>
@@ -331,9 +334,12 @@
 
           <!-- Back Face -->
           <div class="palace-card-face palace-card-back">
-            <div class="palace-card-header">
-              <span class="topic-tag">TECHNICAL EXPLANATION</span>
-              <span class="palace-stab-pill pos">FSRS RECALL GRADE</span>
+            <div class="palace-card-header" style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="topic-tag">TECHNICAL EXPLANATION</span>
+                <span class="palace-stab-pill pos">FSRS RECALL GRADE</span>
+              </div>
+              <button class="btn-hud-glass" style="padding: 4px 10px; font-size: 0.82rem; cursor: pointer;" onclick="window.palaceCloseCard()" title="Close Card">✕</button>
             </div>
             <div class="palace-card-answer-text" id="palace-card-answer">Detailed derivation...</div>
             <pre class="palace-card-code-block" id="palace-card-code"><code>// Code sample</code></pre>
@@ -584,6 +590,11 @@
   window.palaceResetView = palaceResetView;
   window.palaceFlipCard = palaceFlipCard;
   window.palaceGradeCard = palaceGradeCard;
+  window.palaceCloseCard = function() {
+    const modal = document.getElementById("palace-card-modal");
+    if (modal) modal.style.display = "none";
+    palaceResetView();
+  };
   window.memoryPalaceResize = onPalaceResize;
   window.toggleMemoryPalaceMode = function() {
     if (typeof window.switchView === 'function') {

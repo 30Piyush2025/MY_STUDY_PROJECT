@@ -503,7 +503,7 @@
             <span class="search-icon-pos">🔍</span>
             <input type="text" class="search-input" id="curriculum-search-input" placeholder="Search topics, algorithms, frameworks, math...">
           </div>
-          <div style="display: flex; gap: 6px;">
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
             <button class="course-chip filter-chip active" data-filter="all">All Topics</button>
             <button class="course-chip filter-chip" data-filter="pending">Pending</button>
             <button class="course-chip filter-chip" data-filter="completed">Mastered</button>
@@ -621,32 +621,6 @@
           </button>
         </div>
         <div id="memory-palace-3d-canvas"></div>
-
-        <!-- Floating Card Modal for Memory Palace -->
-        <div class="palace-card-modal" id="palace-card-modal">
-          <div class="palace-card-front" id="palace-card-front">
-            <div style="font-size: 0.72rem; font-family: var(--font-mono); font-weight: 700; color: var(--accent-gold);" id="palace-card-category">DISTRIBUTED SYSTEMS</div>
-            <h3 style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: 6px 0 10px;" id="palace-card-title">Concept</h3>
-            <p style="font-size: 0.92rem; color: var(--text-primary); line-height: 1.55;" id="palace-card-question">Question...</p>
-            <button class="btn-pomo-sec" style="margin-top: 14px; width: 100%;" onclick="window.palaceFlipCard()">
-              🔄 Reveal Solution & Invariants
-            </button>
-          </div>
-
-          <div class="palace-card-back" id="palace-card-back" style="display: none;">
-            <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 12px;" id="palace-card-answer">
-              Answer...
-            </div>
-            <pre style="background: var(--bg-tertiary); padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.78rem; overflow-x: auto; margin-bottom: 16px; border: 1px solid var(--surface-border);"><code id="palace-card-code">code</code></pre>
-            
-            <div class="fsrs-rating-buttons">
-              <button class="btn-fsrs again" onclick="window.palaceGradeCard('again')">Again (&lt;10m)</button>
-              <button class="btn-fsrs hard" onclick="window.palaceGradeCard('hard')">Hard (1d)</button>
-              <button class="btn-fsrs good" onclick="window.palaceGradeCard('good')">Good (3d)</button>
-              <button class="btn-fsrs easy" onclick="window.palaceGradeCard('easy')">Easy (7d)</button>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 

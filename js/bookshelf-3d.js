@@ -213,8 +213,8 @@
       topic: "Machine Learning Core Algorithms",
       shortTitle: "Machine Learning",
       track: "PREDICTIVE ALGORITHMS",
-      color: 0x2c3e50,
-      hexColor: "#2c3e50",
+      color: 0x78350f,
+      hexColor: "#78350f",
       subtitle: "Mathematical derivation and implementation of supervised & unsupervised algorithms.",
       curriculum: "CampusX DSMP Week 23-35 · 80 Lectures · 118.3 Hours",
       status: "COMPLETED",
@@ -259,8 +259,8 @@
       topic: "End-to-End Industry Capstone",
       shortTitle: "Real Estate Capstone",
       track: "PRODUCTION SYSTEMS",
-      color: 0x1f618d,
-      hexColor: "#1f618d",
+      color: 0x9a3412,
+      hexColor: "#9a3412",
       subtitle: "Full-cycle real estate property intelligence, recommender system & cloud deployment.",
       curriculum: "CampusX DSMP Capstone · 13 Masterclass Sessions · 17.2 Hours",
       status: "COMPLETED",
@@ -327,8 +327,8 @@
       topic: "RAG & Vector Databases",
       shortTitle: "RAG Pipelines",
       track: "ENTERPRISE INTELLIGENCE",
-      color: 0x1a5276,
-      hexColor: "#1a5276",
+      color: 0x5c2c16,
+      hexColor: "#5c2c16",
       subtitle: "Semantic search, document splitting strategies, vector indexes & hybrid retrieval.",
       curriculum: "GenAI Course Specialized Track · 18 Lectures · 24 Hours",
       status: "PRODUCTION PROVEN",
@@ -349,8 +349,8 @@
       topic: "MLOps & CI/CD Pipelines",
       shortTitle: "MLOps Systems",
       track: "PRODUCTION PLATFORMS",
-      color: 0x1e3f66,
-      hexColor: "#1e3f66",
+      color: 0xc2410c,
+      hexColor: "#c2410c",
       subtitle: "Experiment tracking, data versioning, containerization, and automated deployments.",
       curriculum: "Krish Naik MLOps Bootcamp · 24 Sections · 51 Hours",
       status: "10+ PROJECTS ENROLLED",
@@ -397,8 +397,8 @@
       topic: "Big Data Engineering (Spark/Cloud)",
       shortTitle: "Big Data Cloud",
       track: "DISTRIBUTED COMPUTING",
-      color: 0x212f3d,
-      hexColor: "#212f3d",
+      color: 0x443627,
+      hexColor: "#443627",
       subtitle: "Distributed storage, PySpark, streaming with Kafka, and GCP/Azure cloud pipelines.",
       curriculum: "Krish Naik Big Data Bootcamp · 10 Modules · 50 Hours",
       status: "CLOUD DATA TRACK",
@@ -614,7 +614,7 @@
       createBox(0.85 - f * 0.04, 0.13, 0.72 - f * 0.03, new THREE.MeshStandardMaterial({ color: folioColors[f], roughness: 0.6 }), -1.1, 1.455 + f * 0.135, 0.02 * (f - 1), bookshelfGroup);
     }
     for (let b = 0; b < 4; b++) {
-      const bindMat = new THREE.MeshStandardMaterial({ color: [0x23313d, 0x4d3229, 0x273b2d, 0x42382e][b], roughness: 0.5 });
+      const bindMat = new THREE.MeshStandardMaterial({ color: [0x5c2c16, 0x4d3229, 0x273b2d, 0x42382e][b], roughness: 0.5 });
       createBox(0.18, 0.92, 0.68, bindMat, -0.25 + b * 0.22, 1.85, 0, bookshelfGroup);
       createBox(0.04, 0.18, 0.01, matBrassGold, -0.25 + b * 0.22, 1.85, 0.345, bookshelfGroup);
     }
@@ -733,7 +733,7 @@
 
     // Decorative Shelf 3
     for (let e = 0; e < 5; e++) {
-      createBox(0.16, 0.78, 0.62, new THREE.MeshStandardMaterial({ color: 0x1b2d3d, roughness: 0.55 }), -1.2 + e * 0.18, 3.88, 0, bookshelfGroup);
+      createBox(0.16, 0.78, 0.62, new THREE.MeshStandardMaterial({ color: 0x452b1e, roughness: 0.55 }), -1.2 + e * 0.18, 3.88, 0, bookshelfGroup);
     }
     const clockMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.12, 32), matBrassGold);
     clockMesh.position.set(0.95, 3.75, 0.15);
