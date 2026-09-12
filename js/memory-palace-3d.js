@@ -479,10 +479,10 @@
     const ped = pedestals[activeCardIndex];
 
     let xp = 0;
-    if (score === 1) { card.stability = Math.max(25, card.stability - 30); xp = 0; }
-    else if (score === 2) { card.stability = Math.min(75, card.stability + 12); xp = 50; }
-    else if (score === 3) { card.stability = Math.min(92, card.stability + 25); xp = 100; }
-    else if (score === 4) { card.stability = 98; xp = 150; }
+    if (score === 1 || score === 'again') { card.stability = Math.max(25, card.stability - 30); xp = 0; }
+    else if (score === 2 || score === 'hard') { card.stability = Math.min(75, card.stability + 12); xp = 50; }
+    else if (score === 3 || score === 'good') { card.stability = Math.min(92, card.stability + 25); xp = 100; }
+    else if (score === 4 || score === 'easy') { card.stability = 98; xp = 150; }
 
     // Save stability to localStorage
     const savedStab = JSON.parse(localStorage.getItem("studyPulsePalaceStability") || "{}");
@@ -585,5 +585,12 @@
   window.palaceFlipCard = palaceFlipCard;
   window.palaceGradeCard = palaceGradeCard;
   window.memoryPalaceResize = onPalaceResize;
+  window.toggleMemoryPalaceMode = function() {
+    if (typeof window.switchView === 'function') {
+      window.switchView('dashboard');
+    } else {
+      palaceResetView();
+    }
+  };
 
 })();
