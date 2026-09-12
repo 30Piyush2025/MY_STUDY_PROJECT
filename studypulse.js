@@ -16,7 +16,7 @@
     FOCUS_SECONDS: 'studypulse_focus_seconds_v2',
     DAILY_ACTIVITY: 'studypulse_daily_activity_v2',
     STREAK: 'studypulse_streak_v2',
-    THEME: 'studypulse_theme_v2',
+    THEME: 'studypulse_theme_v3',
     XP: 'studypulse_xp_v2',
     FSRS: 'studypulse_fsrs_v2',
     MILESTONES: 'studypulse_milestones_v2'
@@ -52,7 +52,7 @@
   // =========================================================================
   const state = {
     user: 'Piyush Tiwari',
-    theme: 'dark',
+    theme: 'light',
     activeView: 'dashboard',
     activeCourseId: 'campusx_dsmp',
     searchQuery: '',
@@ -305,7 +305,7 @@
   function updateThemeColorMeta() {
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
-      meta.setAttribute('content', state.theme === 'dark' ? '#060913' : '#f8fafc');
+      meta.setAttribute('content', state.theme === 'dark' ? '#2e2521' : '#faf7f2');
     }
   }
 
