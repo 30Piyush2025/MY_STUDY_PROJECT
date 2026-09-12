@@ -584,15 +584,25 @@
       <div class="module-accordion-list" id="module-accordion-list"></div>
     </section>
 
-    <!-- VIEW 3: 3D TACTILE BOOKSHELF -->
+    <!-- VIEW 3: 3D TACTILE BOOKSHELF & FULLSCREEN LIBRARY -->
     <section class="view-panel" id="view-bookshelf">
-      <div class="bookshelf-container">
+      <div class="bookshelf-container" id="bookshelf-container">
         <div class="bookshelf-hud">
-          <div class="bookshelf-hud-badge">
-            <span>📚 THE REFERENCE SHELF • 18 VOLUMES IN THREE.JS</span>
+          <div class="bookshelf-hud-left">
+            <div class="bookshelf-hud-badge">
+              <span>📚 3D REFERENCE SHELF • 18 VOLUMES</span>
+            </div>
+            <div class="bookshelf-hud-badge hint-badge">
+              <span>👆 Tap any book to inspect syllabus</span>
+            </div>
           </div>
-          <div class="bookshelf-hud-badge" style="background: rgba(229, 169, 60, 0.15); color: var(--accent-gold);">
-            <span>👆 Tap or click any book to pull out & inspect syllabus</span>
+          <div class="bookshelf-hud-right">
+            <button class="bookshelf-hud-btn" id="btn-bookshelf-fullscreen" onclick="window.toggleBookshelfFullscreen()" title="Toggle Fullscreen 3D View">
+              <span id="bookshelf-fs-icon">⛶</span> <span id="bookshelf-fs-label">Fullscreen</span>
+            </button>
+            <button class="bookshelf-hud-btn" onclick="window.bookshelf3DClose()" title="Reset Camera View">
+              <span>↺ Reset</span>
+            </button>
           </div>
         </div>
         <div id="bookshelf-3d-canvas-container"></div>

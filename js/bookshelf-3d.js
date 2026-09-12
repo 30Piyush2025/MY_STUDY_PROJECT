@@ -505,9 +505,9 @@
     if (width === 0) width = 1200;
     if (height === 0) height = 720;
 
-    // WebGL Scene & Camera
+    // WebGL Scene & Camera (Transparent canvas to reveal warm linen room)
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0e17);
+    scene.background = null;
 
     camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
     camera.position.copy(cameraEntrancePos);
@@ -524,7 +524,7 @@
     renderer.domElement.style.display = 'block';
     container.appendChild(renderer.domElement);
 
-    // Warm Library Lighting
+    // Warm Library Lighting (Zero blue, cozy amber & soft terracotta)
     const ambLight = new THREE.AmbientLight(0xfff3e0, 0.85);
     scene.add(ambLight);
 
@@ -535,7 +535,7 @@
     dirLight.shadow.mapSize.height = 1024;
     scene.add(dirLight);
 
-    const fillLight = new THREE.PointLight(0x7090ff, 0.5, 12);
+    const fillLight = new THREE.PointLight(0xffecd0, 0.6, 12);
     fillLight.position.set(-3.5, 3, 2);
     scene.add(fillLight);
 
@@ -1094,8 +1094,8 @@
 
   function onResize() {
     if (!container || !renderer || !camera) return;
-    const width = container.clientWidth || 1200;
-    const height = container.clientHeight || 720;
+    const width = container.clientWidth || window.innerWidth;
+    const height = container.clientHeight || window.innerHeight;
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);

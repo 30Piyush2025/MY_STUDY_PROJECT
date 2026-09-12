@@ -332,6 +332,7 @@
 
     // Initialize Specialized 3D & Canvas Modules on Demand
     if (viewName === 'bookshelf') {
+      document.body.classList.add('view-bookshelf-active');
       setTimeout(() => {
         if (typeof window.initBookshelf3D === 'function') {
           window.initBookshelf3D('bookshelf-3d-canvas-container');
@@ -340,6 +341,12 @@
           window.bookshelf3DResize();
         }
       }, 60);
+    } else {
+      document.body.classList.remove('view-bookshelf-active');
+      const shelf = document.getElementById('bookshelf-container');
+      if (shelf && shelf.classList.contains('is-fullscreen')) {
+        toggleBookshelfFullscreen(false);
+      }
     }
     if (viewName === 'palace') {
       setTimeout(() => {
@@ -365,6 +372,86 @@
       updateDashboardUI();
     }
   }
+
+  // =========================================================================
+  // 3D LIBRARY FULLSCREEN CONTROLLER
+  // =========================================================================
+  function toggleBookshelfFullscreen(forceState) {
+    const shelf = document.getElementById('bookshelf-container') || document.querySelector('.bookshelf-container');
+    const view = document.getElementById('view-bookshelf');
+    const fsIcon = document.getElementById('bookshelf-fs-icon');
+    const fsLabel = document.getElementById('bookshelf-fs-label');
+    if (!shelf) return;
+
+    const isCurrentFs = shelf.classList.contains('is-fullscreen');
+    const targetFs = forceState !== undefined ? forceState : !isCurrentFs;
+
+    if (targetFs) {
+      shelf.classList.add('is-fullscreen');
+      if (view) view.classList.add('is-fullscreen');
+      document.body.classList.add('bookshelf-fullscreen-active');
+      if (fsIcon) fsIcon.textContent = '✕';
+      if (fsLabel) fsLabel.textContent = 'Exit Fullscreen';
+
+      try {
+        if (!document.fullscreenElement && shelf.requestFullscreen) {
+          shelf.requestFullscreen().catch(() => {});
+        } else if (!document.webkitFullscreenElement && shelf.webkitRequestFullscreen) {
+          shelf.webkitRequestFullscreen();
+        }
+      } catch (e) {}
+    } else {
+      shelf.classList.remove('is-fullscreen');
+      if (view) view.classList.remove('is-fullscreen');
+      document.body.classList.remove('bookshelf-fullscreen-active');
+      if (fsIcon) fsIcon.textContent = '⛶';
+      if (fsLabel) fsLabel.textContent = 'Fullscreen';
+
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitFullscreenElement && document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      } catch (e) {}
+    }
+
+    hapticFeedback(14);
+
+    setTimeout(() => {
+      if (typeof window.bookshelf3DResize === 'function') {
+        window.bookshelf3DResize();
+      }
+    }, 60);
+    setTimeout(() => {
+      if (typeof window.bookshelf3DResize === 'function') {
+        window.bookshelf3DResize();
+      }
+    }, 280);
+  }
+
+  document.addEventListener('fullscreenchange', () => {
+    const shelf = document.getElementById('bookshelf-container');
+    if (!document.fullscreenElement && shelf && shelf.classList.contains('is-fullscreen')) {
+      toggleBookshelfFullscreen(false);
+    }
+  });
+
+  document.addEventListener('webkitfullscreenchange', () => {
+    const shelf = document.getElementById('bookshelf-container');
+    if (!document.webkitFullscreenElement && shelf && shelf.classList.contains('is-fullscreen')) {
+      toggleBookshelfFullscreen(false);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const shelf = document.getElementById('bookshelf-container');
+      if (shelf && shelf.classList.contains('is-fullscreen')) {
+        toggleBookshelfFullscreen(false);
+      }
+    }
+  });
 
   // =========================================================================
   // CHRONO-BLOCK POMODORO FOCUS ENGINE
@@ -1393,6 +1480,7 @@
   window.closeTopicNoteModal = closeTopicNoteModal;
   window.updateStudyPaceForecast = updateStudyPaceForecast;
   window.toggleForecasterTable = toggleForecasterTable;
+  window.toggleBookshelfFullscreen = toggleBookshelfFullscreen;
 
   // External Action Bridges
   window.launchStudySession = (topicName) => {
