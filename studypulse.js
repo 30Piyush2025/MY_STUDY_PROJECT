@@ -342,12 +342,7 @@
     if (viewName === 'analytics') {
       renderActivityHeatmap();
     }
-    if (viewName === 'liveroom') {
-      if (typeof startPeerSimulator === 'function') {
-        startPeerSimulator();
-      }
-    }
-    if (viewName === 'dashboard' || viewName === 'leaderboard') {
+    if (viewName === 'dashboard') {
       updateDashboardUI();
     }
   }
@@ -933,20 +928,11 @@
     const regainTodayEl = document.getElementById('regain-today-focus-time');
     if (regainTodayEl) regainTodayEl.textContent = timeFormatted;
 
-    const peerUserEl = document.getElementById('peer-user-time');
-    if (peerUserEl) peerUserEl.textContent = timeFormatted;
-
     const todayBar = document.getElementById('today-bar-fill');
     if (todayBar) {
       const pct = Math.min(100, Math.max(25, (state.totalFocusSeconds / 7200) * 100));
       todayBar.style.height = `${pct}%`;
     }
-
-    const lbUserPill = document.getElementById('leaderboard-user-time');
-    if (lbUserPill) lbUserPill.textContent = `${hrs + 19}h ${String(remMins + 15).padStart(2, '0')}m`;
-
-    const lbUserRow = document.getElementById('leaderboard-row-user-time');
-    if (lbUserRow) lbUserRow.textContent = `${hrs + 19}h ${String(remMins + 15).padStart(2, '0')}m`;
 
     updateRPGStatus();
   }
@@ -1208,13 +1194,10 @@
   // REGAIN COMPLETE FEATURE ARCHITECTURE
   // 1. Tag Selector Popover (Study ▾)
   // 2. Strict Focus Mode Lock (🔒)
-  // 3. Focus Companion Mascot Interactions & Quotes (Shot 0)
-  // 4. Daily Study Schedule Routines (Shot 6)
-  // 5. Live Focus Room & Floating Reaction Emojis (Shot 3)
-  // 6. Competitive Leaderboard Tabs (Shot 4)
-  // 7. Distraction Shield & Reels/Shorts Modal (Shot 1, 2, 5)
-  // 8. Weekly Tracker Day Navigation (Shot 7)
-  // 9. Slide-In Navigation Drawer (≡)
+  // 3. Focus Companion Mascot Interactions & Quotes
+  // 4. Daily Study Schedule Routines
+  // 5. Weekly Tracker Day Navigation
+  // 6. Slide-In Navigation Drawer (≡)
   // =========================================================================
 
   // 1. TAG POPOVER
@@ -1231,8 +1214,6 @@
     state.currentTag = tagName;
     const label = document.getElementById('active-tag-label');
     if (label) label.textContent = tagName;
-    const peerTag = document.getElementById('peer-user-tag');
-    if (peerTag) peerTag.textContent = tagName;
 
     document.querySelectorAll('.regain-tag-option').forEach(opt => {
       opt.classList.toggle('selected', opt.textContent.includes(tagName));
@@ -1262,14 +1243,12 @@
     strictModeEnabled = !strictModeEnabled;
     const btnTimer = document.getElementById('btn-timer-lock');
     const btnHeader = document.getElementById('header-strict-lock-btn');
-    const switchStrict = document.getElementById('shield-toggle-strict');
 
     if (btnTimer) btnTimer.classList.toggle('active-lock', strictModeEnabled);
     if (btnHeader) {
       btnHeader.style.color = strictModeEnabled ? 'var(--accent-orange)' : '';
       btnHeader.style.boxShadow = strictModeEnabled ? '0 0 12px rgba(255, 138, 61, 0.4)' : '';
     }
-    if (switchStrict) switchStrict.checked = strictModeEnabled;
 
     if (strictModeEnabled) {
       showToast('🔒 Strict Study Lock ON: Tab switching is monitored to protect your streak!');
@@ -1280,12 +1259,6 @@
     } else {
       showToast('🔓 Strict Study Lock Paused');
       hapticFeedback(14);
-    }
-  }
-
-  function toggleStrictSwitch(checked) {
-    if (strictModeEnabled !== checked) {
-      toggleStrictMode();
     }
   }
 
@@ -1348,97 +1321,7 @@
     hapticFeedback(16);
   }
 
-  // 5. LIVE STUDY ROOM & FLOATING EMOJIS
-  function sendEmojiReaction(emoji) {
-    const el = document.createElement('div');
-    el.className = 'floating-reaction-emoji';
-    el.textContent = emoji;
-
-    // Randomize position horizontally across screen (25% to 75%)
-    const randomLeft = Math.floor(Math.random() * 50) + 25;
-    const randomRot = (Math.random() * 40 - 20) + 'deg';
-    el.style.left = `${randomLeft}%`;
-    el.style.setProperty('--rot', randomRot);
-
-    document.body.appendChild(el);
-    setTimeout(() => { el.remove(); }, 2400);
-
-    hapticFeedback(10);
-  }
-
-  // Background peer reaction simulation (live atmosphere)
-  let peerReactionInterval = null;
-  function startPeerSimulator() {
-    if (peerReactionInterval) return;
-    const emojis = ['❤️', '💯', '👏', '🔥', '🫡'];
-    peerReactionInterval = setInterval(() => {
-      const activePanel = document.querySelector('.view-panel.active');
-      if (activePanel && activePanel.id === 'view-liveroom') {
-        const randEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-        const el = document.createElement('div');
-        el.className = 'floating-reaction-emoji';
-        el.textContent = randEmoji;
-        el.style.left = `${Math.floor(Math.random() * 60) + 20}%`;
-        el.style.setProperty('--rot', (Math.random() * 30 - 15) + 'deg');
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 2400);
-      }
-    }, 11000);
-  }
-
-  // 6. COMPETITIVE LEADERBOARD
-  function switchLeaderboardTab(tab) {
-    document.querySelectorAll('.leaderboard-tab-pill').forEach(btn => {
-      btn.classList.toggle('active', btn.textContent.toLowerCase().includes(tab));
-    });
-
-    const hours = Math.floor(state.totalFocusSeconds / 3600);
-    const mins = Math.floor((state.totalFocusSeconds % 3600) / 60);
-
-    const userTimePill = document.getElementById('leaderboard-user-time');
-    const userTimeRow = document.getElementById('leaderboard-row-user-time');
-
-    if (tab === 'today') {
-      const tStr = `${hours}h ${String(mins).padStart(2, '0')}m`;
-      if (userTimePill) userTimePill.textContent = tStr;
-      if (userTimeRow) userTimeRow.textContent = tStr;
-    } else if (tab === 'all') {
-      const tStr = `${hours + 84}h ${String(mins).padStart(2, '0')}m`;
-      if (userTimePill) userTimePill.textContent = tStr;
-      if (userTimeRow) userTimeRow.textContent = tStr;
-    } else {
-      const tStr = `${hours + 19}h ${String(mins + 15).padStart(2, '0')}m`;
-      if (userTimePill) userTimePill.textContent = tStr;
-      if (userTimeRow) userTimeRow.textContent = tStr;
-    }
-
-    hapticFeedback(10);
-  }
-
-  // 7. DISTRACTION SHIELD (REELS / SHORTS BLOCKER)
-  function triggerShieldDemo() {
-    const modal = document.getElementById('regain-shield-overlay');
-    if (modal) modal.style.display = 'flex';
-    hapticFeedback([40, 30, 80]);
-  }
-
-  function closeShieldModal() {
-    const modal = document.getElementById('regain-shield-overlay');
-    if (modal) modal.style.display = 'none';
-    hapticFeedback(8);
-  }
-
-  function toggleReelsBlock(checked) {
-    showToast(`🚫 Reels & Shorts Blocker: ${checked ? 'STRICT SHIELD ACTIVE' : 'PAUSED'}`);
-    hapticFeedback(10);
-  }
-
-  function toggleYoutubeStudyMode(checked) {
-    showToast(`📺 YouTube Study Mode: ${checked ? 'Only Educational Channels Allowed' : 'Standard Feed'}`);
-    hapticFeedback(10);
-  }
-
-  // 8. WEEKLY TRACKER NAVIGATION
+  // 5. WEEKLY TRACKER NAVIGATION
   const DAYS_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   let currentChartDayIdx = 6; // Sunday / Today
 
@@ -1455,7 +1338,7 @@
     hapticFeedback(10);
   }
 
-  // 9. SLIDE-IN REGAIN DRAWER
+  // 6. SLIDE-IN REGAIN DRAWER
   function toggleRegainDrawer(force) {
     const overlay = document.getElementById('regain-drawer-overlay');
     const drawer = document.getElementById('regain-drawer');
@@ -1478,15 +1361,8 @@
   window.toggleTagPopover = toggleTagPopover;
   window.selectTag = selectTag;
   window.toggleStrictMode = toggleStrictMode;
-  window.toggleStrictSwitch = toggleStrictSwitch;
   window.mascotInteract = mascotInteract;
   window.activateRoutine = activateRoutine;
-  window.sendEmojiReaction = sendEmojiReaction;
-  window.switchLeaderboardTab = switchLeaderboardTab;
-  window.triggerShieldDemo = triggerShieldDemo;
-  window.closeShieldModal = closeShieldModal;
-  window.toggleReelsBlock = toggleReelsBlock;
-  window.toggleYoutubeStudyMode = toggleYoutubeStudyMode;
   window.navigateChartDay = navigateChartDay;
   window.toggleRegainDrawer = toggleRegainDrawer;
 

@@ -38,19 +38,10 @@
         </div>
       </div>
 
-      <!-- Desktop Navigation Tabs (Regain + Engineering Ecosystem) -->
+      <!-- Desktop Navigation Tabs -->
       <nav class="desktop-nav-tabs" aria-label="Desktop Navigation">
         <button class="nav-tab-btn active" data-view="dashboard" onclick="window.switchView('dashboard')">
           <span>⏱</span> <span>Focus</span>
-        </button>
-        <button class="nav-tab-btn" data-view="liveroom" onclick="window.switchView('liveroom')">
-          <span>👥</span> <span>Live Room</span>
-        </button>
-        <button class="nav-tab-btn" data-view="leaderboard" onclick="window.switchView('leaderboard')">
-          <span>🏆</span> <span>Leaderboard</span>
-        </button>
-        <button class="nav-tab-btn" data-view="shield" onclick="window.switchView('shield')">
-          <span>🛡️</span> <span>Shield</span>
         </button>
         <button class="nav-tab-btn" data-view="curriculum" onclick="window.switchView('curriculum')">
           <span>📋</span> <span>Syllabus</span>
@@ -71,8 +62,8 @@
 
       <!-- Actions & Profile -->
       <div class="header-actions">
-        <div class="live-focus-badge" onclick="window.switchView('liveroom')" style="cursor: pointer;" title="Live Focus with Peers (Regain)">
-          <span>🟢</span> <span id="header-live-count">520k+ focusing</span>
+        <div class="live-focus-badge" title="Engineering Focus Studio">
+          <span>🟢</span> <span>Focus Mode</span>
         </div>
         <button class="icon-btn" id="header-strict-lock-btn" onclick="window.toggleStrictMode()" title="Toggle Strict Study Mode">
           <span>🔒</span>
@@ -407,22 +398,17 @@
             </div>
           </div>
 
-          <!-- Quick Access Cards to Regain Hubs & 3D Environments -->
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--surface-border-subtle);">
-            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('liveroom')">
-              <div style="font-size: 1.4rem; margin-bottom: 4px;">👥</div>
-              <div style="font-size: 0.85rem; font-weight: 700;">Live Room</div>
-              <div style="font-size: 0.7rem; color: var(--text-muted);">520k+ focusing</div>
+          <!-- Quick Access Cards to 3D Environments -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--surface-border-subtle);">
+            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('bookshelf')">
+              <div style="font-size: 1.5rem; margin-bottom: 4px;">📚</div>
+              <div style="font-size: 0.9rem; font-weight: 700;">The 3D Library</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">18 tactile Three.js volumes</div>
             </div>
-            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('leaderboard')">
-              <div style="font-size: 1.4rem; margin-bottom: 4px;">🏆</div>
-              <div style="font-size: 0.85rem; font-weight: 700;">Leaderboard</div>
-              <div style="font-size: 0.7rem; color: var(--text-muted);">Podium & ranks</div>
-            </div>
-            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('shield')">
-              <div style="font-size: 1.4rem; margin-bottom: 4px;">🛡️</div>
-              <div style="font-size: 0.85rem; font-weight: 700;">Shield</div>
-              <div style="font-size: 0.7rem; color: var(--text-muted);">Block Shorts & Reels</div>
+            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('chaos')">
+              <div style="font-size: 1.5rem; margin-bottom: 4px;">⚡</div>
+              <div style="font-size: 0.9rem; font-weight: 700;">Systems Lab</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">Raft, Redis & Kafka Architecture</div>
             </div>
           </div>
         </div>
@@ -671,324 +657,13 @@
       </div>
     </section>
 
-    <!-- VIEW 7: REGAIN LIVE STUDY ROOM WITH PEERS (Shot 3) -->
-    <section class="view-panel" id="view-liveroom">
-      <div class="regain-liveroom-panel">
-        <div class="regain-room-hero">
-          <h2 class="regain-room-title">AI & Engineering Aspirants</h2>
-          <div class="regain-live-counter-pill">
-            <span>🟢</span> <span id="liveroom-live-count">520,248 focusing</span>
-          </div>
-          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;">
-            Deep work circle with students across India mastering Data Science, LLMs, and System Design.
-          </p>
-        </div>
-
-        <!-- Live Peers Grid with Pulsing Focus Rings -->
-        <div class="regain-peers-grid" id="regain-peers-container">
-          <!-- 1: Current User (Piyush) -->
-          <div class="regain-peer-card">
-            <div class="regain-peer-avatar-wrap focusing">
-              <div class="regain-peer-avatar" style="background: radial-gradient(circle at 30% 30%, #ff8a3d, #ea580c); color: #fff; font-size: 1.1rem; font-weight: 800;">
-                PT
-              </div>
-              <div class="regain-peer-live-dot">✓</div>
-            </div>
-            <div class="regain-peer-name">You (Piyush)</div>
-            <div class="regain-peer-time" id="peer-user-time">2h 45m</div>
-            <div class="regain-peer-tag" id="peer-user-tag">DSA & Algorithms</div>
-          </div>
-
-          <!-- 2: Peer Rohan -->
-          <div class="regain-peer-card">
-            <div class="regain-peer-avatar-wrap focusing">
-              <div class="regain-peer-avatar" style="background: #3b82f6;">👨‍💻</div>
-              <div class="regain-peer-live-dot">✓</div>
-            </div>
-            <div class="regain-peer-name">Rohan</div>
-            <div class="regain-peer-time">2h 30m</div>
-            <div class="regain-peer-tag">CampusX DSMP</div>
-          </div>
-
-          <!-- 3: Peer Ayaan -->
-          <div class="regain-peer-card">
-            <div class="regain-peer-avatar-wrap focusing">
-              <div class="regain-peer-avatar" style="background: #a855f7;">⚡</div>
-              <div class="regain-peer-live-dot">✓</div>
-            </div>
-            <div class="regain-peer-name">Ayaan Khan</div>
-            <div class="regain-peer-time">2h 15m</div>
-            <div class="regain-peer-tag">LangChain Agents</div>
-          </div>
-
-          <!-- 4: Peer Rajesh -->
-          <div class="regain-peer-card">
-            <div class="regain-peer-avatar-wrap focusing">
-              <div class="regain-peer-avatar" style="background: #0284c7;">☕</div>
-              <div class="regain-peer-live-dot">✓</div>
-            </div>
-            <div class="regain-peer-name">Rajesh Kumar</div>
-            <div class="regain-peer-time">1h 20m</div>
-            <div class="regain-peer-tag">Deep Learning</div>
-          </div>
-
-          <!-- 5: Peer Nisha -->
-          <div class="regain-peer-card">
-            <div class="regain-peer-avatar-wrap focusing">
-              <div class="regain-peer-avatar" style="background: #ec4899;">👩‍🔬</div>
-              <div class="regain-peer-live-dot">✓</div>
-            </div>
-            <div class="regain-peer-name">Nisha Sharma</div>
-            <div class="regain-peer-time">1h 15m</div>
-            <div class="regain-peer-tag">LeetCode 75</div>
-          </div>
-
-          <!-- 6: Peer Aarav -->
-          <div class="regain-peer-card">
-            <div class="regain-peer-avatar-wrap focusing">
-              <div class="regain-peer-avatar" style="background: #10b981;">🐳</div>
-              <div class="regain-peer-live-dot">✓</div>
-            </div>
-            <div class="regain-peer-name">Aarav Mehta</div>
-            <div class="regain-peer-time">1h 05m</div>
-            <div class="regain-peer-tag">Docker & MLOps</div>
-          </div>
-        </div>
-
-        <!-- Floating Reactions Bar (Shot 3) -->
-        <div class="regain-reactions-bar">
-          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('❤️')" title="Send Love">❤️</button>
-          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('💯')" title="100% Focus">💯</button>
-          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('👏')" title="Applause">👏</button>
-          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('😲')" title="Astonished">😲</button>
-          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('🔥')" title="On Fire">🔥</button>
-          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('🫡')" title="Respect">🫡</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- VIEW 8: REGAIN COMPETITIVE LEADERBOARD (Shot 4) -->
-    <section class="view-panel" id="view-leaderboard">
-      <div class="regain-leaderboard-panel">
-        <div style="text-align: center; margin-bottom: 20px;">
-          <h2 style="font-size: 1.55rem; font-weight: 800;">Compete in Leaderboard</h2>
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 4px;">Compare weekly deep work hours with dedicated engineering peers</p>
-        </div>
-
-        <div class="leaderboard-tabs-row">
-          <button class="leaderboard-tab-pill active" onclick="window.switchLeaderboardTab('week')">This Week</button>
-          <button class="leaderboard-tab-pill" onclick="window.switchLeaderboardTab('today')">Today</button>
-          <button class="leaderboard-tab-pill" onclick="window.switchLeaderboardTab('all')">All-Time</button>
-        </div>
-
-        <!-- Top 3 Podium (Shot 4) -->
-        <div class="regain-podium-row">
-          <!-- Rank 2: Silver (Left) -->
-          <div class="podium-slot rank-2">
-            <div class="podium-avatar-wrap">
-              <div class="podium-avatar" style="background: #3b82f6;">👩‍💻</div>
-              <div class="podium-rank-badge">2</div>
-            </div>
-            <div class="podium-user-name">Sara Chen</div>
-            <div class="podium-time-pill">19h 15m</div>
-          </div>
-
-          <!-- Rank 1: Gold (Center Elevated) -->
-          <div class="podium-slot rank-1">
-            <div style="font-size: 1.4rem; margin-bottom: -6px;">👑</div>
-            <div class="podium-avatar-wrap">
-              <div class="podium-avatar" style="background: #f59e0b;">👨‍🎓</div>
-              <div class="podium-rank-badge">1</div>
-            </div>
-            <div class="podium-user-name">Arjun K.</div>
-            <div class="podium-time-pill">23h 20m</div>
-          </div>
-
-          <!-- Rank 3: Bronze (Right) -->
-          <div class="podium-slot rank-3">
-            <div class="podium-avatar-wrap">
-              <div class="podium-avatar" style="background: radial-gradient(circle at 30% 30%, #ff8a3d, #ea580c); color: #fff; font-weight: 800; font-size: 1.1rem;">PT</div>
-              <div class="podium-rank-badge">3</div>
-            </div>
-            <div class="podium-user-name">Piyush (You)</div>
-            <div class="podium-time-pill" id="leaderboard-user-time">19h 15m</div>
-          </div>
-        </div>
-
-        <!-- Ranked List (Positions 4+) -->
-        <div class="regain-rank-list">
-          <div class="regain-rank-row is-user">
-            <span class="rank-num">3</span>
-            <div class="rank-avatar" style="background: var(--accent-orange-soft); color: var(--accent-orange); font-weight: 800; font-size: 0.85rem;">YOU</div>
-            <div class="rank-details">
-              <div class="rank-name">Piyush Tiwari (You)</div>
-              <div class="rank-meta">Data Science & Systems Engineer • 7 Programs</div>
-            </div>
-            <span class="rank-time" id="leaderboard-row-user-time">19h 15m</span>
-          </div>
-
-          <div class="regain-rank-row">
-            <span class="rank-num">4</span>
-            <div class="rank-avatar">👩‍🔬</div>
-            <div class="rank-details">
-              <div class="rank-name">Amina</div>
-              <div class="rank-meta">Natural Language Processing</div>
-            </div>
-            <span class="rank-time">16h 00m</span>
-          </div>
-
-          <div class="regain-rank-row">
-            <span class="rank-num">5</span>
-            <div class="rank-avatar">👨‍💻</div>
-            <div class="rank-details">
-              <div class="rank-name">Rami</div>
-              <div class="rank-meta">Distributed Systems</div>
-            </div>
-            <span class="rank-time">13h 35m</span>
-          </div>
-
-          <div class="regain-rank-row">
-            <span class="rank-num">6</span>
-            <div class="rank-avatar">🧑‍💼</div>
-            <div class="rank-details">
-              <div class="rank-name">Omar</div>
-              <div class="rank-meta">Computer Vision & PyTorch</div>
-            </div>
-            <span class="rank-time">10h 12m</span>
-          </div>
-
-          <div class="regain-rank-row">
-            <span class="rank-num">7</span>
-            <div class="rank-avatar">👩‍🎨</div>
-            <div class="rank-details">
-              <div class="rank-name">Priya Patel</div>
-              <div class="rank-meta">Frontend & WebGL Systems</div>
-            </div>
-            <span class="rank-time">9h 45m</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- VIEW 9: REGAIN DISTRACTION SHIELD & APP BLOCKER (Shots 1, 2, 5) -->
-    <section class="view-panel" id="view-shield">
-      <div class="regain-shield-panel">
-        <div style="text-align: center; margin-bottom: 24px;">
-          <h2 style="font-size: 1.55rem; font-weight: 800;">Digital Wellbeing & Shield</h2>
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 4px;">Guard your focus against short-form video dopamine loops and notification noise</p>
-        </div>
-
-        <div class="shield-hero-card">
-          <div class="shield-toggle-item">
-            <div class="shield-toggle-info">
-              <h4><span>🚫</span> Block Reels & Shorts</h4>
-              <p>Intercepts addictive scroll feeds on Instagram, YouTube & TikTok</p>
-            </div>
-            <label class="regain-switch">
-              <input type="checkbox" id="shield-toggle-reels" checked onchange="window.toggleReelsBlock(this.checked)">
-              <span class="regain-slider"></span>
-            </label>
-          </div>
-
-          <div class="shield-toggle-item">
-            <div class="shield-toggle-info">
-              <h4><span>🔒</span> Strict Focus Lock Mode</h4>
-              <p>Penalizes tab-switching and leaves full-immersion full screen</p>
-            </div>
-            <label class="regain-switch">
-              <input type="checkbox" id="shield-toggle-strict" onchange="window.toggleStrictSwitch(this.checked)">
-              <span class="regain-slider"></span>
-            </label>
-          </div>
-
-          <div class="shield-toggle-item">
-            <div class="shield-toggle-info">
-              <h4><span>📺</span> Watch Only Study Videos on YouTube</h4>
-              <p>Whitelists CampusX, Krish Naik, Physics Wallah, and MIT OCW only</p>
-            </div>
-            <label class="regain-switch">
-              <input type="checkbox" id="shield-toggle-youtube" checked onchange="window.toggleYoutubeStudyMode(this.checked)">
-              <span class="regain-slider"></span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Blocked Apps Status Grid -->
-        <div class="hero-card" style="margin-bottom: 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-            <span style="font-weight: 700; font-size: 0.9rem;">App Protection Status</span>
-            <span class="meta-pill highlight">Active Shield</span>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-md); background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2);">
-              <span style="font-size: 1.3rem;">📸</span>
-              <div>
-                <div style="font-size: 0.82rem; font-weight: 700;">Instagram</div>
-                <div style="font-size: 0.7rem; color: #f87171;">Reels Blocked</div>
-              </div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-md); background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2);">
-              <span style="font-size: 1.3rem;">▶️</span>
-              <div>
-                <div style="font-size: 0.82rem; font-weight: 700;">YouTube Shorts</div>
-                <div style="font-size: 0.7rem; color: #f87171;">Feed Blocked</div>
-              </div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-md); background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2);">
-              <span style="font-size: 1.3rem;">🤖</span>
-              <div>
-                <div style="font-size: 0.82rem; font-weight: 700;">Reddit</div>
-                <div style="font-size: 0.7rem; color: #f87171;">Distractions Blocked</div>
-              </div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-md); background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.2);">
-              <span style="font-size: 1.3rem;">🎓</span>
-              <div>
-                <div style="font-size: 0.82rem; font-weight: 700;">Educational Channels</div>
-                <div style="font-size: 0.7rem; color: #4ade80;">Whitelisted</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Trigger Interactive Regain Shield Demo -->
-        <div style="text-align: center; margin-top: 24px;">
-          <button class="btn-pomo-main" onclick="window.triggerShieldDemo()" style="width: 100%; max-width: 380px;">
-            <span>🛡️</span> <span>Test Distraction Shield Popup (Regain)</span>
-          </button>
-        </div>
-      </div>
-    </section>
 
   </main>
 
   <!-- =========================================================================
        OVERLAYS & MODALS
        ========================================================================= -->
-  <!-- Regain Distraction Shield Modal Overlay (Authentic Shot 5) -->
-  <div class="regain-shield-overlay" id="regain-shield-overlay" onclick="if(event.target === this) window.closeShieldModal()">
-    <div class="regain-shield-card">
-      <div class="shield-card-header">
-        <span class="shield-hourglass-icon">⏳</span>
-        <div class="shield-settings-pill">
-          <span>⚙️</span> <span>Settings</span>
-        </div>
-      </div>
 
-      <div class="shield-blocked-app-icon">
-        🎬
-      </div>
-
-      <h3 class="shield-blocked-title">Instagram Reels is blocked!</h3>
-      <p class="shield-blocked-desc">
-        Stay focused on your engineering goals. 25 minutes of algorithmic focus today builds lasting career mastery tomorrow.
-      </p>
-
-      <button class="shield-btn-action" onclick="window.closeShieldModal()">
-        Back to Deep Work
-      </button>
-    </div>
-  </div>
 
   <!-- Regain Slide-In Navigation Drawer (≡ Button) -->
   <div class="regain-drawer-overlay" id="regain-drawer-overlay" onclick="window.toggleRegainDrawer(false)">
@@ -1004,15 +679,6 @@
       <div class="drawer-nav-list">
         <button class="drawer-item active" onclick="window.switchView('dashboard'); window.toggleRegainDrawer(false);">
           <span>⏱</span> <span>Focus Console</span>
-        </button>
-        <button class="drawer-item" onclick="window.switchView('liveroom'); window.toggleRegainDrawer(false);">
-          <span>👥</span> <span>Live Study Room</span>
-        </button>
-        <button class="drawer-item" onclick="window.switchView('leaderboard'); window.toggleRegainDrawer(false);">
-          <span>🏆</span> <span>Leaderboard</span>
-        </button>
-        <button class="drawer-item" onclick="window.switchView('shield'); window.toggleRegainDrawer(false);">
-          <span>🛡️</span> <span>Distraction Shield</span>
         </button>
         <button class="drawer-item" onclick="window.switchView('curriculum'); window.toggleRegainDrawer(false);">
           <span>📋</span> <span>7 Master Curricula</span>
@@ -1065,25 +731,17 @@
       <span class="nav-icon">⏱</span>
       <span>Focus</span>
     </button>
-    <button class="bottom-nav-item" data-view="liveroom" onclick="window.switchView('liveroom')">
-      <span class="nav-icon">👥</span>
-      <span>Live</span>
-    </button>
-    <button class="bottom-nav-item" data-view="leaderboard" onclick="window.switchView('leaderboard')">
-      <span class="nav-icon">🏆</span>
-      <span>Ranks</span>
-    </button>
-    <button class="bottom-nav-item" data-view="shield" onclick="window.switchView('shield')">
-      <span class="nav-icon">🛡️</span>
-      <span>Shield</span>
-    </button>
     <button class="bottom-nav-item" data-view="curriculum" onclick="window.switchView('curriculum')">
       <span class="nav-icon">📋</span>
       <span>Syllabus</span>
     </button>
     <button class="bottom-nav-item" data-view="bookshelf" onclick="window.switchView('bookshelf')">
       <span class="nav-icon">📚</span>
-      <span>3D</span>
+      <span>3D Lib</span>
+    </button>
+    <button class="bottom-nav-item" data-view="chaos" onclick="window.switchView('chaos')">
+      <span class="nav-icon">⚡</span>
+      <span>Systems</span>
     </button>
     <button class="bottom-nav-item" data-view="analytics" onclick="window.switchView('analytics')">
       <span class="nav-icon">📊</span>
