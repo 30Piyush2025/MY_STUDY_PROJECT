@@ -299,6 +299,9 @@
 
     const icon = document.getElementById('theme-toggle-icon');
     if (icon) icon.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+    
+    // Re-render heatmap blocks so SVG colors match the active theme
+    renderActivityHeatmap();
     hapticFeedback(12);
   }
 
@@ -1242,6 +1245,22 @@
 
     updateRPGStatus();
     updateMilestoneWidget();
+    updateJournalStats();
+  }
+
+  function updateJournalStats() {
+    const activeDaysEl = document.getElementById('journal-active-days');
+    const totalFocusEl = document.getElementById('journal-total-focus');
+    const masteredEl = document.getElementById('journal-mastered-topics');
+    const streakEl = document.getElementById('journal-current-streak');
+
+    const activeDaysCount = Object.keys(state.dailyActivity).length;
+    const totalHours = (state.totalFocusSeconds / 3600).toFixed(1);
+
+    if (activeDaysEl) activeDaysEl.textContent = `${activeDaysCount} Days`;
+    if (totalFocusEl) totalFocusEl.textContent = `${totalHours}h`;
+    if (masteredEl) masteredEl.textContent = `${state.completedTopics.size} / 1,769`;
+    if (streakEl) streakEl.textContent = `${state.streak.count || 0} Days`;
   }
 
   function renderActivityHeatmap() {
@@ -1249,46 +1268,107 @@
     if (!svg) return;
 
     svg.innerHTML = '';
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+    const lightColors = [
+      '#e5ddd0',                      // 0: visible warm parchment block
+      'rgba(217, 119, 6, 0.42)',      // 1: soft amber
+      '#059669',                      // 2: warm sage
+      '#c2410c',                      // 3: terracotta
+      '#d97706'                       // 4: deep golden amber
+    ];
+    const darkColors = [
+      'rgba(245, 235, 224, 0.08)',    // 0: subtle espresso block
+      'rgba(245, 158, 11, 0.40)',     // 1: soft amber
+      '#10b981',                      // 2: bright sage
+      '#ea580c',                      // 3: terracotta
+      '#f59e0b'                       // 4: vivid amber
+    ];
+    const palette = isDark ? darkColors : lightColors;
+    const strokeColor = isDark ? 'rgba(245, 235, 224, 0.04)' : 'rgba(68, 54, 42, 0.10)';
+
     const today = new Date();
     const cellSize = 11;
     const cellGap = 3;
-    const totalWeeks = 52;
+    const xOffset = 26;
+    const yOffset = 22;
 
-    // Calculate dates backwards for 52 weeks
+    // Day labels (Mon, Wed, Fri) on the left
+    const dayLabels = [
+      { text: 'M', row: 1 },
+      { text: 'W', row: 3 },
+      { text: 'F', row: 5 }
+    ];
+    dayLabels.forEach(dl => {
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', 6);
+      text.setAttribute('y', yOffset + (dl.row * (cellSize + cellGap)) + 9);
+      text.setAttribute('fill', isDark ? '#ab9e95' : '#8c827a');
+      text.setAttribute('font-family', 'var(--font-mono)');
+      text.setAttribute('font-size', '9');
+      text.setAttribute('font-weight', '600');
+      text.textContent = dl.text;
+      svg.appendChild(text);
+    });
+
+    // Calculate dates backwards for 52 weeks (364 days)
     const days = [];
-    for (let i = 364; i >= 0; i--) {
+    for (let i = 363; i >= 0; i--) {
       const d = new Date(today);
       d.setDate(d.getDate() - i);
       const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      days.push({ date: dateStr, dayOfWeek: d.getDay() });
+      days.push({ date: dateStr, dayOfWeek: d.getDay(), month: d.getMonth(), dayOfMonth: d.getDate() });
     }
+
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let lastMonth = -1;
 
     days.forEach((item, index) => {
       const weekIndex = Math.floor(index / 7);
       const dayIndex = item.dayOfWeek;
-      const x = weekIndex * (cellSize + cellGap);
-      const y = dayIndex * (cellSize + cellGap);
+      const x = xOffset + (weekIndex * (cellSize + cellGap));
+      const y = yOffset + (dayIndex * (cellSize + cellGap));
+
+      // Month header label when month starts
+      if (dayIndex === 0 && item.month !== lastMonth) {
+        lastMonth = item.month;
+        const mText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        mText.setAttribute('x', x);
+        mText.setAttribute('y', 13);
+        mText.setAttribute('fill', isDark ? '#ab9e95' : '#8c827a');
+        mText.setAttribute('font-family', 'var(--font-mono)');
+        mText.setAttribute('font-size', '9');
+        mText.setAttribute('font-weight', '600');
+        mText.textContent = monthNames[item.month];
+        svg.appendChild(mText);
+      }
 
       const activity = state.dailyActivity[item.date] || { topics: 0, focusMinutes: 0 };
       const score = (activity.topics * 2) + Math.floor(activity.focusMinutes / 15);
 
-      let color = 'rgba(245, 235, 224, 0.06)';
-      if (score >= 8) color = '#f59e0b'; // Warm Amber
-      else if (score >= 4) color = '#ea580c'; // Terracotta
-      else if (score >= 2) color = '#10b981'; // Warm Sage
-      else if (score >= 1) color = 'rgba(245, 158, 11, 0.4)'; // Soft Amber
+      let level = 0;
+      if (score >= 8) level = 4;
+      else if (score >= 4) level = 3;
+      else if (score >= 2) level = 2;
+      else if (score >= 1) level = 1;
 
       const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       rect.setAttribute('x', x);
       rect.setAttribute('y', y);
       rect.setAttribute('width', cellSize);
       rect.setAttribute('height', cellSize);
-      rect.setAttribute('fill', color);
-      rect.setAttribute('class', 'heatmap-cell');
+      rect.setAttribute('rx', 3);
+      rect.setAttribute('ry', 3);
+      rect.setAttribute('fill', palette[level]);
+      rect.setAttribute('stroke', strokeColor);
+      rect.setAttribute('stroke-width', '0.5');
+      rect.setAttribute('class', `heatmap-cell level-${level}`);
 
       rect.innerHTML = `<title>${item.date}: ${activity.topics} topics mastered, ${activity.focusMinutes}m focus</title>`;
       svg.appendChild(rect);
     });
+
+    updateJournalStats();
   }
 
   // =========================================================================

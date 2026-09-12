@@ -1634,13 +1634,13 @@ body {
   color: var(--text-primary);
   pointer-events: none;
   box-shadow: 0 4px 14px rgba(60, 45, 30, 0.15);
+  white-space: nowrap;
 }
 
 [data-theme="dark"] .bookshelf-tooltip-chip {
   background: rgba(46, 37, 33, 0.94);
   color: #faf7f2;
   box-shadow: 0 4px 14px rgba(18, 14, 12, 0.5);
-}  white-space: nowrap;
 }
 
 .dossier-inner {
@@ -1680,9 +1680,13 @@ body {
   font-family: var(--font-sans);
   font-size: 1.35rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   line-height: 1.25;
   margin-bottom: 4px;
+}
+
+[data-theme="dark"] .dossier-title {
+  color: #faf7f2;
 }
 
 .dossier-track {
@@ -1691,6 +1695,7 @@ body {
   color: var(--accent-blue);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 700;
 }
 
 .dossier-subtitle {
@@ -1701,8 +1706,8 @@ body {
 }
 
 .dossier-curriculum-badge {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--surface-border-subtle);
+  background: var(--bg-secondary);
+  border: 1px solid var(--surface-border);
   border-radius: var(--radius-sm);
   padding: 8px 12px;
   font-size: 0.78rem;
@@ -1715,7 +1720,8 @@ body {
 
 .dossier-section-title {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.70rem;
+  font-weight: 700;
   color: var(--text-muted);
   letter-spacing: 0.06em;
   margin-bottom: 0.5rem;
@@ -1728,6 +1734,10 @@ body {
   gap: 6px;
   margin-bottom: 1rem;
   font-size: 0.84rem;
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .dossier-concepts {
   color: #e2e8f0;
 }
 
@@ -1735,20 +1745,34 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 8px;
+  line-height: 1.45;
+}
+
+.dossier-concepts .bullet {
+  color: var(--accent-orange);
+  font-size: 0.78rem;
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
 .dossier-formula-box {
-  background: rgba(28, 25, 23, 0.6);
-  border: 1px solid var(--surface-border-subtle);
+  background: var(--bg-secondary);
+  border: 1px solid var(--surface-border);
   border-radius: var(--radius-sm);
   padding: 10px 14px;
   margin-bottom: 1.2rem;
+}
+
+[data-theme="dark"] .dossier-formula-box {
+  background: rgba(38, 30, 26, 0.7);
+  border: 1px solid var(--surface-border-subtle);
 }
 
 .formula-label {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--accent-orange);
+  font-weight: 700;
   margin-bottom: 3px;
 }
 
@@ -1756,6 +1780,7 @@ body {
   font-family: var(--font-mono);
   font-size: 0.76rem;
   color: var(--accent-blue);
+  font-weight: 600;
   display: block;
   word-break: break-all;
 }
@@ -1763,13 +1788,13 @@ body {
 .dossier-meta-row {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin-bottom: 1.35rem;
 }
 
 .dossier-meta-row .val {
   color: var(--accent-orange);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .dossier-actions {
@@ -1801,9 +1826,14 @@ body {
 }
 
 .btn-dossier.close-btn {
-  background: transparent;
-  color: var(--text-muted);
-  border: 1px solid var(--surface-border-subtle);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--surface-border);
+}
+
+.btn-dossier.close-btn:hover {
+  background: var(--surface-border-active);
+  color: var(--accent-orange);
 }
 
 .dossier-overlay-modal {
@@ -1981,7 +2011,9 @@ body {
 
 .btn-chaos-action.surge { border-color: rgba(244, 63, 94, 0.35); }
 .btn-chaos-action.kill { border-color: var(--accent-orange-border); color: var(--accent-orange); }
-.btn-chaos-action.heal { border-color: rgba(52, 211, 153, 0.35); color: #34d399; }
+.btn-chaos-action.surge { border-color: rgba(244, 63, 94, 0.35); }
+.btn-chaos-action.kill { border-color: var(--accent-orange-border); color: var(--accent-orange); }
+.btn-chaos-action.heal { border-color: var(--accent-sage-soft); color: var(--accent-sage); }
 
 .chaos-console-logs {
   background: var(--bg-tertiary);
@@ -2003,43 +2035,172 @@ body {
 }
 
 /* ==========================================================================
-   VIEW 6: ANNUAL ACTIVITY HEATMAP & JOURNAL — UNBOXED
+   VIEW 6: ANNUAL ACTIVITY HEATMAP & JOURNAL — BLOCKS & CARDS
    ========================================================================== */
 .analytics-panel {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
+}
+
+/* Journal Summary Stat Cards */
+.journal-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.journal-stat-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 4px 16px rgba(60, 45, 30, 0.05);
+  transition: var(--transition-fast);
+}
+
+[data-theme="dark"] .journal-stat-card {
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 16px rgba(18, 14, 12, 0.4);
+}
+
+.journal-stat-icon {
+  font-size: 1.65rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.journal-stat-content {
+  min-width: 0;
+}
+
+.journal-stat-val {
+  font-family: var(--font-sans);
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.journal-stat-lbl {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 3px;
 }
 
 .heatmap-card {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0 0 28px 0;
-  border-bottom: 1px solid var(--surface-border-subtle);
-  box-shadow: none;
+  background: var(--bg-secondary);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  box-shadow: 0 4px 20px rgba(60, 45, 30, 0.05);
+}
+
+[data-theme="dark"] .heatmap-card {
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 20px rgba(18, 14, 12, 0.4);
 }
 
 .heatmap-scroll-container {
   overflow-x: auto;
-  padding-bottom: 12px;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .heatmap-grid-svg {
-  min-width: 720px;
-  height: 140px;
+  min-width: 740px;
+  height: 132px;
+  display: block;
 }
 
+/* Heatmap Block Cells — Clear visibility in both Light and Dark modes */
 .heatmap-cell {
   rx: 3px;
   ry: 3px;
-  transition: fill 0.2s ease;
+  transition: all 0.18s ease;
+  cursor: pointer;
+}
+
+/* Light Mode Cell Palette (Warm Paper & Amber/Sage/Terracotta) */
+.heatmap-cell.level-0 {
+  fill: #e5ddd0;
+  stroke: rgba(68, 54, 42, 0.10);
+  stroke-width: 0.5px;
+}
+.heatmap-cell.level-1 {
+  fill: rgba(217, 119, 6, 0.42);
+  stroke: rgba(217, 119, 6, 0.25);
+  stroke-width: 0.5px;
+}
+.heatmap-cell.level-2 {
+  fill: #059669;
+}
+.heatmap-cell.level-3 {
+  fill: #c2410c;
+}
+.heatmap-cell.level-4 {
+  fill: #d97706;
+}
+
+/* Dark Mode Cell Palette */
+[data-theme="dark"] .heatmap-cell.level-0 {
+  fill: rgba(245, 235, 224, 0.08);
+  stroke: rgba(245, 235, 224, 0.04);
+  stroke-width: 0.5px;
+}
+[data-theme="dark"] .heatmap-cell.level-1 {
+  fill: rgba(245, 158, 11, 0.40);
+  stroke: rgba(245, 158, 11, 0.20);
+  stroke-width: 0.5px;
+}
+[data-theme="dark"] .heatmap-cell.level-2 {
+  fill: #10b981;
+}
+[data-theme="dark"] .heatmap-cell.level-3 {
+  fill: #ea580c;
+}
+[data-theme="dark"] .heatmap-cell.level-4 {
+  fill: #f59e0b;
 }
 
 .heatmap-cell:hover {
-  stroke: var(--accent-orange);
-  stroke-width: 1.5;
+  stroke: var(--accent-orange) !important;
+  stroke-width: 1.5px !important;
+  filter: brightness(1.12);
 }
+
+/* Heatmap Legend Cells */
+.legend-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  display: inline-block;
+  border: 0.5px solid rgba(68, 54, 42, 0.10);
+}
+
+.legend-cell.level-0 { background: #e5ddd0; }
+.legend-cell.level-1 { background: rgba(217, 119, 6, 0.42); }
+.legend-cell.level-2 { background: #059669; }
+.legend-cell.level-3 { background: #c2410c; }
+.legend-cell.level-4 { background: #d97706; }
+
+[data-theme="dark"] .legend-cell {
+  border-color: rgba(245, 235, 224, 0.06);
+}
+[data-theme="dark"] .legend-cell.level-0 { background: rgba(245, 235, 224, 0.08); }
+[data-theme="dark"] .legend-cell.level-1 { background: rgba(245, 158, 11, 0.40); }
+[data-theme="dark"] .legend-cell.level-2 { background: #10b981; }
+[data-theme="dark"] .legend-cell.level-3 { background: #ea580c; }
+[data-theme="dark"] .legend-cell.level-4 { background: #f59e0b; }
 
 /* Notes Modal */
 .notes-modal-overlay {

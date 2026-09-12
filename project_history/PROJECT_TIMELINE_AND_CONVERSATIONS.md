@@ -124,6 +124,19 @@ This document logs the comprehensive development trajectory, architectural miles
   * **Accessible Touch Ergonomics**: Sized `.icon-btn` with 46px touch boundary, wrapped curriculum items in `<label class="topic-left">` for full-line tap-to-complete, expanded `.btn-topic-note` to 40px+ hit area, and adapted `.pomo-mode-selector` on `< 480px`.
   * **PWA & 3D Palette Leak Cleanup**: Updated `manifest.json` (`#faf7f2`), crafted warm terracotta PT monogram in `favicon.svg`, and replaced residual blue book spines in `bookshelf-3d.js` with warm leather tones.
 
+### Phase 10: Light Mode Contrast Restoration & Journal Blocks Architecture
+* **3D Bookshelf Click Dossier Contrast Restoration**:
+  * Root Cause: When clicking any book volume in the 3D Library in Light Mode, `.dossier-title` had hardcoded `color: #fff;` and `.dossier-concepts` had `color: #e2e8f0;`, rendering text completely invisible against the warm ivory/parchment background (`rgba(254, 252, 248, 0.98)`).
+  * Fix: Bound `.dossier-title` and `.dossier-concepts` to `var(--text-primary)` (`#292524` in Light Mode, `#faf7f2` in Dark Mode), updated `.dossier-curriculum-badge` and `.dossier-formula-box` to adapt cleanly with `var(--bg-secondary)` and subtle warm borders, and fixed an orphaned syntax error on `.bookshelf-tooltip-chip`.
+* **Annual Study Journal Blocks & Grid Visualization**:
+  * Root Cause: In the Journal view (`#view-analytics`), the 365-day heatmap SVG rectangles were filled with `rgba(245, 235, 224, 0.06)`, rendering all empty and baseline calendar tiles completely invisible against the `#faf7f2` canvas in Light Mode.
+  * Fix: Re-architected `renderActivityHeatmap()` with dedicated multi-level palettes:
+    * Level 0 (no activity): Crisp, tangible warm parchment blocks (`#e5ddd0` with `0.5px` border `rgba(68, 54, 42, 0.10)` in Light Mode; `rgba(245, 235, 224, 0.08)` in Dark Mode).
+    * Activity Levels 1–4: Warm amber, sage, and terracotta intensity gradients.
+    * Added month headers (Jan–Dec) and day indicators (M, W, F) for complete chronological orientation.
+    * Wired `renderActivityHeatmap()` directly into `toggleAppTheme()` so all SVG cells instantly re-render with the correct theme palette.
+  * Added 4 Journal Summary Metric Blocks (`Active Study Days`, `Total Deep Focus`, `Mastered Topics`, `Daily Streak`) inside `.journal-stats-grid` providing prominent visual tracking blocks.
+
 ---
 
 

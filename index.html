@@ -668,25 +668,57 @@
     <!-- VIEW 6: STUDY JOURNAL & ACTIVITY RECORD -->
     <section class="view-panel" id="view-analytics">
       <div class="analytics-panel">
+        <!-- Journal Summary Metric Blocks -->
+        <div class="journal-stats-grid">
+          <div class="journal-stat-card">
+            <div class="journal-stat-icon">📅</div>
+            <div class="journal-stat-content">
+              <div class="journal-stat-val" id="journal-active-days">0 Days</div>
+              <div class="journal-stat-lbl">Active Study Days</div>
+            </div>
+          </div>
+          <div class="journal-stat-card">
+            <div class="journal-stat-icon">⏱️</div>
+            <div class="journal-stat-content">
+              <div class="journal-stat-val" id="journal-total-focus">0.0h</div>
+              <div class="journal-stat-lbl">Total Deep Focus</div>
+            </div>
+          </div>
+          <div class="journal-stat-card">
+            <div class="journal-stat-icon">📚</div>
+            <div class="journal-stat-content">
+              <div class="journal-stat-val" id="journal-mastered-topics">0 / 1769</div>
+              <div class="journal-stat-lbl">Mastered Topics</div>
+            </div>
+          </div>
+          <div class="journal-stat-card">
+            <div class="journal-stat-icon">🔥</div>
+            <div class="journal-stat-content">
+              <div class="journal-stat-val" id="journal-current-streak">0 Days</div>
+              <div class="journal-stat-lbl">Daily Streak</div>
+            </div>
+          </div>
+        </div>
+
         <div class="heatmap-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
             <div>
               <h3 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600;">Annual Study Journal</h3>
               <p style="font-size: 0.84rem; color: var(--text-secondary);">A real chronological 365-day heatmap of deep work sessions and mastered topics</p>
             </div>
-            <div style="display: flex; gap: 5px; align-items: center; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
+            <div style="display: flex; gap: 6px; align-items: center; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
               <span>Less</span>
-              <span style="width: 10px; height: 10px; background: rgba(245, 235, 224, 0.08); border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: rgba(245, 158, 11, 0.4); border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #10b981; border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #ea580c; border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #f59e0b; border-radius: 2px;"></span>
+              <span class="legend-cell level-0"></span>
+              <span class="legend-cell level-1"></span>
+              <span class="legend-cell level-2"></span>
+              <span class="legend-cell level-3"></span>
+              <span class="legend-cell level-4"></span>
               <span>More</span>
             </div>
           </div>
 
           <div class="heatmap-scroll-container">
-            <svg class="heatmap-grid-svg" id="heatmap-grid-svg" viewBox="0 0 760 110"></svg>
+            <svg class="heatmap-grid-svg" id="heatmap-grid-svg" viewBox="0 0 760 130"></svg>
           </div>
         </div>
 
