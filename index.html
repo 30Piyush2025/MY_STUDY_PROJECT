@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#060913">
-  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.json">
-  <title>StudyPulse FOCUS ENGINE • AI Learning Intelligence Hub</title>
+  <title>StudyPulse FOCUS ENGINE • Piyush Tiwari's AI & Systems Intelligence</title>
+  
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="studypulse.css">
 </head>
 <body>
 
-  <!-- App Header & Navigation (Matches StudyPulse Screenshots) -->
+  <!-- =========================================================================
+       APP HEADER
+       ========================================================================= -->
   <header class="app-header">
     <div class="header-container">
-      <div class="brand-wrapper">
+      <div class="brand-wrapper" onclick="window.switchView('dashboard')">
         <div class="brand-icon">⚡</div>
         <div class="brand-title">
           StudyPulse
@@ -28,1446 +32,442 @@
         </div>
       </div>
 
-      <!-- Main Navigation Tabs -->
-      <nav class="nav-tabs-wrapper" aria-label="Main Navigation">
-        <button class="nav-tab-btn active" data-view="dashboard">
+      <!-- Desktop Navigation Tabs -->
+      <nav class="desktop-nav-tabs" aria-label="Desktop Navigation">
+        <button class="nav-tab-btn active" data-view="dashboard" onclick="window.switchView('dashboard')">
           <span>🏠</span> <span>Dashboard</span>
         </button>
-        <button class="nav-tab-btn" data-view="curriculum">
-          <span>📋</span> <span>Topic Checklist</span>
+        <button class="nav-tab-btn" data-view="curriculum" onclick="window.switchView('curriculum')">
+          <span>📋</span> <span>Roadmap</span>
         </button>
-        <button class="nav-tab-btn" data-view="system-design">
-          <span>🛡️</span> <span>Chaos Lab</span>
-        </button>
-        <button class="nav-tab-btn" data-view="flashcards">
-          <span>📇</span> <span>Recall & 3D Palace</span>
-        </button>
-        <button class="nav-tab-btn" data-view="analytics">
-          <span>📊</span> <span>Analytics</span>
-        </button>
-        <button class="nav-tab-btn" data-view="planner">
-          <span>🎯</span> <span>Planner</span>
-        </button>
-        <button class="nav-tab-btn" data-view="bookshelf">
+        <button class="nav-tab-btn" data-view="bookshelf" onclick="window.switchView('bookshelf')">
           <span>📚</span> <span>3D Bookshelf</span>
+        </button>
+        <button class="nav-tab-btn" data-view="palace" onclick="window.switchView('palace')">
+          <span>🏛️</span> <span>Memory Palace</span>
+        </button>
+        <button class="nav-tab-btn" data-view="chaos" onclick="window.switchView('chaos')">
+          <span>⚡</span> <span>Chaos Lab</span>
+        </button>
+        <button class="nav-tab-btn" data-view="analytics" onclick="window.switchView('analytics')">
+          <span>📊</span> <span>Analytics</span>
         </button>
       </nav>
 
-      <!-- Header Meta & Actions -->
-      <div class="header-meta-actions">
-        <div class="rpg-level-pill" id="rpg-level-pill" title="RPG Master Level & XP Progression">
-          <span style="font-weight: 700;" id="nav-rpg-level">LVL 1</span>
-          <span id="nav-rpg-title" style="font-size: 0.68rem; opacity: 0.85;">CODE INITIATE</span>
-          <div class="rpg-xp-mini-track">
-            <div class="rpg-xp-mini-fill" id="nav-rpg-xp-fill" style="width: 0%;"></div>
-          </div>
-        </div>
-        <div class="nav-timer-pill" id="nav-timer-pill">
-          <span class="pulse-dot"></span>
-          <span id="nav-timer-clock">24:18 | POMODORO</span>
-        </div>
-        <div class="streak-pill">
+      <!-- Actions & Profile -->
+      <div class="header-actions">
+        <div class="streak-pill" title="Current Daily Streak">
           <span>🔥</span> <span id="header-streak-val">1 Day</span>
         </div>
-        <!-- Theme Toggle Button -->
-        <button class="android-theme-btn" id="btn-theme-toggle" onclick="window.toggleAppTheme()" aria-label="Toggle Dark/Light Theme" title="Toggle Light / Dark Mode">
+        <div class="rpg-badge-pill" title="RPG Master Rank">
+          <span id="rpg-level-badge">LVL 1</span>
+          <span id="rpg-title-badge" style="opacity: 0.85; font-size: 0.7rem;">Code Initiate</span>
+        </div>
+        <button class="icon-btn" id="theme-toggle-btn" onclick="window.toggleAppTheme()" title="Toggle Dark/Light Mode">
           <span id="theme-toggle-icon">☀️</span>
         </button>
-        <button class="android-appbar-btn" id="btn-android-menu" onclick="window.toggleAndroidAppMenu()" aria-label="Android App Menu">
-          <span>⋮</span>
-        </button>
-        <div class="user-profile-avatar" title="Piyush Tiwari">
+        <a href="StudyPulse.apk" class="btn-apk-download" download="StudyPulse.apk" title="Download Android APK">
+          <span>📥</span> <span>APK</span>
+        </a>
+        <div class="user-avatar" title="Piyush Tiwari">
           PT
         </div>
       </div>
     </div>
   </header>
 
+  <!-- =========================================================================
+       MAIN CONTAINER
+       ========================================================================= -->
   <main class="main-container">
 
-    <!-- ====================================================================
-         VIEW 1: DASHBOARD (Screenshot 1)
-         ==================================================================== -->
-    <section class="view-section active" id="view-dashboard">
-      
-      <!-- Hero Welcome Banner with Interactive Knowledge Topology -->
-      <div class="dashboard-hero">
-        <div class="hero-left-content">
-          <h2 class="hero-greeting">Welcome back, Alex! 🎯</h2>
-          <p class="hero-subtitle">
-            You're on track to hit today's velocity target. Raft Consensus review is scheduled next in your flight manifest.
-          </p>
-          <div class="hero-goal-progress-box">
-            <div class="goal-header-row">
-              <span class="goal-label">Daily Goal Progress</span>
-              <span class="goal-val">4.5 / 6.0h (75%)</span>
+    <!-- VIEW 1: DASHBOARD & FOCUS ENGINE -->
+    <section class="view-panel active" id="view-dashboard">
+      <div class="dashboard-grid">
+        
+        <!-- Left: Hero Card & Focus Engine -->
+        <div>
+          <div class="hero-card">
+            <div class="hero-header">
+              <h2 class="hero-title">Welcome back, Piyush! 🎯</h2>
+              <p class="hero-subtitle">
+                Your AI & Distributed Systems Command Center is synchronized. Track your 7 courses, 488 lectures, and 1,769 curriculum topics with flow-state focus.
+              </p>
             </div>
-            <div class="goal-progress-track">
-              <div class="goal-progress-fill" style="width: 75%;"></div>
+
+            <!-- Stats Counter Grid -->
+            <div class="stats-counter-grid">
+              <div class="stat-item">
+                <div class="stat-num" id="dash-completed-count">0 / 1769</div>
+                <div class="stat-label">Topics Mastered</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num" id="dash-streak-count">1 Day</div>
+                <div class="stat-label">Study Streak</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num" id="dash-focus-hours">0.0h</div>
+                <div class="stat-label">Focus Logged</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num" id="dash-rpg-level">LEVEL 1</div>
+                <div class="stat-label" id="dash-rpg-title">Code Initiate</div>
+              </div>
+            </div>
+
+            <!-- RPG Level Progression Bar -->
+            <div style="margin-top: 18px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 700; margin-bottom: 6px;">
+                <span style="color: var(--accent-purple);">RPG PROGRESSION</span>
+                <span id="dash-rpg-xp" style="font-family: var(--font-mono);">0 XP</span>
+              </div>
+              <div style="width: 100%; height: 6px; background: rgba(148, 163, 184, 0.15); border-radius: 999px; overflow: hidden;">
+                <div id="dash-rpg-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan)); transition: width 0.4s ease;"></div>
+              </div>
             </div>
           </div>
-          <div class="hero-btn-row">
-            <button class="btn-pulse-primary" onclick="window.launchStudySession('Distributed Systems / Raft Consensus')">
-              ⚡ Start Focus Session
-            </button>
-            <button class="btn-pulse-ghost" onclick="window.switchAppTab('planner')">
-              📅 View Schedule
-            </button>
-            <button class="btn-pulse-ghost" onclick="window.switchAppTab('bookshelf')">
-              📚 Browse 3D Bookshelf
-            </button>
+
+          <!-- Chrono-Block Pomodoro Section -->
+          <div class="focus-card" style="margin-top: 20px;">
+            <div class="pomo-mode-selector">
+              <button class="pomo-tab active" data-mode="pomo" onclick="window.setTimerMode('pomo')">Pomodoro (25m)</button>
+              <button class="pomo-tab" data-mode="deep" onclick="window.setTimerMode('deep')">Deep Work (50m)</button>
+              <button class="pomo-tab" data-mode="short" onclick="window.setTimerMode('short')">Short Break (5m)</button>
+              <button class="pomo-tab" data-mode="long" onclick="window.setTimerMode('long')">Long Break (15m)</button>
+            </div>
+
+            <div class="timer-ring-container">
+              <svg class="timer-svg" viewBox="0 0 220 220">
+                <circle class="timer-track" cx="110" cy="110" r="100"></circle>
+                <circle class="timer-progress" id="timer-svg-progress" cx="110" cy="110" r="100"></circle>
+              </svg>
+              <div class="timer-display">
+                <div class="timer-digits" id="timer-digits">25:00</div>
+                <div class="timer-status-pill" id="timer-status-pill">FLOW STATE</div>
+              </div>
+            </div>
+
+            <div class="pomo-controls-row">
+              <button class="btn-pomo-main" id="btn-timer-toggle" onclick="window.toggleTimer()">
+                <span>▶</span> <span>Start Sprint</span>
+              </button>
+              <button class="btn-pomo-sec" onclick="window.resetTimer()">
+                <span>↺</span> <span>Reset</span>
+              </button>
+              <button class="btn-pomo-sec" onclick="window.skipTimer()">
+                <span>⏭</span> <span>Skip</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Interactive Topology & 3D Galaxy Wrapper -->
-        <div class="hero-topology-wrapper">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span class="topology-tag">ACTIVE KNOWLEDGE TOPOLOGY // LIVE</span>
-            <button id="btn-toggle-topology-mode" class="btn-hud" style="font-size: 0.72rem; padding: 4px 10px; cursor: pointer;" onclick="window.toggleTopologyGalaxyView()">
-              🌌 3D Knowledge Galaxy
-            </button>
-          </div>
-          <canvas id="topology-canvas" class="topology-canvas"></canvas>
-          <div id="galaxy-3d-container" style="display: none; width: 100%; height: 260px; border-radius: 12px; overflow: hidden; position: relative; background: #080c14;"></div>
-        </div>
-      </div>
-
-      <!-- 4-Tile Stat Grid (Screenshot 1) -->
-      <div class="metric-grid-4">
-        <div class="metric-card">
-          <div class="metric-top-row">
-            <span class="metric-label">Today's Focus</span>
-            <span class="metric-icon-badge">⏱️</span>
-          </div>
-          <div class="metric-main-val" id="metric-today-focus">0m</div>
-          <div class="metric-sub-row">
-            <span class="metric-delta pos">Active</span>
-            <span class="metric-context">logged today</span>
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-top-row">
-            <span class="metric-label">Topics Mastered</span>
-            <span class="metric-icon-badge">📚</span>
-          </div>
-          <div class="metric-main-val" id="metric-topics-mastered">0 / 10</div>
-          <div class="metric-sub-row">
-            <span class="metric-delta pos" id="metric-topics-pct">0%</span>
-            <span class="metric-context">curriculum complete</span>
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-top-row">
-            <span class="metric-label">Active Streak</span>
-            <span class="metric-icon-badge">🔥</span>
-          </div>
-          <div class="metric-main-val" id="metric-active-streak">1 Day</div>
-          <div class="metric-sub-row">
-            <span class="metric-delta pos">Daily Habit</span>
-            <span class="metric-context">keep it burning</span>
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-top-row">
-            <span class="metric-label">SRS Retention</span>
-            <span class="metric-icon-badge">🧠</span>
-          </div>
-          <div class="metric-main-val">100%</div>
-          <div class="metric-sub-row">
-            <span class="metric-delta pos">Optimal</span>
-            <span class="metric-context">FSRS-4.5 engine</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Dashboard Columns (Pomodoro Engine & Topics Queue) -->
-      <div class="dashboard-columns">
-        <div class="dash-left-col">
-          
-          <!-- Pomodoro Engine Card -->
-          <div class="panel-card">
-            <div class="panel-header">
-              <div class="panel-title-group">
-                <span class="panel-title">Pomodoro Engine</span>
-                <span class="panel-badge">FSRS SYNCED</span>
-              </div>
-              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-dim);">INTERVAL 3 OF 4</span>
+        <!-- Right: Web Audio Synthesizer Studio -->
+        <div>
+          <div class="audio-studio-card">
+            <div class="audio-header">
+              <h3><span>🎛️</span> <span>Focus Audio Synthesizer</span></h3>
+              <button class="icon-btn" id="btn-audio-toggle" onclick="window.toggleAudioSynthesizer()" title="Toggle Master Audio">
+                <span>🔊</span>
+              </button>
             </div>
-
-            <div class="pomodoro-box">
-              <div class="pomo-focus-pill">
-                <span>🎯 CURRENT FOCUS:</span>
-                <strong id="pomo-task-name">Distributed Systems / Raft Consensus Algorithm</strong>
-              </div>
-
-              <div class="pomo-time-display" id="pomo-time-display">24:18</div>
-              <div class="pomo-session-tag">DEEP WORK FOCUS • 40HZ BINAURAL LAYER ENGAGED</div>
-
-              <div class="pomo-controls-row">
-                <button class="btn-pomo-action primary" id="btn-pomo-toggle">
-                  ▶ Resume Focus
-                </button>
-                <button class="btn-pomo-action" id="btn-pomo-skip">
-                  ⏭ Skip Block
-                </button>
-                <button class="btn-pomo-action" id="btn-pomo-reset">
-                  ↺ Reset
-                </button>
-              </div>
-
-              <!-- Biohacking Audio Synthesizer & FFT Equalizer Console -->
-              <div class="bio-audio-console">
-                <div class="equalizer-header">
-                  <div class="audio-label">
-                    <span>⚡</span> <span>Neural Audio Synthesizer // FFT 64-Band</span>
-                  </div>
-                  <span class="equalizer-status" id="equalizer-status-text">STANDBY // MUTED</span>
-                </div>
-                
-                <canvas id="audio-equalizer-canvas" class="audio-equalizer-canvas" width="340" height="42"></canvas>
-
-                <div class="sound-presets-row">
-                  <button class="btn-preset-pill active" onclick="window.applyAudioPreset('focus')">🧠 40Hz Gamma</button>
-                  <button class="btn-preset-pill" onclick="window.applyAudioPreset('deep')">🌊 Deep Brown</button>
-                  <button class="btn-preset-pill" onclick="window.applyAudioPreset('rain')">🌧️ Nordic Rain</button>
-                  <button class="btn-preset-pill" onclick="window.applyAudioPreset('lofi')">🎹 Lo-Fi Chords</button>
-                  <button class="btn-preset-pill mute" onclick="window.applyAudioPreset('mute')">🔇 Mute</button>
-                </div>
-
-                <details class="mixer-drawer-details">
-                  <summary class="mixer-drawer-summary">🎛️ Multi-Channel Audio Mixer & Speech Alerts</summary>
-                  <div class="mixer-channels-grid">
-                    <div class="mixer-ch-row">
-                      <span class="mixer-ch-name">🧠 40Hz Binaural</span>
-                      <input type="range" id="mixer-slider-gamma" min="0" max="100" value="35" oninput="window.setAudioMixerChannel('gamma', this.value/100)">
-                    </div>
-                    <div class="mixer-ch-row">
-                      <span class="mixer-ch-name">🌧️ Nordic Rain</span>
-                      <input type="range" id="mixer-slider-rain" min="0" max="100" value="15" oninput="window.setAudioMixerChannel('rain', this.value/100)">
-                    </div>
-                    <div class="mixer-ch-row">
-                      <span class="mixer-ch-name">🌊 Brown Noise</span>
-                      <input type="range" id="mixer-slider-brown" min="0" max="100" value="0" oninput="window.setAudioMixerChannel('brown', this.value/100)">
-                    </div>
-                    <div class="mixer-ch-row">
-                      <span class="mixer-ch-name">🎹 Lo-Fi Chords</span>
-                      <input type="range" id="mixer-slider-lofi" min="0" max="100" value="0" oninput="window.setAudioMixerChannel('lofi', this.value/100)">
-                    </div>
-                    <div class="mixer-ch-row">
-                      <span class="mixer-ch-name">🔊 Master Gain</span>
-                      <input type="range" id="mixer-slider-master" min="0" max="100" value="75" oninput="window.setAudioMixerMaster(this.value/100)">
-                    </div>
-                    <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border-subtle);">
-                      <label style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px;">
-                        <input type="checkbox" id="voice-alerts-checkbox" checked onchange="window.toggleVoiceAlerts(this.checked)">
-                        <span>🗣️ Voice Focus Cues (Web Speech)</span>
-                      </label>
-                      <button class="btn-launch-sm" style="font-size: 0.68rem;" onclick="window.testVoiceCue()">Test Voice</button>
-                    </div>
-                  </div>
-                </details>
-              </div>
-            </div>
-          </div>
-
-          <!-- Topic Mastery Queue -->
-          <div class="panel-card">
-            <div class="panel-header">
-              <div class="panel-title-group">
-                <span class="panel-title">Topic Mastery Queue</span>
-                <span class="panel-badge">OPTIMAL ORDER</span>
-              </div>
-              <button class="btn-launch-sm" onclick="window.switchAppTab('curriculum')">View All Matrix</button>
-            </div>
-
-            <div class="queue-list">
-              <div class="queue-item">
-                <div class="queue-item-left">
-                  <div class="queue-tag-row">
-                    <span class="queue-badge progress">IN PROGRESS</span>
-                    <span class="topic-tag">DISTRIBUTED SYSTEMS</span>
-                  </div>
-                  <div class="queue-title">Raft Consensus & Leader Election Mechanism</div>
-                  <div class="queue-meta">Chrono Block: 10:00 - 11:15 · Stability: 88%</div>
-                </div>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Raft Consensus & Leader Election')">Launch</button>
-              </div>
-
-              <div class="queue-item">
-                <div class="queue-item-left">
-                  <div class="queue-tag-row">
-                    <span class="queue-badge revision">NEEDS REVISION</span>
-                    <span class="topic-tag">ALGORITHMS</span>
-                  </div>
-                  <div class="queue-title">Monotonic Stacks & Sliding Window Maximum</div>
-                  <div class="queue-meta">SRS Recall Due Today · 6 Flashcards</div>
-                </div>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Monotonic Stacks & Sliding Window')">Launch</button>
-              </div>
-
-              <div class="queue-item">
-                <div class="queue-item-left">
-                  <div class="queue-tag-row">
-                    <span class="queue-badge scheduled">SCHEDULED</span>
-                    <span class="topic-tag">DEEP LEARNING</span>
-                  </div>
-                  <div class="queue-title">Backpropagation Dynamics & Multi-Head Attention Math</div>
-                  <div class="queue-meta">Chrono Block: 15:30 - 16:45 · 4 Lectures</div>
-                </div>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Multi-Head Attention Math')">Launch</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- RPG Skill Tree & Verified Trophies (Gamification) -->
-          <div class="rpg-cabinet-card">
-            <div class="panel-header">
-              <div class="panel-title-group">
-                <span class="panel-title">🏆 RPG Skill Tree & Verified Trophies</span>
-                <span class="panel-badge">+150 XP / TOPIC</span>
-              </div>
-              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: #c084fc;">TIER III: MASTER ARCHITECT</span>
-            </div>
-            <div class="badge-grid">
-              <div class="skill-badge-item unlocked">
-                <div class="badge-icon">🛡️</div>
-                <div class="badge-title">Consensus Sentinel</div>
-                <div class="badge-desc">Raft & Paxos Mastered</div>
-                <span class="badge-status-tag earned">UNLOCKED</span>
-              </div>
-              <div class="skill-badge-item unlocked">
-                <div class="badge-icon">⚡</div>
-                <div class="badge-title">Vector Sovereign</div>
-                <div class="badge-desc">Linear Algebra & PCA</div>
-                <span class="badge-status-tag earned">UNLOCKED</span>
-              </div>
-              <div class="skill-badge-item unlocked">
-                <div class="badge-icon">🧠</div>
-                <div class="badge-title">Backprop Alchemist</div>
-                <div class="badge-desc">Multivariable Chain Rule</div>
-                <span class="badge-status-tag earned">UNLOCKED</span>
-              </div>
-              <div class="skill-badge-item unlocked">
-                <div class="badge-icon">🤖</div>
-                <div class="badge-title">Transformer Mage</div>
-                <div class="badge-desc">FlashAttention & LCEL</div>
-                <span class="badge-status-tag earned">UNLOCKED</span>
-              </div>
-              <div class="skill-badge-item">
-                <div class="badge-icon">🐳</div>
-                <div class="badge-title">MLOps Centurion</div>
-                <div class="badge-desc">Docker, DVC & CI/CD</div>
-                <span class="badge-status-tag" style="color:#38bdf8; background:rgba(56,189,248,0.12);">80% MASTERED</span>
-              </div>
-              <div class="skill-badge-item unlocked">
-                <div class="badge-icon">🔥</div>
-                <div class="badge-title">Cognitive Titan</div>
-                <div class="badge-desc">14-Day Study Streak</div>
-                <span class="badge-status-tag earned">UNLOCKED</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Dashboard Right Column (Velocity & Recall Radar) -->
-        <div class="dash-right-col">
-          
-          <!-- Weekly Velocity Chart -->
-          <div class="panel-card">
-            <div class="panel-header">
-              <span class="panel-title">Weekly Velocity</span>
-              <span class="panel-badge">5.2h AVG</span>
-            </div>
-            <div class="velocity-bars-wrap">
-              <div class="velocity-bar-col">
-                <div class="velocity-bar" style="height: 65%;" data-hours="4.8h"></div>
-                <span class="velocity-day-label">MON</span>
-              </div>
-              <div class="velocity-bar-col">
-                <div class="velocity-bar" style="height: 75%;" data-hours="5.5h"></div>
-                <span class="velocity-day-label">TUE</span>
-              </div>
-              <div class="velocity-bar-col">
-                <div class="velocity-bar highlight" style="height: 90%;" data-hours="6.2h"></div>
-                <span class="velocity-day-label">WED</span>
-              </div>
-              <div class="velocity-bar-col">
-                <div class="velocity-bar" style="height: 70%;" data-hours="5.1h"></div>
-                <span class="velocity-day-label">THU</span>
-              </div>
-              <div class="velocity-bar-col">
-                <div class="velocity-bar" style="height: 55%;" data-hours="4.2h"></div>
-                <span class="velocity-day-label">FRI</span>
-              </div>
-              <div class="velocity-bar-col">
-                <div class="velocity-bar" style="height: 80%;" data-hours="5.8h"></div>
-                <span class="velocity-day-label">SAT</span>
-              </div>
-              <div class="velocity-bar-col">
-                <div class="velocity-bar" style="height: 40%;" data-hours="3.0h"></div>
-                <span class="velocity-day-label">SUN</span>
-              </div>
-            </div>
-            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.75rem; text-align: right;">
-              Target Velocity: 5.0h/day • Velocity Ratio: 104%
-            </div>
-          </div>
-
-          <!-- Active Recall Radar -->
-          <div class="panel-card">
-            <div class="panel-header">
-              <span class="panel-title">Active Recall Radar</span>
-              <span class="panel-badge">FSRS 4.5</span>
-            </div>
-            <div style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 0.75rem;">
-              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;">
-                <span>MEMORY STABILITY</span>
-                <span style="color: #34d399; font-weight: 600;">94% RETENTION</span>
-              </div>
-              <div style="height: 60px; display: flex; align-items: flex-end; gap: 4px;">
-                <div style="flex: 1; height: 98%; background: #10b981; border-radius: 2px;"></div>
-                <div style="flex: 1; height: 92%; background: #10b981; border-radius: 2px;"></div>
-                <div style="flex: 1; height: 86%; background: #34d399; border-radius: 2px;"></div>
-                <div style="flex: 1; height: 79%; background: #38bdf8; border-radius: 2px;"></div>
-                <div style="flex: 1; height: 73%; background: #fbbf24; border-radius: 2px;"></div>
-                <div style="flex: 1; height: 68%; background: #f59e0b; border-radius: 2px;"></div>
-                <div style="flex: 1; height: 60%; background: #f87171; border-radius: 2px;"></div>
-              </div>
-              <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-dim); margin-top: 4px;">
-                <span>DAY 0</span>
-                <span>DAY 7 (OPTIMAL REVIEW)</span>
-              </div>
-            </div>
-            <button class="btn-pulse-primary" style="width: 100%; justify-content: center;" onclick="window.switchAppTab('flashcards')">
-              📇 Launch Recall Session
-            </button>
-          </div>
-
-          <!-- Quick Jump To 3D Bookshelf -->
-          <div class="panel-card" style="border-color: rgba(56, 189, 248, 0.3);">
-            <div class="panel-header">
-              <span class="panel-title">📚 3D Archive Bookshelf</span>
-              <span class="panel-badge">18 VOLUMES</span>
-            </div>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
-              Inspect tactile 3D books for all 18 curriculum tracks with animated pull-out dossiers and syllabus formulas.
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
+              Real-time Web Audio synthesis generates pure neuro-acoustic frequencies to lock into deep flow state.
             </p>
-            <button class="btn-pulse-ghost" style="width: 100%; justify-content: center;" onclick="window.switchAppTab('bookshelf')">
-              Open 3D Bookshelf Terminal →
-            </button>
+
+            <div class="audio-channels-grid">
+              <div class="audio-channel">
+                <div class="channel-info">
+                  <span>🧠 40Hz Gamma Beats</span>
+                  <span style="font-family: var(--font-mono); color: var(--accent-cyan);">35%</span>
+                </div>
+                <input type="range" class="audio-slider" min="0" max="1" step="0.01" value="0.35" 
+                       oninput="window.setChannelVolume('binaural', this.value)">
+              </div>
+
+              <div class="audio-channel">
+                <div class="channel-info">
+                  <span>🌧️ Nordic Rain</span>
+                  <span style="font-family: var(--font-mono); color: var(--accent-cyan);">30%</span>
+                </div>
+                <input type="range" class="audio-slider" min="0" max="1" step="0.01" value="0.30" 
+                       oninput="window.setChannelVolume('rain', this.value)">
+              </div>
+
+              <div class="audio-channel">
+                <div class="channel-info">
+                  <span>🌊 Deep Brown Noise</span>
+                  <span style="font-family: var(--font-mono); color: var(--accent-cyan);">25%</span>
+                </div>
+                <input type="range" class="audio-slider" min="0" max="1" step="0.01" value="0.25" 
+                       oninput="window.setChannelVolume('brown', this.value)">
+              </div>
+
+              <div class="audio-channel">
+                <div class="channel-info">
+                  <span>🎹 Ambient Lo-Fi Pad</span>
+                  <span style="font-family: var(--font-mono); color: var(--accent-cyan);">20%</span>
+                </div>
+                <input type="range" class="audio-slider" min="0" max="1" step="0.01" value="0.20" 
+                       oninput="window.setChannelVolume('lofi', this.value)">
+              </div>
+            </div>
+
+            <!-- Live FFT Visualizer -->
+            <canvas class="audio-fft-canvas" id="audio-fft-canvas" width="600" height="60"></canvas>
           </div>
 
+          <!-- Quick Navigation Cards -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;">
+            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('bookshelf')">
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">📚</div>
+              <div style="font-size: 0.9rem; font-weight: 700;">3D Bookshelf</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">18 tactile curriculum volumes in WebGL</div>
+            </div>
+            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('chaos')">
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">⚡</div>
+              <div style="font-size: 0.9rem; font-weight: 700;">Chaos Lab</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">Raft, Redis & Kafka Distributed Simulator</div>
+            </div>
+          </div>
         </div>
+
       </div>
     </section>
 
-    <!-- ====================================================================
-         VIEW 2: TOPIC CHECKLIST / CURRICULUM MASTER MATRIX (Screenshot 6)
-         ==================================================================== -->
-    <section class="view-section" id="view-curriculum">
-      
-      <!-- Top Banner with 68% Master Index Gauge -->
-      <div class="checklist-top-banner">
-        <div class="checklist-left-info">
-          <h2 class="matrix-header-title">
-            Curriculum Master Matrix // Topic Checklist
-          </h2>
-          <p class="matrix-subtitle">
-            Comprehensive curriculum index mapped across Distributed Systems, Machine Learning, Deep Learning, Generative AI, MLOps, and Data Structures.
-          </p>
-          <div class="global-progress-bar-block">
-            <div class="global-label-row">
-              <span>GLOBAL TARGET PROGRESS</span>
-              <span id="matrix-mastered-stat">0 of 10 Topics Mastered</span>
-            </div>
-            <div class="global-track">
-              <div class="global-fill" id="matrix-global-fill" style="width: 0%;"></div>
-            </div>
+    <!-- VIEW 2: CURRICULUM MASTER MATRIX -->
+    <section class="view-panel" id="view-curriculum">
+      <div class="curriculum-header-panel">
+        <!-- Horizontal Course Switcher -->
+        <div class="course-selector-scroll" id="course-selector-container"></div>
+
+        <!-- Selected Course Overview -->
+        <div style="margin-bottom: 16px;">
+          <h2 id="active-course-title" style="font-size: 1.35rem; font-weight: 800; margin-bottom: 4px;">CampusX DSMP</h2>
+          <p id="active-course-desc" style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 6px;">End-to-End Data Science</p>
+          <div id="active-course-stats" style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); font-family: var(--font-mono);">
+            40 Modules • 213 Lectures • 1,219 Topics
           </div>
         </div>
 
-        <!-- 68% Gauge Circle Widget (Screenshot 6) -->
-        <div class="gauge-circle-widget">
-          <svg viewBox="0 0 36 36" class="circular-chart">
-            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path class="circle" id="matrix-circle-fill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <text x="18" y="20.35" class="percentage" id="matrix-gauge-val">0%</text>
-          </svg>
-          <span class="gauge-caption">MASTER INDEX</span>
-        </div>
-      </div>
-
-      <!-- Filter Controls Bar -->
-      <div class="checklist-filter-bar">
-        <div class="subject-pills-row">
-          <button class="filter-pill-btn active" data-subject="all">All Subjects (210)</button>
-          <button class="filter-pill-btn" data-subject="dist-sys">Distributed Systems (42)</button>
-          <button class="filter-pill-btn" data-subject="ml">Machine Learning (54)</button>
-          <button class="filter-pill-btn" data-subject="dsa">Algorithms & DSA (48)</button>
-          <button class="filter-pill-btn" data-subject="genai">Generative AI (36)</button>
-          <button class="filter-pill-btn" data-subject="mlops">MLOps & Systems (30)</button>
-        </div>
-
-        <div class="filter-controls-row">
+        <!-- Search & Filters -->
+        <div class="search-filter-row">
           <div class="search-input-box">
-            <input type="text" id="checklist-search-input" placeholder="Filter topics, algorithms, formulas, or concepts...">
+            <span class="search-icon-pos">🔍</span>
+            <input type="text" class="search-input" id="curriculum-search-input" placeholder="Search topics, algorithms, frameworks...">
           </div>
-          <select class="filter-dropdown">
-            <option>All Difficulties</option>
-            <option>Fundamental</option>
-            <option>Intermediate</option>
-            <option>Advanced</option>
-          </select>
-          <select class="filter-dropdown">
-            <option>All Statuses</option>
-            <option>Mastered</option>
-            <option>In Progress</option>
-            <option>Needs Review</option>
-          </select>
+          <div style="display: flex; gap: 6px;">
+            <button class="course-chip filter-chip active" data-filter="all">All Topics</button>
+            <button class="course-chip filter-chip" data-filter="pending">Pending</button>
+            <button class="course-chip filter-chip" data-filter="completed">Completed</button>
+          </div>
         </div>
       </div>
 
-      <!-- Module Accordion List -->
-      <div class="modules-accordion-list">
-        
-        <!-- Module 1: Distributed Systems -->
-        <div class="module-card expanded" data-subject="dist-sys">
-          <div class="module-header">
-            <div class="module-title-left">
-              <span class="module-chevron">▶</span>
-              <span class="module-code-pill">MOD 01</span>
-              <span class="module-name">Distributed Consensus & Replication Mechanisms</span>
-            </div>
-            <div class="module-meta-right">
-              <div class="module-mini-track"><div class="module-mini-fill" style="width: 80%;"></div></div>
-              <span class="module-progress-stat">8/10 (80%)</span>
-            </div>
+      <!-- Modules Accordion List -->
+      <div class="module-accordion-list" id="module-accordion-list"></div>
+    </section>
+
+    <!-- VIEW 3: 3D TACTILE BOOKSHELF -->
+    <section class="view-panel" id="view-bookshelf">
+      <div class="bookshelf-container">
+        <div class="bookshelf-hud">
+          <div class="bookshelf-hud-badge">
+            <span>📚 18 CURRICULUM VOLUMES IN THREE.JS WEBGL</span>
           </div>
-          <div class="module-topics-body">
-            <div class="topic-row">
-              <div class="topic-left-side">
-                <div class="custom-checkbox"></div>
-                <div class="topic-info-text">
-                  <span class="topic-title-span">Raft Leader Election & Term Transitions <span class="topic-tag">CONSENSUS</span></span>
-                  <span class="topic-meta-sub">3.5h · 4 Lectures · Heartbeat intervals & randomized timeouts</span>
-                </div>
-              </div>
-              <div class="topic-right-actions">
-                <span class="retention-pill stable">95% STABLE</span>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Raft Leader Election')">Review</button>
-              </div>
-            </div>
-
-            <div class="topic-row">
-              <div class="topic-left-side">
-                <div class="custom-checkbox"></div>
-                <div class="topic-info-text">
-                  <span class="topic-title-span">Log Replication & Majority Quorum Commits <span class="topic-tag">REPLICATION</span></span>
-                  <span class="topic-meta-sub">2.8h · 3 Lectures · AppendEntries RPC consistency checks</span>
-                </div>
-              </div>
-              <div class="topic-right-actions">
-                <span class="retention-pill stable">92% STABLE</span>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Log Replication & Quorum')">Review</button>
-              </div>
-            </div>
-
-            <div class="topic-row">
-              <div class="topic-left-side">
-                <div class="custom-checkbox"></div>
-                <div class="topic-info-text">
-                  <span class="topic-title-span">Vector Clocks & Causal Ordering in Event Systems <span class="topic-tag">TIME</span></span>
-                  <span class="topic-meta-sub">4.0h · 5 Lectures · Lamport timestamps vs vector concurrency</span>
-                </div>
-              </div>
-              <div class="topic-right-actions">
-                <span class="retention-pill decaying">72% DECAYING</span>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Vector Clocks & Causal Ordering')">Study</button>
-              </div>
-            </div>
-
-            <div class="topic-row">
-              <div class="topic-left-side">
-                <div class="custom-checkbox"></div>
-                <div class="topic-info-text">
-                  <span class="topic-title-span">Byzantine Fault Tolerance & PBFT Protocol <span class="topic-tag">SECURITY</span></span>
-                  <span class="topic-meta-sub">5.2h · 6 Lectures · Pre-prepare, Prepare, and Commit 3-phase commit</span>
-                </div>
-              </div>
-              <div class="topic-right-actions">
-                <span class="retention-pill new">NEW TOPIC</span>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Byzantine Fault Tolerance')">Study</button>
-              </div>
-            </div>
+          <div class="bookshelf-hud-badge" style="background: rgba(0, 242, 255, 0.15); color: var(--accent-cyan);">
+            <span>👆 Tap book to inspect syllabus</span>
           </div>
         </div>
-
-        <!-- Module 2: Algorithms & Data Structures -->
-        <div class="module-card expanded" data-subject="dsa">
-          <div class="module-header">
-            <div class="module-title-left">
-              <span class="module-chevron">▶</span>
-              <span class="module-code-pill">MOD 02</span>
-              <span class="module-name">Advanced Data Structures & Interview Mechanics</span>
-            </div>
-            <div class="module-meta-right">
-              <div class="module-mini-track"><div class="module-mini-fill" style="width: 75%;"></div></div>
-              <span class="module-progress-stat">9/12 (75%)</span>
-            </div>
-          </div>
-          <div class="module-topics-body">
-            <div class="topic-row">
-              <div class="topic-left-side">
-                <div class="custom-checkbox"></div>
-                <div class="topic-info-text">
-                  <span class="topic-title-span">Monotonic Stack: Next Greater Element & Histogram Area <span class="topic-tag">STACKS</span></span>
-                  <span class="topic-meta-sub">4.2h · LeetCode 84 & 739 · O(n) amortized scans</span>
-                </div>
-              </div>
-              <div class="topic-right-actions">
-                <span class="retention-pill stable">96% STABLE</span>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Monotonic Stacks')">Review</button>
-              </div>
-            </div>
-
-            <div class="topic-row">
-              <div class="topic-left-side">
-                <div class="custom-checkbox"></div>
-                <div class="topic-info-text">
-                  <span class="topic-title-span">Trie (Prefix Tree) & Bitwise XOR Maximum <span class="topic-tag">TREES</span></span>
-                  <span class="topic-meta-sub">3.0h · Prefix lookup, autocomplete, LeetCode 421</span>
-                </div>
-              </div>
-              <div class="topic-right-actions">
-                <span class="retention-pill stable">89% STABLE</span>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Trie & Bitwise XOR')">Review</button>
-              </div>
-            </div>
-
-            <div class="topic-row">
-              <div class="topic-left-side">
-                <div class="custom-checkbox"></div>
-                <div class="topic-info-text">
-                  <span class="topic-title-span">Segment Trees with Lazy Propagation <span class="topic-tag">ADVANCED</span></span>
-                  <span class="topic-meta-sub">5.0h · Range queries & range updates in O(log n)</span>
-                </div>
-              </div>
-              <div class="topic-right-actions">
-                <span class="retention-pill new">SCHEDULED</span>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Segment Trees')">Study</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Module 3: Machine Learning & Generative AI -->
-        <div class="module-card expanded" data-subject="ml">
-          <div class="module-header">
-            <div class="module-title-left">
-              <span class="module-chevron">▶</span>
-              <span class="module-code-pill">MOD 03</span>
-              <span class="module-name">Machine Learning Core Algorithms & Mathematical Formulations</span>
-            </div>
-            <div class="module-meta-right">
-              <div class="module-mini-track"><div class="module-mini-fill" style="width: 85%;"></div></div>
-              <span class="module-progress-stat">12/14 (85%)</span>
-            </div>
-          </div>
-          <div class="module-topics-body">
-            <div class="topic-row">
-              <div class="topic-left-side">
-                <div class="custom-checkbox"></div>
-                <div class="topic-info-text">
-                  <span class="topic-title-span">Gradient Boosting Math: Residual Loss Minimization <span class="topic-tag">BOOSTING</span></span>
-                  <span class="topic-meta-sub">6.5h · Pseudo residuals, Taylor series approximation</span>
-                </div>
-              </div>
-              <div class="topic-right-actions">
-                <span class="retention-pill stable">98% STABLE</span>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Gradient Boosting')">Review</button>
-              </div>
-            </div>
-
-            <div class="topic-row">
-              <div class="topic-left-side">
-                <div class="custom-checkbox"></div>
-                <div class="topic-info-text">
-                  <span class="topic-title-span">Multi-Head Attention & Transformer Scaled Dot-Product <span class="topic-tag">ATTENTION</span></span>
-                  <span class="topic-meta-sub">8.0h · Q, K, V projection matrices & softmax scaling</span>
-                </div>
-              </div>
-              <div class="topic-right-actions">
-                <span class="retention-pill stable">94% STABLE</span>
-                <button class="btn-launch-sm" onclick="window.launchStudySession('Multi-Head Attention')">Review</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <div id="bookshelf-3d-canvas-container"></div>
       </div>
     </section>
 
-    <!-- ====================================================================
-         VIEW: SYSTEM DESIGN & CHAOS ENGINEERING LAB
-         ==================================================================== -->
-    <section class="view-section" id="view-system-design">
-      <div class="chaos-lab-header">
-        <div class="chaos-title-col">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 1.4rem;">🛡️</span>
-            <div>
-              <h2 style="font-size: 1.35rem; font-weight: 800; color: #fff; margin: 0;">System Design Chaos Lab // Live Simulation</h2>
-              <div style="font-size: 0.78rem; color: var(--text-dim); margin-top: 2px;">
-                Interactive distributed systems sandbox. Inject traffic spikes, sever quorum leader nodes, and observe live circuit breakers.
-              </div>
+    <!-- VIEW 4: 3D MEMORY PALACE & FSRS -->
+    <section class="view-panel" id="view-palace">
+      <div class="palace-container">
+        <div class="bookshelf-hud">
+          <div class="bookshelf-hud-badge">
+            <span>🏛️ SPATIAL MEMORY PALACE • FSRS SPACED REPETITION</span>
+          </div>
+          <button class="bookshelf-hud-badge" style="cursor: pointer;" onclick="window.palaceResetView()">
+            <span>↺ Reset Orbit View</span>
+          </button>
+        </div>
+        <div id="memory-palace-3d-canvas"></div>
+
+        <!-- Floating Card Modal for Memory Palace -->
+        <div class="palace-card-modal" id="palace-card-modal">
+          <div class="palace-card-front" id="palace-card-front">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--accent-cyan);" id="palace-card-category">DISTRIBUTED SYSTEMS</div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; margin: 6px 0 10px;" id="palace-card-title">Concept</h3>
+            <p style="font-size: 0.9rem; color: var(--text-primary); line-height: 1.5;" id="palace-card-question">Question...</p>
+            <button class="btn-pomo-sec" style="margin-top: 14px; width: 100%;" onclick="window.palaceFlipCard()">
+              🔄 Reveal Architectural Solution
+            </button>
+          </div>
+
+          <div class="palace-card-back" id="palace-card-back" style="display: none;">
+            <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;" id="palace-card-answer">
+              Answer...
             </div>
-          </div>
-        </div>
-
-        <div class="chaos-stats-row">
-          <div class="chaos-stat-box">
-            <span class="chaos-stat-label">CLUSTER LOAD</span>
-            <span class="chaos-stat-val pos" id="chaos-stat-total-rps">18,400 RPS</span>
-          </div>
-          <div class="chaos-stat-box">
-            <span class="chaos-stat-label">CLUSTER HEALTH</span>
-            <span class="chaos-stat-val pos" id="chaos-stat-health">100% ONLINE</span>
-          </div>
-          <div class="chaos-stat-box">
-            <span class="chaos-stat-label">CIRCUIT BREAKER</span>
-            <span class="chaos-stat-val" id="chaos-stat-circuit">CLOSED</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="chaos-arch-nav">
-        <button class="btn-arch-tab active" data-arch="gateway" onclick="window.loadChaosArchitecture('gateway')">
-          🌐 API Gateway & L2 Cache
-        </button>
-        <button class="btn-arch-tab" data-arch="raft" onclick="window.loadChaosArchitecture('raft')">
-          🗳️ Raft Distributed Quorum
-        </button>
-        <button class="btn-arch-tab" data-arch="kafka" onclick="window.loadChaosArchitecture('kafka')">
-          📨 Event-Driven Kafka Streaming
-        </button>
-      </div>
-
-      <div class="chaos-action-bar">
-        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.05em;">CHAOS INJECTIONS:</span>
-        <button class="btn-chaos-attack surge" onclick="window.chaosInjectTrafficSpike()">
-          💥 Inject 100k RPS Surge
-        </button>
-        <button class="btn-chaos-attack kill" onclick="window.chaosKillLeaderNode()">
-          ⚡ Kill Leader / Master Node
-        </button>
-        <button class="btn-chaos-attack jitter" onclick="window.chaosInjectLatencyJitter()">
-          🐢 Inject 250ms Latency Jitter
-        </button>
-        <button class="btn-chaos-attack heal" onclick="window.chaosHealCluster()">
-          🛡️ Heal & Restore Quorum
-        </button>
-      </div>
-
-      <div class="chaos-main-grid">
-        <div class="chaos-canvas-wrapper">
-          <div class="canvas-header-info">
-            <span id="chaos-arch-title" style="font-weight: 700; color: #fff; font-size: 0.88rem;">High-Throughput API Gateway & Cache Cluster</span>
-            <span id="chaos-arch-desc" style="font-size: 0.75rem; color: var(--text-dim);">Distributed ingress handling 100k+ RPS with rate limiting...</span>
-          </div>
-          <div id="chaos-sim-canvas-container" style="width: 100%; height: 390px; border-radius: 8px; overflow: hidden; background: #080c16; position: relative;"></div>
-          <div class="canvas-footer-hint">
-            <span>DRAG NODES TO REARRANGE</span>
-            <span>CLICK NODE TO INSPECT LIVE TELEMETRY</span>
-          </div>
-        </div>
-
-        <div class="chaos-sidebar">
-          <div class="panel-card" style="padding: 1rem; border-color: rgba(56, 189, 248, 0.3);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-              <div>
-                <span class="topic-tag" id="chaos-node-type">GATEWAY</span>
-                <h4 id="chaos-node-name" style="font-size: 1rem; font-weight: 700; color: #fff; margin-top: 4px;">Nginx API Gateway</h4>
-              </div>
-              <span class="metric-delta pos" id="chaos-node-status">HEALTHY</span>
-            </div>
+            <pre style="background: #020617; padding: 10px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.78rem; overflow-x: auto; margin-bottom: 16px;"><code id="palace-card-code">code</code></pre>
             
-            <div class="chaos-node-metrics-grid">
-              <div class="node-metric-cell">
-                <span class="node-metric-label">THROUGHPUT</span>
-                <span class="node-metric-val" id="chaos-node-rps">8,400 req/s</span>
-              </div>
-              <div class="node-metric-cell">
-                <span class="node-metric-label">P99 LATENCY</span>
-                <span class="node-metric-val" id="chaos-node-lat">18 ms</span>
-              </div>
-              <div class="node-metric-cell">
-                <span class="node-metric-label">CPU LOAD</span>
-                <span class="node-metric-val" id="chaos-node-cpu">42%</span>
-              </div>
+            <div class="fsrs-rating-buttons">
+              <button class="btn-fsrs again" onclick="window.palaceGradeCard('again')">Again (&lt;10m)</button>
+              <button class="btn-fsrs hard" onclick="window.palaceGradeCard('hard')">Hard (1d)</button>
+              <button class="btn-fsrs good" onclick="window.palaceGradeCard('good')">Good (3d)</button>
+              <button class="btn-fsrs easy" onclick="window.palaceGradeCard('easy')">Easy (7d)</button>
             </div>
-
-            <p id="chaos-node-info" style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.4; margin-top: 0.75rem; margin-bottom: 0;">
-              Token-bucket rate limiting (10k RPS cap), JWT authentication, reverse proxy routing.
-            </p>
-          </div>
-
-          <div class="panel-card" style="padding: 0.85rem; flex: 1; display: flex; flex-direction: column;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 0.75rem; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">CHAOS EVENT LOG</span>
-              <span class="pulse-dot"></span>
-            </div>
-            <div id="chaos-console-logs" class="chaos-console-logs"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ====================================================================
-         VIEW 3: FLASHCARDS / ACTIVE RECALL ENGINE (Screenshots 3 & 4)
-         ==================================================================== -->
-    <section class="view-section" id="view-flashcards">
-      <!-- Palace Mode Switcher Banner -->
-      <div class="palace-mode-switcher-bar">
-        <div style="display:flex; align-items: center; gap: 10px;">
-          <span style="font-size: 1.15rem;">🏛️</span>
+    <!-- VIEW 5: SYSTEM DESIGN CHAOS LAB -->
+    <section class="view-panel" id="view-chaos">
+      <div class="chaos-lab-panel">
+        <div class="chaos-top-bar">
           <div>
-            <div style="font-weight: 700; font-size: 0.95rem; color: #fff;">Method of Loci // Spatial Spaced Repetition</div>
-            <div style="font-size: 0.75rem; color: var(--text-dim);">Switch between classic flashcards and interactive 3D cybernetic sanctuary.</div>
+            <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;">Distributed Systems Chaos Simulator</h2>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">Real-time consensus, caching, and streaming fault injection lab</p>
+          </div>
+          <div class="chaos-arch-tabs">
+            <button class="btn-arch-tab active" data-arch="gateway" onclick="window.loadChaosArchitecture('gateway')">API Gateway & Redis</button>
+            <button class="btn-arch-tab" data-arch="raft" onclick="window.loadChaosArchitecture('raft')">Raft Consensus Quorum</button>
+            <button class="btn-arch-tab" data-arch="kafka" onclick="window.loadChaosArchitecture('kafka')">Kafka Microservices</button>
           </div>
         </div>
-        <button id="btn-toggle-palace-mode" class="btn-palace-toggle" onclick="window.toggleMemoryPalaceMode()">
-          🏛️ Launch 3D Memory Palace
-        </button>
+
+        <div class="chaos-canvas-wrapper">
+          <canvas id="chaos-canvas"></canvas>
+        </div>
+
+        <!-- Action Grid -->
+        <div class="chaos-controls-grid">
+          <button class="btn-chaos-action surge" onclick="window.chaosInjectTrafficSpike()">
+            <span>💥</span> <span>100k RPS Surge</span>
+          </button>
+          <button class="btn-chaos-action kill" onclick="window.chaosKillLeaderNode()">
+            <span>☠️</span> <span>Terminate Leader</span>
+          </button>
+          <button class="btn-chaos-action" onclick="window.chaosInjectLatencyJitter()">
+            <span>⏱️</span> <span>300ms Jitter</span>
+          </button>
+          <button class="btn-chaos-action heal" onclick="window.chaosHealCluster()">
+            <span>💚</span> <span>Heal Cluster</span>
+          </button>
+        </div>
+
+        <div class="chaos-console-logs" id="chaos-console-logs">
+          <div class="chaos-log-line" style="color: #64748b;">[SYSTEM INITIALIZED] Distributed cluster healthy. Ready for Chaos Monkey injection.</div>
+        </div>
       </div>
+    </section>
 
-      <!-- 3D Memory Palace Sanctuary Viewport Container -->
-      <div id="memory-palace-container" style="display: none; width: 100%; height: 560px; position: relative; border-radius: 12px; overflow: hidden; background: #060913; border: 1px solid rgba(56, 189, 248, 0.25); margin-bottom: 1.5rem;">
-        <div id="memory-palace-canvas-container" style="width: 100%; height: 100%;"></div>
-      </div>
-
-      <!-- Classic Flat Deck Container -->
-      <div id="flashcard-standard-container">
-      <div class="flashcards-layout">
-        
-        <!-- Left Side: Interactive Flashcard -->
-        <div class="fc-card-container">
-          <div class="fc-nav-header">
-            <div class="fc-deck-title-group">
-              <span style="font-size: 1.1rem; font-weight: 700;">Active Recall Engine</span>
-              <span class="panel-badge">FSRS v4.5</span>
-            </div>
-            <select class="fc-deck-select" id="fc-deck-select">
-              <option value="dist-sys">Distributed Systems / Raft Protocol (28 Cards)</option>
-              <option value="dsa">Data Structures & LeetCode (45 Cards)</option>
-              <option value="ml">Machine Learning Core (38 Cards)</option>
-            </select>
-          </div>
-
-          <div class="fc-card-progress-bar">
-            <div class="fc-card-progress-fill" id="fc-card-fill" style="width: 50%;"></div>
-          </div>
-
-          <!-- Interactive Card -->
-          <div class="fc-interactive-card" id="fc-interactive-card" title="Click anywhere on card or press SPACE to flip">
+    <!-- VIEW 6: COGNITIVE ANALYTICS & HEATMAP -->
+    <section class="view-panel" id="view-analytics">
+      <div class="analytics-panel">
+        <div class="heatmap-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
             <div>
-              <div class="fc-card-top-tag">
-                <span id="fc-card-num" style="font-family: var(--font-mono); font-weight: 600; color: var(--accent-cyan);">Card 1 of 4</span>
-                <span class="topic-tag">PRESS SPACE TO FLIP</span>
-              </div>
-
-              <div class="fc-question-text" id="fc-question">
-                Loading question...
-              </div>
-
-              <div class="fc-ascii-diagram" id="fc-diagram">
-                Loading diagram...
-              </div>
+              <h3 style="font-size: 1.15rem; font-weight: 800;">Cognitive Activity Heatmap</h3>
+              <p style="font-size: 0.82rem; color: var(--text-secondary);">365-day chronological record of daily study sprints and completed topics</p>
             </div>
-
-            <!-- Answer Box (Hidden until flipped) -->
-            <div class="fc-answer-box" id="fc-answer-box">
-              <div class="dossier-section-title" style="color: var(--accent-emerald);">DERIVATION & CORE INVARIANTS:</div>
-              <div class="fc-answer-text" id="fc-answer"></div>
-              <div class="dossier-formula-box">
-                <div class="formula-label">INVARIANT / FORMULA:</div>
-                <code id="fc-formula"></code>
-              </div>
-            </div>
-
-            <div class="fc-flip-prompt">
-              🔄 Click anywhere to flip between Prompt & Derivation
+            <div style="display: flex; gap: 4px; align-items: center; font-size: 0.72rem; color: var(--text-muted);">
+              <span>Less</span>
+              <span style="width: 10px; height: 10px; background: rgba(148, 163, 184, 0.15); border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #075985; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #0284c7; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #00f2ff; border-radius: 2px;"></span>
+              <span>More</span>
             </div>
           </div>
 
-          <!-- FSRS 4.5 Rating Buttons (Screenshots 3 & 4) -->
-          <div class="fc-rating-panel" id="fc-rating-panel">
-            <button class="btn-fsrs-rating again">
-              <span class="fsrs-name">[1] Again</span>
-              <span class="fsrs-interval">&lt; 10m · Lapse</span>
-            </button>
-            <button class="btn-fsrs-rating hard">
-              <span class="fsrs-name">[2] Hard</span>
-              <span class="fsrs-interval">1.2d · Diff +0.15</span>
-            </button>
-            <button class="btn-fsrs-rating good">
-              <span class="fsrs-name">[3] Good</span>
-              <span class="fsrs-interval">3.5d · Optimal</span>
-            </button>
-            <button class="btn-fsrs-rating easy">
-              <span class="fsrs-name">[4] Easy</span>
-              <span class="fsrs-interval">7.0d · Stable</span>
-            </button>
+          <div class="heatmap-scroll-container">
+            <svg class="heatmap-grid-svg" id="heatmap-grid-svg" viewBox="0 0 760 110"></svg>
           </div>
         </div>
 
-        <!-- Right Side: 7-Day Horizon & AI Tutor -->
-        <div class="fc-sidebar">
-          
-          <!-- 7-Day Load Horizon -->
-          <div class="fc-horizon-card">
-            <div class="panel-header">
-              <span class="panel-title">7-Day Load Horizon</span>
-              <span class="panel-badge">SRS QUEUE</span>
-            </div>
-            <div style="height: 100px; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; padding-top: 8px;">
-              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <div style="width: 100%; height: 80px; background: #38bdf8; border-radius: 4px 4px 0 0;"></div>
-                <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim);">TODAY</span>
-              </div>
-              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <div style="width: 100%; height: 50px; background: #0ea5e9; border-radius: 4px 4px 0 0;"></div>
-                <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim);">+1d</span>
-              </div>
-              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <div style="width: 100%; height: 35px; background: #0284c7; border-radius: 4px 4px 0 0;"></div>
-                <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim);">+2d</span>
-              </div>
-              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <div style="width: 100%; height: 60px; background: #0ea5e9; border-radius: 4px 4px 0 0;"></div>
-                <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim);">+3d</span>
-              </div>
-              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <div style="width: 100%; height: 25px; background: #0284c7; border-radius: 4px 4px 0 0;"></div>
-                <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim);">+4d</span>
-              </div>
-              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <div style="width: 100%; height: 40px; background: #0284c7; border-radius: 4px 4px 0 0;"></div>
-                <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim);">+5d</span>
-              </div>
-              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <div style="width: 100%; height: 20px; background: #0284c7; border-radius: 4px 4px 0 0;"></div>
-                <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim);">+6d</span>
-              </div>
-            </div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.75rem; display: flex; justify-content: space-between;">
-              <span>Target Retention: <strong>92%</strong></span>
-              <span>Total Scheduled: <strong>112 cards</strong></span>
-            </div>
+        <!-- Student Profile Card -->
+        <div class="hero-card" style="padding: 24px;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 8px;">Engineering Portfolio Profile</h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            <strong>Piyush Tiwari</strong> • Data Science, Machine Learning, Deep Learning & Distributed Systems Engineer.<br>
+            Mastering 7 flagship curriculums including CampusX DSMP, GenAI & LangChain, MLOps Bootcamp, AI Security, Python DSA, and Big Data Engineering.
+          </p>
+          <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="https://github.com/30Piyush2025/MY_STUDY_PROJECT" target="_blank" class="btn-pomo-sec" style="text-decoration: none;">
+              🐙 GitHub Repository
+            </a>
+            <a href="StudyPulse.apk" class="btn-pomo-main" style="text-decoration: none; font-size: 0.88rem; padding: 8px 18px;">
+              📥 Download Android App (APK)
+            </a>
           </div>
-
-          <!-- Neural AI Tutor -->
-          <div class="ai-tutor-box">
-            <div class="panel-header">
-              <span class="panel-title">Neural AI Tutor</span>
-              <span class="panel-badge">LLM PROMPT</span>
-            </div>
-            <div class="ai-tutor-chat-area" id="ai-tutor-chat">
-              <div style="color: #94a3b8;">
-                <strong>Neural Tutor:</strong> Ask me anything about this card's proof or implementation invariants!
-              </div>
-            </div>
-            <div class="ai-input-row">
-              <input type="text" id="ai-tutor-input" placeholder="Ask about split-vote invariants...">
-              <button class="btn-pulse-primary" id="btn-ai-tutor-send">Send</button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-      </div> <!-- /#flashcard-standard-container -->
-    </section>
-
-    <!-- ====================================================================
-         VIEW 4: SESSION ANALYTICS (Screenshot 5)
-         ==================================================================== -->
-    <section class="view-section" id="view-analytics">
-      
-      <!-- Top 4 Analytics Tiles -->
-      <div class="metric-grid-4">
-        <div class="metric-card">
-          <div class="metric-top-row">
-            <span class="metric-label">Total Focus Volume</span>
-            <span class="metric-icon-badge">⚡</span>
-          </div>
-          <div class="metric-main-val">142.5h</div>
-          <div class="metric-sub-row">
-            <span class="metric-delta pos">+12.4h</span>
-            <span class="metric-context">this week</span>
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-top-row">
-            <span class="metric-label">Avg Session Duration</span>
-            <span class="metric-icon-badge">⏱️</span>
-          </div>
-          <div class="metric-main-val">52.4m</div>
-          <div class="metric-sub-row">
-            <span class="metric-delta pos">Optimal</span>
-            <span class="metric-context">flow state zone</span>
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-top-row">
-            <span class="metric-label">Mean Focus Rating</span>
-            <span class="metric-icon-badge">🎯</span>
-          </div>
-          <div class="metric-main-val">91%</div>
-          <div class="metric-sub-row">
-            <span class="metric-delta pos">+3%</span>
-            <span class="metric-context">cognitive score</span>
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-top-row">
-            <span class="metric-label">Topics Mastered</span>
-            <span class="metric-icon-badge">🏆</span>
-          </div>
-          <div class="metric-main-val">168</div>
-          <div class="metric-sub-row">
-            <span class="metric-delta pos">Verified</span>
-            <span class="metric-context">across 7 curricula</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cognitive Density Heatmap -->
-      <div class="heatmap-card">
-        <div class="panel-header">
-          <div class="panel-title-group">
-            <span class="panel-title">Daily Cognitive Density Heatmap</span>
-            <span class="panel-badge">28 WEEKS TELEMETRY</span>
-          </div>
-          <span style="font-size: 0.75rem; color: var(--text-dim);">HOURS LOGGED PER DAY</span>
-        </div>
-        <div class="heatmap-grid" id="density-heatmap-grid"></div>
-        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 10px; font-size: 0.72rem; color: var(--text-dim);">
-          <span>Less</span>
-          <div style="width: 10px; height: 10px; background: rgba(255,255,255,0.05); border-radius: 2px;"></div>
-          <div style="width: 10px; height: 10px; background: rgba(16, 185, 129, 0.25); border-radius: 2px;"></div>
-          <div style="width: 10px; height: 10px; background: rgba(16, 185, 129, 0.5); border-radius: 2px;"></div>
-          <div style="width: 10px; height: 10px; background: rgba(16, 185, 129, 0.75); border-radius: 2px;"></div>
-          <div style="width: 10px; height: 10px; background: #10b981; border-radius: 2px;"></div>
-          <span>More (4h+)</span>
-        </div>
-      </div>
-
-      <!-- Deep Work Telemetry Table -->
-      <div class="panel-card">
-        <div class="panel-header">
-          <span class="panel-title">Deep Work Telemetry Table</span>
-          <span class="panel-badge">SESSION LOGS</span>
-        </div>
-        <div style="overflow-x: auto;">
-          <table class="telemetry-table">
-            <thead>
-              <tr>
-                <th>TIMESTAMP</th>
-                <th>TOPIC / LECTURE</th>
-                <th>TRACK</th>
-                <th>DURATION</th>
-                <th>COGNITIVE SCORE</th>
-                <th>MODE</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="font-family: var(--font-mono); color: var(--text-muted);">Today 10:15</td>
-                <td style="font-weight: 600;">Raft Consensus & Leader Election</td>
-                <td><span class="topic-tag">DIST-SYS</span></td>
-                <td style="font-family: var(--font-mono);">75 mins</td>
-                <td><span class="retention-pill stable">96% FLOW</span></td>
-                <td><span class="queue-badge progress">DEEP WORK</span></td>
-              </tr>
-              <tr>
-                <td style="font-family: var(--font-mono); color: var(--text-muted);">Today 08:30</td>
-                <td style="font-weight: 600;">B-Trees & LSM Tree Storage Engines</td>
-                <td><span class="topic-tag">DATABASES</span></td>
-                <td style="font-family: var(--font-mono);">90 mins</td>
-                <td><span class="retention-pill stable">94% FLOW</span></td>
-                <td><span class="queue-badge progress">DEEP WORK</span></td>
-              </tr>
-              <tr>
-                <td style="font-family: var(--font-mono); color: var(--text-muted);">Yesterday 17:00</td>
-                <td style="font-weight: 600;">Multi-Head Attention Math & Scaled Softmax</td>
-                <td><span class="topic-tag">DEEP LEARNING</span></td>
-                <td style="font-family: var(--font-mono);">60 mins</td>
-                <td><span class="retention-pill stable">91% FLOW</span></td>
-                <td><span class="queue-badge progress">DEEP WORK</span></td>
-              </tr>
-              <tr>
-                <td style="font-family: var(--font-mono); color: var(--text-muted);">Yesterday 14:15</td>
-                <td style="font-weight: 600;">Monotonic Queue LeetCode Problems</td>
-                <td><span class="topic-tag">ALGORITHMS</span></td>
-                <td style="font-family: var(--font-mono);">45 mins</td>
-                <td><span class="retention-pill stable">88% FLOW</span></td>
-                <td><span class="queue-badge revision">SRS REVISION</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         VIEW 5: PLANNER / FLIGHT MANIFEST (Screenshot 2)
-         ==================================================================== -->
-    <section class="view-section" id="view-planner">
-      
-      <!-- Milestone Countdown Cards -->
-      <div class="planner-milestone-grid">
-        <div class="milestone-card">
-          <span class="topic-tag">PRIMARY DEADLINE</span>
-          <div class="milestone-days-num">5 Days</div>
-          <div class="milestone-target">Distributed Systems Exam</div>
-          <div class="queue-meta">Oct 26 · 85% Syllabus Ready</div>
-        </div>
-
-        <div class="milestone-card">
-          <span class="topic-tag">QUALIFYING EXAM</span>
-          <div class="milestone-days-num">18 Days</div>
-          <div class="milestone-target">Algorithms & Data Structures Qualifying</div>
-          <div class="queue-meta">Nov 08 · 62% Syllabus Ready</div>
-        </div>
-
-        <div class="milestone-card">
-          <span class="topic-tag">RESEARCH SUBMISSION</span>
-          <div class="milestone-days-num">24 Days</div>
-          <div class="milestone-target">Paper Draft: Consensus Invariants</div>
-          <div class="queue-meta">Nov 14 · 40% Complete</div>
-        </div>
-      </div>
-
-      <!-- Chrono Blocks Execution Graph -->
-      <div class="planner-columns">
-        <div class="planner-left">
-          <div class="panel-card">
-            <div class="panel-header">
-              <div class="panel-title-group">
-                <span class="panel-title">Chrono Blocks // Today's Execution Graph</span>
-                <span class="panel-badge">5.5H ALLOCATED</span>
-              </div>
-              <span style="font-size: 0.75rem; color: var(--text-dim);">OCTOBER 21</span>
-            </div>
-
-            <div class="chrono-blocks-list">
-              <div class="chrono-block-item completed">
-                <div class="chrono-time">08:00 - 09:30</div>
-                <div class="chrono-title-group">
-                  <div class="chrono-title">Deep Work · Advanced B-Trees & Storage Internals</div>
-                  <div class="chrono-type-tag">COMPLETED · 95% FOCUS RATING</div>
-                </div>
-                <span class="retention-pill stable">DONE</span>
-              </div>
-
-              <div class="chrono-block-item active">
-                <div class="chrono-time">10:00 - 11:15</div>
-                <div class="chrono-title-group">
-                  <div class="chrono-title">Active Recall · Raft Consensus & Leader Election</div>
-                  <div class="chrono-type-tag">CURRENT ACTIVE SESSION · 40HZ AUDIO</div>
-                </div>
-                <span class="retention-pill new">ACTIVE</span>
-              </div>
-
-              <div class="chrono-block-item">
-                <div class="chrono-time">13:00 - 14:30</div>
-                <div class="chrono-title-group">
-                  <div class="chrono-title">Deep Work · Vector Clock Impl in Python / Go</div>
-                  <div class="chrono-type-tag">SCHEDULED AFTERNOON IMMERSION</div>
-                </div>
-                <span class="retention-pill decaying">UPCOMING</span>
-              </div>
-
-              <div class="chrono-block-item">
-                <div class="chrono-time">15:30 - 16:45</div>
-                <div class="chrono-title-group">
-                  <div class="chrono-title">Flashcard Sprint · FSRS 28 Cards Due</div>
-                  <div class="chrono-type-tag">SCHEDULED ACTIVE RECALL SPRINT</div>
-                </div>
-                <span class="retention-pill decaying">UPCOMING</span>
-              </div>
-
-              <div class="chrono-block-item">
-                <div class="chrono-time">19:30 - 21:00</div>
-                <div class="chrono-title-group">
-                  <div class="chrono-title">Review & Synthesis · Paper Notes & Summary</div>
-                  <div class="chrono-type-tag">SCHEDULED EVENING CONSOLIDATION</div>
-                </div>
-                <span class="retention-pill decaying">UPCOMING</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Planner Right Sidebar -->
-        <div class="planner-right">
-          <div class="panel-card">
-            <div class="panel-header">
-              <span class="panel-title">Study Capacity Gauge</span>
-              <span class="panel-badge">91.6%</span>
-            </div>
-            <div style="text-align: center; padding: 1rem 0;">
-              <div style="font-family: var(--font-mono); font-size: 2.2rem; font-weight: 700; color: #38bdf8;">5.5h / 6.0h</div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Daily Cognitive Bandwidth Utilized</div>
-            </div>
-          </div>
-
-          <div class="panel-card">
-            <div class="panel-header">
-              <span class="panel-title">SRS Revision Queue</span>
-              <span class="panel-badge">28 CARDS</span>
-            </div>
-            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem;">
-              <li style="display: flex; justify-content: space-between;"><span style="color: #f87171;">Critical (Lapsed)</span> <strong>12 Cards</strong></li>
-              <li style="display: flex; justify-content: space-between;"><span style="color: #fbbf24;">Moderate Retention</span> <strong>10 Cards</strong></li>
-              <li style="display: flex; justify-content: space-between;"><span style="color: #34d399;">Mature Refresh</span> <strong>6 Cards</strong></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         VIEW 6: 📚 3D BOOKSHELF (Interactive Three.js & CSS3D Scene)
-         ==================================================================== -->
-    <section class="view-section" id="view-bookshelf">
-      <div class="bookshelf-section-wrapper">
-        
-        <!-- Bookshelf HUD Controls Bar -->
-        <div class="bookshelf-hud-bar">
-          <div class="hud-title-badge">
-            <span>📚</span>
-            <span>STUDYPULSE 3D ARCHIVE // 18 VOLUMES</span>
-          </div>
-          <div class="hud-actions-row">
-            <select id="bookshelf-hud-select" class="btn-hud" style="outline: none;" onchange="if(this.value!=='') window.bookshelf3DOpenBook(parseInt(this.value))">
-              <option value="">-- Jump to Any Book --</option>
-              <option value="0">Vol. 01: DSA & LeetCode</option>
-              <option value="1">Vol. 02: Python Core</option>
-              <option value="2">Vol. 03: Advanced Python & OOP</option>
-              <option value="3">Vol. 04: NumPy Engine</option>
-              <option value="4">Vol. 05: Pandas Wrangling</option>
-              <option value="5">Vol. 06: Data Viz & EDA</option>
-              <option value="6">Vol. 07: SQL Mastery</option>
-              <option value="7">Vol. 08: Linear Algebra</option>
-              <option value="8">Vol. 09: Probability & Stats</option>
-              <option value="9">Vol. 10: Machine Learning Core</option>
-              <option value="10">Vol. 11: Boosting & XGBoost</option>
-              <option value="11">Vol. 12: Real Estate Capstone</option>
-              <option value="12">Vol. 13: Deep Learning</option>
-              <option value="13">Vol. 14: Generative AI</option>
-              <option value="14">Vol. 15: RAG Pipelines</option>
-              <option value="15">Vol. 16: MLOps Systems</option>
-              <option value="16">Vol. 17: AI Security</option>
-              <option value="17">Vol. 18: Big Data Cloud</option>
-            </select>
-            <button class="btn-hud" onclick="window.bookshelf3DOpenBook(0)">
-              📖 Vol. 01 (DSA)
-            </button>
-            <button class="btn-hud" onclick="window.bookshelf3DOpenBook(9)">
-              📖 Vol. 10 (ML)
-            </button>
-            <button class="btn-hud" onclick="window.bookshelf3DClose()">
-              ↺ Reset Overview
-            </button>
-          </div>
-        </div>
-
-        <!-- WebGL & CSS3D Canvas Viewport -->
-        <div id="bookshelf-canvas-container" class="bookshelf-viewport"></div>
-
-        <!-- Instructional Overlay at bottom -->
-        <div style="position: absolute; bottom: 12px; left: 16px; right: 16px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); pointer-events: none;">
-          <span>▸ CLICK ANY BOOK TO PULL FROM SHELF & INSPECT SYLLABUS</span>
-          <span>DRAG TO ROTATE VIEW • ESC TO RETURN BOOK</span>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- External & Core Libraries -->
-  <script src="js/three.min.js"></script>
-  <script src="js/bookshelf-3d.js"></script>
-  <script src="js/galaxy-3d.js"></script>
-  <script src="js/chaos-simulator.js"></script>
-  <script src="js/memory-palace-3d.js"></script>
-  <script src="all_courses_data.js"></script>
-  <script src="studypulse.js"></script>
-
-  <!-- Floating Peer Review Button -->
-  <button class="floating-peer-review-btn" onclick="window.togglePeerReviewDrawer()">
-    <span>💬</span> <span>Peer Review & Feedback</span>
-  </button>
-
-  <!-- Peer Review Drawer (Slide-Over) -->
-  <aside id="peer-review-drawer" class="peer-review-drawer" aria-label="Peer Review Panel">
-    <div class="drawer-header">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 1.2rem;">💬</span>
-        <h3 style="font-size: 1.05rem; font-weight: 700; color: #fff;">Peer Review & Feedback</h3>
-      </div>
-      <button class="btn-hud" onclick="window.togglePeerReviewDrawer(false)">✕ Close</button>
-    </div>
-
-    <div class="drawer-body">
-      <p style="color: var(--text-muted); font-size: 0.85rem;">
-        Share your thoughts, review the curriculum depth, or give feedback on the 3D bookshelf experience.
-      </p>
-
-      <div class="review-input-group">
-        <label>YOUR OVERALL RATING</label>
-        <div class="review-star-rating" id="review-stars">
-          <span class="review-star selected" data-val="1">★</span>
-          <span class="review-star selected" data-val="2">★</span>
-          <span class="review-star selected" data-val="3">★</span>
-          <span class="review-star selected" data-val="4">★</span>
-          <span class="review-star selected" data-val="5">★</span>
-        </div>
-      </div>
-
-      <div class="review-input-group">
-        <label>YOUR NAME / HANDLE</label>
-        <input type="text" id="review-author-name" placeholder="e.g. Alex M. or Colleague">
-      </div>
-
-      <div class="review-input-group">
-        <label>FEEDBACK / STUDY SUGGESTIONS</label>
-        <textarea id="review-comment-text" rows="4" placeholder="What did you think of the 3D bookshelf and study manifest? Any topics to add?"></textarea>
-      </div>
-
-      <div style="display: flex; gap: 8px;">
-        <button class="btn-pulse-primary" style="flex: 1; justify-content: center;" onclick="window.submitPeerReview()">
-          Submit Review (+100 XP)
-        </button>
-        <button class="btn-pulse-ghost" onclick="window.copyReviewerLink()" title="Copy link to send to a friend">
-          🔗 Copy Link
-        </button>
-      </div>
-
-      <div style="margin-top: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
-        <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); margin-bottom: 8px;">RECENT PEER REVIEWS:</div>
-        <div id="peer-reviews-list" class="review-logs-list"></div>
+  <!-- =========================================================================
+       OVERLAYS & MODALS
+       ========================================================================= -->
+  <!-- Topic Study Note Modal -->
+  <div class="notes-modal-overlay" id="notes-modal-overlay">
+    <div class="notes-card">
+      <div style="font-size: 0.74rem; font-weight: 700; color: var(--accent-cyan);">PERSONAL STUDY NOTES</div>
+      <h3 style="font-size: 1.1rem; font-weight: 800; margin-top: 4px;" id="notes-modal-topic-title">Topic Title</h3>
+      <textarea class="notes-textarea" id="notes-modal-textarea" placeholder="Write key formulas, code snippets, gotchas, or interview notes..."></textarea>
+      <div class="notes-footer">
+        <button class="btn-pomo-sec" onclick="window.closeTopicNoteModal()">Cancel</button>
+        <button class="btn-pomo-main" style="padding: 8px 20px; font-size: 0.88rem;" onclick="window.saveTopicNote()">Save Note</button>
       </div>
     </div>
-  </aside>
+  </div>
 
-  <!-- Android Material You Bottom Navigation Bar -->
-  <nav class="android-bottom-nav" id="android-bottom-nav" aria-label="Android App Navigation">
-    <button class="android-nav-item active" data-view="dashboard" onclick="window.switchAppTab('dashboard')">
-      <div class="android-nav-icon-pill">
-        <span class="android-nav-icon">⏱️</span>
-      </div>
-      <span class="android-nav-label">Focus</span>
+  <!-- Book Dossier Overlay (Populated dynamically by bookshelf-3d.js) -->
+  <div class="dossier-overlay-modal" id="bookshelf-dossier-modal">
+    <div class="dossier-card" id="bookshelf-dossier-content"></div>
+  </div>
+
+  <!-- =========================================================================
+       MOBILE BOTTOM NAVIGATION
+       ========================================================================= -->
+  <nav class="bottom-nav" aria-label="Mobile Bottom Navigation">
+    <button class="bottom-nav-item active" data-view="dashboard" onclick="window.switchView('dashboard')">
+      <span class="nav-icon">🏠</span>
+      <span>Focus</span>
     </button>
-    <button class="android-nav-item" data-view="curriculum" onclick="window.switchAppTab('curriculum')">
-      <div class="android-nav-icon-pill">
-        <span class="android-nav-icon">📋</span>
-      </div>
-      <span class="android-nav-label">Matrix</span>
+    <button class="bottom-nav-item" data-view="curriculum" onclick="window.switchView('curriculum')">
+      <span class="nav-icon">📋</span>
+      <span>Roadmap</span>
     </button>
-    <button class="android-nav-item" data-view="system-design" onclick="window.switchAppTab('system-design')">
-      <div class="android-nav-icon-pill">
-        <span class="android-nav-icon">🛡️</span>
-      </div>
-      <span class="android-nav-label">Chaos</span>
+    <button class="bottom-nav-item" data-view="bookshelf" onclick="window.switchView('bookshelf')">
+      <span class="nav-icon">📚</span>
+      <span>3D Shelf</span>
     </button>
-    <button class="android-nav-item" data-view="flashcards" onclick="window.switchAppTab('flashcards')">
-      <div class="android-nav-icon-pill">
-        <span class="android-nav-icon">🏛️</span>
-      </div>
-      <span class="android-nav-label">Recall</span>
+    <button class="bottom-nav-item" data-view="palace" onclick="window.switchView('palace')">
+      <span class="nav-icon">🏛️</span>
+      <span>Palace</span>
     </button>
-    <button class="android-nav-item" data-view="bookshelf" onclick="window.switchAppTab('bookshelf')">
-      <div class="android-nav-icon-pill">
-        <span class="android-nav-icon">📚</span>
-      </div>
-      <span class="android-nav-label">3D Shelf</span>
+    <button class="bottom-nav-item" data-view="chaos" onclick="window.switchView('chaos')">
+      <span class="nav-icon">⚡</span>
+      <span>Chaos</span>
     </button>
-    <button class="android-nav-item" onclick="window.toggleAndroidAppMenu()">
-      <div class="android-nav-icon-pill">
-        <span class="android-nav-icon">⋮</span>
-      </div>
-      <span class="android-nav-label">More</span>
+    <button class="bottom-nav-item" data-view="analytics" onclick="window.switchView('analytics')">
+      <span class="nav-icon">📊</span>
+      <span>Stats</span>
     </button>
   </nav>
 
-  <!-- Android Bottom Sheet Modal (More Menu) -->
-  <div id="android-sheet-backdrop" class="android-sheet-backdrop" onclick="window.toggleAndroidAppMenu()"></div>
-  <aside id="android-app-sheet" class="android-app-sheet" aria-label="Android App Drawer">
-    <div class="android-sheet-handle-bar"></div>
-    <div class="android-sheet-header">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 1.25rem;">⚡</span>
-        <div>
-          <div style="font-weight: 800; font-size: 1rem; color: #fff;">StudyPulse Hub</div>
-          <div style="font-size: 0.68rem; color: var(--accent-cyan); font-family: var(--font-mono);">ANDROID NATIVE APP INTERFACE</div>
-        </div>
-      </div>
-      <button class="btn-sheet-close" onclick="window.toggleAndroidAppMenu()">✕</button>
-    </div>
-
-    <div class="android-sheet-grid">
-      <button class="android-sheet-tile" onclick="window.toggleAppTheme();">
-        <span class="sheet-tile-icon" id="sheet-theme-icon">☀️</span>
-        <span class="sheet-tile-name" id="sheet-theme-name">Light Theme</span>
-        <span class="sheet-tile-sub">Material 3 Palette</span>
-      </button>
-      <button class="android-sheet-tile" onclick="window.switchAppTab('analytics'); window.toggleAndroidAppMenu();">
-        <span class="sheet-tile-icon">📊</span>
-        <span class="sheet-tile-name">Analytics</span>
-        <span class="sheet-tile-sub">Retention Curves</span>
-      </button>
-      <button class="android-sheet-tile" onclick="window.switchAppTab('planner'); window.toggleAndroidAppMenu();">
-        <span class="sheet-tile-icon">📅</span>
-        <span class="sheet-tile-name">Chrono Planner</span>
-        <span class="sheet-tile-sub">Milestones & Gantt</span>
-      </button>
-      <button class="android-sheet-tile" onclick="window.togglePeerReviewDrawer(); window.toggleAndroidAppMenu();">
-        <span class="sheet-tile-icon">💬</span>
-        <span class="sheet-tile-name">Peer Review</span>
-        <span class="sheet-tile-sub">Feedback & Rating</span>
-      </button>
-      <button class="android-sheet-tile" onclick="window.requestFSRSNotifications(); window.toggleAndroidAppMenu();">
-        <span class="sheet-tile-icon">🔔</span>
-        <span class="sheet-tile-name">FSRS Alerts</span>
-        <span class="sheet-tile-sub">Native Notifications</span>
-      </button>
-      <button class="android-sheet-tile" onclick="window.toggleFullscreen(); window.toggleAndroidAppMenu();">
-        <span class="sheet-tile-icon">📱</span>
-        <span class="sheet-tile-name">Fullscreen</span>
-        <span class="sheet-tile-sub">Immersive App Mode</span>
-      </button>
-      <button class="android-sheet-tile" onclick="window.downloadApkDirect(); window.toggleAndroidAppMenu();">
-        <span class="sheet-tile-icon">📦</span>
-        <span class="sheet-tile-name">Download APK</span>
-        <span class="sheet-tile-sub">Native Android Package</span>
-      </button>
-    </div>
-  </aside>
-
-  <!-- Android Material Floating Action Button (FAB) -->
-  <button class="android-fab" id="android-fab" onclick="window.handleFabClick()" aria-label="Quick Focus Sprint">
-    <span style="font-size: 1.1rem;">⚡</span>
-    <span>Start Sprint</span>
-  </button>
-
+  <!-- =========================================================================
+       SCRIPTS
+       ========================================================================= -->
+  <script src="all_courses_data.js"></script>
+  <script src="js/three.min.js"></script>
+  <script src="js/bookshelf-3d.js"></script>
+  <script src="js/memory-palace-3d.js"></script>
+  <script src="js/chaos-simulator.js"></script>
+  <script src="studypulse.js"></script>
 </body>
 </html>

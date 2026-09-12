@@ -1,1430 +1,1054 @@
 /**
- * StudyPulse FOCUS ENGINE — Main Application Controller
- * Matches Exact UI/UX from StudyPulse App Screenshots
+ * StudyPulse FOCUS ENGINE — Core Application Engine
+ * Tailored for Piyush Tiwari — Data Science & AI Engineering
+ * Complete State Management, Web Audio Synthesizer, FSRS & Pomodoro Engine
  */
 
 (function() {
   'use strict';
 
-  // State
-  const AppState = {
-    currentTab: 'dashboard',
-    pomo: {
-      totalSeconds: 25 * 60,
-      remainingSeconds: 24 * 60 + 18,
+  // =========================================================================
+  // STORAGE KEYS & CONSTANTS
+  // =========================================================================
+  const STORAGE_KEYS = {
+    COMPLETED_TOPICS: 'studypulse_completed_topics_v2',
+    TOPIC_NOTES: 'studypulse_topic_notes_v2',
+    FOCUS_SECONDS: 'studypulse_focus_seconds_v2',
+    DAILY_ACTIVITY: 'studypulse_daily_activity_v2',
+    STREAK: 'studypulse_streak_v2',
+    THEME: 'studypulse_theme_v2',
+    XP: 'studypulse_xp_v2',
+    FSRS: 'studypulse_fsrs_v2'
+  };
+
+  const RPG_LEVELS = [
+    { lvl: 1, title: 'Code Initiate', minXp: 0, maxXp: 450 },
+    { lvl: 2, title: 'Syntax Apprentice', minXp: 450, maxXp: 1200 },
+    { lvl: 3, title: 'Algorithmic Nomad', minXp: 1200, maxXp: 2400 },
+    { lvl: 4, title: 'Data Wrangler', minXp: 2400, maxXp: 4000 },
+    { lvl: 5, title: 'Feature Architect', minXp: 4000, maxXp: 6200 },
+    { lvl: 6, title: 'Gradient Disciple', minXp: 6200, maxXp: 9000 },
+    { lvl: 7, title: 'Neural Pioneer', minXp: 9000, maxXp: 12500 },
+    { lvl: 8, title: 'Transformer Adept', minXp: 12500, maxXp: 16800 },
+    { lvl: 9, title: 'Latent Space Navigator', minXp: 16800, maxXp: 22000 },
+    { lvl: 10, title: 'Distributed Systems Sapper', minXp: 22000, maxXp: 28000 },
+    { lvl: 11, title: 'MLOps Commander', minXp: 28000, maxXp: 35000 },
+    { lvl: 12, title: 'Raft Consensus Master', minXp: 35000, maxXp: 44000 },
+    { lvl: 13, title: 'High-Throughput Architect', minXp: 44000, maxXp: 55000 },
+    { lvl: 14, title: 'LLM Guardrail Guardian', minXp: 55000, maxXp: 70000 },
+    { lvl: 15, title: 'AI Sovereign', minXp: 70000, maxXp: 100000 }
+  ];
+
+  // =========================================================================
+  // APPLICATION STATE
+  // =========================================================================
+  const state = {
+    user: 'Piyush Tiwari',
+    theme: 'dark',
+    activeView: 'dashboard',
+    activeCourseId: 'campusx_dsmp',
+    searchQuery: '',
+    topicFilter: 'all',
+    completedTopics: new Set(),
+    topicNotes: {},
+    totalFocusSeconds: 0,
+    dailyActivity: {},
+    streak: { count: 1, lastActive: getTodayDateString() },
+    xp: 0,
+    fsrs: {},
+    
+    // Pomodoro Timer State
+    timer: {
+      mode: 'pomo', // pomo, deep, short, long
+      duration: 25 * 60,
+      remaining: 25 * 60,
       isRunning: false,
       intervalId: null,
-      mode: 'pomodoro', // pomodoro | deep | break
-      audioMode: '40hz',
-      volume: 0.35,
-      audioCtx: null,
-      audioNodes: null
+      sessionsCompleted: 0
     },
-    flashcards: {
-      currentDeck: 'dist-sys',
-      currentIndex: 0,
-      isFlipped: false,
-      cards: [
-        {
-          id: 1,
-          deck: 'dist-sys',
-          topic: 'CONSENSUS MECHANISMS',
-          difficulty: 'HARD',
-          question: 'Explain the Raft Leader Election process when an election timeout expires without receiving heartbeats from the leader.',
-          diagram: `[Follower] --(election timeout)--> [Candidate] --(RequestVote RPC)--> [Cluster Quorum]\n                                     |\n                          (votes >= (N/2) + 1)\n                                     v\n                                 [Leader] --(AppendEntries Heartbeat)--> [Followers]`,
-          answer: `1. Election Timeout Trigger: A follower transitions to Candidate state, increments currentTerm, and votes for itself.\n2. RequestVote RPC Broadcast: It issues parallel RequestVote RPCs to all peers in the cluster.\n3. Quorum Requirement: If it receives votes from a majority ((N/2) + 1 nodes), it establishes authority as Leader.\n4. Heartbeat Emission: Immediately sends empty AppendEntries RPCs to establish dominance and prevent election timeouts on other peers.\n5. Split-Vote Invariant: Randomized election timeouts in range [150ms, 300ms] prevent split-brain quorums.`,
-          formula: 'Quorum Q = floor(N / 2) + 1 · ElectionTimeout ~ Uniform(T, 2T)'
-        },
-        {
-          id: 2,
-          deck: 'dist-sys',
-          topic: 'LOG REPLICATION',
-          difficulty: 'MEDIUM',
-          question: 'What invariant guarantees that committed log entries in Raft are durable and never overwritten by future leaders?',
-          diagram: `Leader Term 2: [T1, 1] [T1, 2] [T2, 3*] (Committed on Majority)\n                               ^\nLeader Term 3: Must contain [T2, 3*] by Leader Completeness Property`,
-          answer: `The Leader Completeness Property: If a log entry is committed in a given term, then that entry will be present in the logs of the leaders for all higher-numbered terms.\n\nEnforced during Leader Election: A voter denies its vote if the candidate's log is less up-to-date than its own log (measured by lastLogTerm, then lastLogIndex).`,
-          formula: 'Candidate.lastTerm > Voter.lastTerm OR (equal AND Candidate.lastIndex >= Voter.lastIndex)'
-        },
-        {
-          id: 3,
-          deck: 'dsa',
-          topic: 'BINARY SEARCH TREES',
-          difficulty: 'MEDIUM',
-          question: 'What is the time complexity of searching, inserting, and deleting in an AVL tree vs an un-balanced BST?',
-          diagram: `   Balanced AVL (Height = O(log n))         Degenerate BST (Height = O(n))\n              (10)                                     (10)\n             /    \\                                       \\\n           (5)    (15)                                    (15)\n          /   \\                                             \\\n        (2)   (7)                                           (20)`,
-          answer: `AVL Trees maintain a strict balance factor in {-1, 0, 1} through rotations.\n• Search: O(log n) guaranteed\n• Insert: O(log n) (at most 2 rotations)\n• Delete: O(log n) (up to O(log n) rotations)\n\nUnbalanced BST can degenerate into a linked list with worst-case O(n) operations.`,
-          formula: 'BalanceFactor = Height(LeftSubtree) - Height(RightSubtree) in {-1, 0, +1}'
-        },
-        {
-          id: 4,
-          deck: 'ml',
-          topic: 'OPTIMIZATION & GRADIENTS',
-          difficulty: 'HARD',
-          question: 'Derive the Adam (Adaptive Moment Estimation) optimizer update rule incorporating momentum and adaptive learning rates.',
-          diagram: `g_t = grad_w(Loss)\nm_t = beta1 * m_{t-1} + (1 - beta1) * g_t          (1st Moment: Momentum)\nv_t = beta2 * v_{t-1} + (1 - beta2) * g_t^2        (2nd Moment: RMSProp)\nm_hat = m_t / (1 - beta1^t)                        (Bias Correction)\nv_hat = v_t / (1 - beta2^t)\nw_t = w_{t-1} - (lr / (sqrt(v_hat) + eps)) * m_hat`,
-          answer: `Adam combines AdaGrad/RMSProp (scaling gradients inversely by second raw moment) with classical Momentum (exponentially moving average of gradients).\n\nBias correction counters the zero-initialization bias in early iterations when beta1=0.9 and beta2=0.999.`,
-          formula: 'w_t = w_{t-1} - alpha * m_hat_t / (sqrt(v_hat_t) + epsilon)'
-        }
-      ]
-    },
-    checklist: {
-      completedCount: 142,
-      totalCount: 210,
-      activeFilter: 'all',
-      searchQuery: ''
+
+    // Audio Synthesizer State
+    audio: {
+      ctx: null,
+      analyser: null,
+      masterGain: null,
+      isPlaying: false,
+      channels: {
+        binaural: { gain: null, osc1: null, osc2: null, vol: 0.35, active: false },
+        rain: { gain: null, node: null, vol: 0.30, active: false },
+        brown: { gain: null, node: null, vol: 0.25, active: false },
+        lofi: { gain: null, oscs: [], vol: 0.20, active: false }
+      }
     }
   };
 
-  // DOM Elements
-  let els = {};
-
-  // Horizontal Scroll Lockdown: Ensure screen never wobbles or pans left/right
-  function initHorizontalScrollLock() {
-    window.addEventListener('scroll', () => {
-      if (window.scrollX !== 0) {
-        window.scrollTo(0, window.scrollY);
-      }
-    }, { passive: true });
-
-    document.addEventListener('touchmove', () => {
-      if (window.scrollX !== 0) {
-        window.scrollTo(0, window.scrollY);
-      }
-    }, { passive: true });
-  }
-
-  function initApp() {
-    initHorizontalScrollLock();
-    initTheme();
-    cacheElements();
-    bindEvents();
-    initTopologyCanvas();
-    initUserActivityState();
-    startEqualizerVisualizer();
-    updatePomoDisplay();
-    renderFlashcard();
-    initHeatmap();
-    setupChecklistListeners();
-    updateRPGDisplay();
-    initPeerReview();
-
-    // Keydown shortcuts
-    window.addEventListener('keydown', handleGlobalKeydown);
-
-    console.log("StudyPulse FOCUS ENGINE Initialized.");
-  }
-
-  function cacheElements() {
-    els.navTabs = document.querySelectorAll('.nav-tab-btn');
-    els.sections = document.querySelectorAll('.view-section');
-    els.navTimer = document.getElementById('nav-timer-clock');
-    els.pomoTime = document.getElementById('pomo-time-display');
-    els.pomoToggleBtn = document.getElementById('btn-pomo-toggle');
-    els.pomoResetBtn = document.getElementById('btn-pomo-reset');
-    els.pomoSkipBtn = document.getElementById('btn-pomo-skip');
-    els.pomoAudioSelect = document.getElementById('pomo-audio-select');
-    els.fcCard = document.getElementById('fc-interactive-card');
-    els.fcRatingPanel = document.getElementById('fc-rating-panel');
-    els.fcCardNum = document.getElementById('fc-card-num');
-    els.fcCardFill = document.getElementById('fc-card-fill');
-    els.fcQuestion = document.getElementById('fc-question');
-    els.fcDiagram = document.getElementById('fc-diagram');
-    els.fcAnswer = document.getElementById('fc-answer');
-    els.fcFormula = document.getElementById('fc-formula');
-    els.fcDeckSelect = document.getElementById('fc-deck-select');
-  }
-
-  function bindEvents() {
-    // Nav Tab Switching
-    els.navTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const targetView = tab.dataset.view;
-        switchTab(targetView);
-      });
-    });
-
-    // Pomodoro Engine
-    if (els.pomoToggleBtn) {
-      els.pomoToggleBtn.addEventListener('click', togglePomodoro);
-    }
-    if (els.pomoResetBtn) {
-      els.pomoResetBtn.addEventListener('click', resetPomodoro);
-    }
-    if (els.pomoSkipBtn) {
-      els.pomoSkipBtn.addEventListener('click', () => {
-        AppState.pomo.remainingSeconds = 25 * 60;
-        updatePomoDisplay();
-      });
-    }
-    if (els.pomoAudioSelect) {
-      els.pomoAudioSelect.addEventListener('change', (e) => {
-        AppState.pomo.audioMode = e.target.value;
-        if (AppState.pomo.isRunning) {
-          playAudioTone(AppState.pomo.audioMode);
-        }
-      });
-    }
-
-    // Flashcard Flip & Deck
-    if (els.fcCard) {
-      els.fcCard.addEventListener('click', flipFlashcard);
-    }
-    if (els.fcDeckSelect) {
-      els.fcDeckSelect.addEventListener('change', (e) => {
-        AppState.flashcards.currentDeck = e.target.value;
-        AppState.flashcards.currentIndex = 0;
-        AppState.flashcards.isFlipped = false;
-        renderFlashcard();
-      });
-    }
-
-    // FSRS Rating buttons
-    const ratingButtons = document.querySelectorAll('.btn-fsrs-rating');
-    ratingButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        nextFlashcard();
-      });
-    });
-
-    // AI Tutor Send
-    const btnAiSend = document.getElementById('btn-ai-tutor-send');
-    const inputAi = document.getElementById('ai-tutor-input');
-    if (btnAiSend && inputAi) {
-      const handleAiSend = () => {
-        const text = inputAi.value.trim();
-        if (!text) return;
-        const chatArea = document.getElementById('ai-tutor-chat');
-        const userMsg = document.createElement('div');
-        userMsg.style.margin = '6px 0';
-        userMsg.style.color = '#38bdf8';
-        userMsg.innerHTML = `<strong>You:</strong> ${escapeHtml(text)}`;
-        chatArea.appendChild(userMsg);
-        inputAi.value = '';
-
-        // Response
-        setTimeout(() => {
-          const aiMsg = document.createElement('div');
-          aiMsg.style.margin = '6px 0';
-          aiMsg.style.color = '#34d399';
-          aiMsg.innerHTML = `<strong>Neural Tutor:</strong> In Raft consensus, invariants strictly enforce that committed entries remain immutable across terms. If election timeout elapses without heartbeats, candidate initiates voting round with randomized backoff (150-300ms) to ensure leader convergence.`;
-          chatArea.appendChild(aiMsg);
-          chatArea.scrollTop = chatArea.scrollHeight;
-        }, 500);
-      };
-
-      btnAiSend.addEventListener('click', handleAiSend);
-      inputAi.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') handleAiSend();
-      });
-    }
-
-    // Filter pills in Checklist
-    const filterPills = document.querySelectorAll('.filter-pill-btn');
-    filterPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        filterPills.forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        const subj = pill.dataset.subject;
-        filterCurriculumBySubject(subj);
-      });
-    });
-
-    // Search filter in Checklist
-    const searchInput = document.getElementById('checklist-search-input');
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        filterCurriculumBySearch(e.target.value.toLowerCase());
-      });
-    }
-  }
-
-  function switchTab(viewId, pushHistory = true) {
-    AppState.currentTab = viewId;
-
-    els.navTabs.forEach(t => {
-      t.classList.toggle('active', t.dataset.view === viewId);
-    });
-
-    document.querySelectorAll('.android-nav-item').forEach(item => {
-      item.classList.toggle('active', item.dataset.view === viewId);
-    });
-
-    if (pushHistory && window.history && window.history.pushState) {
-      window.history.pushState({ view: viewId }, "", "#" + viewId);
-    }
-
-    if (navigator.vibrate) {
-      try { navigator.vibrate(14); } catch(e) {}
-    }
-
-    els.sections.forEach(sec => {
-      sec.classList.toggle('active', sec.id === `view-${viewId}`);
-    });
-
-    // Special trigger for 3D Bookshelf
-    if (viewId === 'bookshelf') {
-      setTimeout(() => {
-        if (typeof window.initBookshelf3D === 'function') {
-          window.initBookshelf3D('bookshelf-canvas-container');
-        }
-      }, 50);
-    }
-    // Special trigger for System Design Chaos Lab
-    if (viewId === 'system-design') {
-      setTimeout(() => {
-        if (typeof window.initChaosSimulator === 'function') {
-          window.initChaosSimulator('chaos-sim-canvas-container');
-        }
-      }, 50);
-    }
+  // Helper date string YYYY-MM-DD
+  function getTodayDateString() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   }
 
   // =========================================================================
-  // Pomodoro Engine & Web Audio
+  // PERSISTENCE (LOCAL STORAGE)
   // =========================================================================
-  function togglePomodoro() {
-    if (AppState.pomo.isRunning) {
-      pausePomodoro();
-    } else {
-      startPomodoro();
-    }
-  }
-
-  // Biohacking Audio Synthesizer & Multi-Channel Mixer State
-  let audioMixer = {
-    master: 0.75,
-    gamma: 0.35,
-    rain: 0.15,
-    brown: 0.0,
-    lofi: 0.0,
-    voice: true
-  };
-  let analyserNode = null;
-  let masterGainNode = null;
-  let activeAudioChannels = {};
-  let equalizerAnimId = null;
-
-  function getAudioContext() {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AppState.pomo.audioCtx) {
-      AppState.pomo.audioCtx = new AudioContext();
-    }
-    const ctx = AppState.pomo.audioCtx;
-    if (ctx.state === 'suspended') ctx.resume();
-
-    if (!analyserNode) {
-      analyserNode = ctx.createAnalyser();
-      analyserNode.fftSize = 64;
-      masterGainNode = ctx.createGain();
-      masterGainNode.gain.setValueAtTime(audioMixer.master, ctx.currentTime);
-      masterGainNode.connect(analyserNode);
-      analyserNode.connect(ctx.destination);
-    }
-    return ctx;
-  }
-
-  function startEqualizerVisualizer() {
-    const canvas = document.getElementById('audio-equalizer-canvas');
-    if (!canvas) return;
-    const ctx2d = canvas.getContext('2d');
-    const statusEl = document.getElementById('equalizer-status-text');
-
-    function renderEq() {
-      const w = canvas.width;
-      const h = canvas.height;
-      ctx2d.clearRect(0, 0, w, h);
-
-      const isPlaying = analyserNode && (AppState.pomo.isRunning || Object.keys(activeAudioChannels).length > 0);
-
-      if (isPlaying) {
-        if (statusEl) statusEl.textContent = 'TRANSMITTING // ACTIVE';
-        const bufferLength = analyserNode.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        analyserNode.getByteFrequencyData(dataArray);
-
-        const barCount = 20;
-        const barWidth = (w / barCount) - 3;
-
-        for (let i = 0; i < barCount; i++) {
-          const val = dataArray[i] || 0;
-          const barHeight = Math.max(3, (val / 255) * (h - 6));
-          const x = i * (barWidth + 3) + 2;
-          const y = h - barHeight - 2;
-
-          const grad = ctx2d.createLinearGradient(0, y, 0, h);
-          grad.addColorStop(0, '#38bdf8');
-          grad.addColorStop(0.6, '#a855f7');
-          grad.addColorStop(1, '#06b6d4');
-
-          ctx2d.fillStyle = grad;
-          ctx2d.fillRect(x, y, barWidth, barHeight);
-
-          // Peak needle indicator
-          ctx2d.fillStyle = val > 160 ? '#f43f5e' : '#38bdf8';
-          ctx2d.fillRect(x, Math.max(0, y - 2), barWidth, 1.5);
-        }
-      } else {
-        if (statusEl) statusEl.textContent = 'STANDBY // MUTED';
-        // Idle scanline wave
-        ctx2d.strokeStyle = 'rgba(56, 189, 248, 0.25)';
-        ctx2d.lineWidth = 1;
-        ctx2d.beginPath();
-        const time = Date.now() * 0.003;
-        for (let x = 0; x < w; x += 4) {
-          const y = h / 2 + Math.sin(x * 0.04 + time) * 3;
-          if (x === 0) ctx2d.moveTo(x, y);
-          else ctx2d.lineTo(x, y);
-        }
-        ctx2d.stroke();
-      }
-
-      equalizerAnimId = requestAnimationFrame(renderEq);
-    }
-
-    if (equalizerAnimId) cancelAnimationFrame(equalizerAnimId);
-    renderEq();
-  }
-
-  function startPomodoro() {
-    AppState.pomo.isRunning = true;
-    if (els.pomoToggleBtn) {
-      els.pomoToggleBtn.innerHTML = '⏸ Pause Session';
-    }
-    speakVoiceCue('Focus session initiated. Deep work protocol active.');
-    applyAudioPreset('focus');
-
-    AppState.pomo.intervalId = setInterval(() => {
-      if (AppState.pomo.remainingSeconds > 0) {
-        AppState.pomo.remainingSeconds--;
-        updatePomoDisplay();
-      } else {
-        pausePomodoro();
-        speakVoiceCue('Focus interval completed. Excellent work! 150 XP awarded.');
-        addFocusMinutes(25);
-        addXP(150, 'Completed 25m Focus Block');
-        showToast('🎉 Focus Block Completed! (+150 XP)');
-      }
-    }, 1000);
-  }
-
-  function pausePomodoro() {
-    AppState.pomo.isRunning = false;
-    clearInterval(AppState.pomo.intervalId);
-    if (els.pomoToggleBtn) {
-      els.pomoToggleBtn.innerHTML = '▶ Resume Focus';
-    }
-    speakVoiceCue('Focus session paused.');
-    stopAudioTone();
-  }
-
-  function resetPomodoro() {
-    pausePomodoro();
-    AppState.pomo.remainingSeconds = 25 * 60;
-    updatePomoDisplay();
-  }
-
-  function updatePomoDisplay() {
-    const mins = Math.floor(AppState.pomo.remainingSeconds / 60);
-    const secs = AppState.pomo.remainingSeconds % 60;
-    const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-
-    if (els.pomoTime) els.pomoTime.textContent = timeStr;
-    if (els.navTimer) els.navTimer.textContent = `${timeStr} | POMODORO`;
-  }
-
-  function playAudioTone(mode) {
-    if (mode === 'off') {
-      stopAudioTone();
-      return;
-    }
-    if (mode === '40hz') applyAudioPreset('focus');
-    else if (mode === 'rain') applyAudioPreset('rain');
-    else if (mode === 'brown') applyAudioPreset('brown');
-    else if (mode === 'lofi') applyAudioPreset('lofi');
-  }
-
-  function applyAudioPreset(preset) {
-    document.querySelectorAll('.btn-preset-pill').forEach(p => {
-      p.classList.toggle('active', p.textContent.toLowerCase().includes(preset));
-    });
-
-    if (preset === 'focus') {
-      setAudioMixerChannel('gamma', 0.35);
-      setAudioMixerChannel('rain', 0.15);
-      setAudioMixerChannel('brown', 0.0);
-      setAudioMixerChannel('lofi', 0.0);
-    } else if (preset === 'deep') {
-      setAudioMixerChannel('gamma', 0.0);
-      setAudioMixerChannel('rain', 0.0);
-      setAudioMixerChannel('brown', 0.35);
-      setAudioMixerChannel('lofi', 0.15);
-    } else if (preset === 'rain') {
-      setAudioMixerChannel('gamma', 0.0);
-      setAudioMixerChannel('rain', 0.35);
-      setAudioMixerChannel('brown', 0.0);
-      setAudioMixerChannel('lofi', 0.0);
-    } else if (preset === 'brown') {
-      setAudioMixerChannel('gamma', 0.0);
-      setAudioMixerChannel('rain', 0.0);
-      setAudioMixerChannel('brown', 0.35);
-      setAudioMixerChannel('lofi', 0.0);
-    } else if (preset === 'lofi') {
-      setAudioMixerChannel('gamma', 0.0);
-      setAudioMixerChannel('rain', 0.0);
-      setAudioMixerChannel('brown', 0.0);
-      setAudioMixerChannel('lofi', 0.3);
-    } else if (preset === 'mute') {
-      stopAudioTone();
-    }
-    syncMixerSlidersUI();
-  }
-
-  function setAudioMixerChannel(channel, val) {
-    val = Math.max(0, Math.min(1, parseFloat(val)));
-    audioMixer[channel] = val;
-
-    const ctx = getAudioContext();
-    if (val <= 0.001) {
-      if (activeAudioChannels[channel]) {
-        activeAudioChannels[channel].nodes.forEach(n => {
-          try {
-            if (n.stop) n.stop();
-            if (n.disconnect) n.disconnect();
-          } catch(e) {}
-        });
-        delete activeAudioChannels[channel];
-      }
-      return;
-    }
-
-    if (activeAudioChannels[channel]) {
-      activeAudioChannels[channel].gainNode.gain.setValueAtTime(val, ctx.currentTime);
-      return;
-    }
-
-    const gainNode = ctx.createGain();
-    gainNode.gain.setValueAtTime(val, ctx.currentTime);
-    gainNode.connect(masterGainNode);
-
-    if (channel === 'gamma') {
-      const oscL = ctx.createOscillator();
-      const oscR = ctx.createOscillator();
-      oscL.type = 'sine'; oscL.frequency.setValueAtTime(200, ctx.currentTime);
-      oscR.type = 'sine'; oscR.frequency.setValueAtTime(240, ctx.currentTime);
-      oscL.connect(gainNode);
-      oscR.connect(gainNode);
-      oscL.start();
-      oscR.start();
-      activeAudioChannels['gamma'] = { nodes: [oscL, oscR, gainNode], gainNode };
-    } else if (channel === 'brown') {
-      const bufferSize = ctx.sampleRate * 2;
-      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      let lastOut = 0.0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        output[i] = (lastOut + (0.02 * white)) / 1.02;
-        lastOut = output[i];
-        output[i] *= 2.5;
-      }
-      const brownNoise = ctx.createBufferSource();
-      brownNoise.buffer = noiseBuffer;
-      brownNoise.loop = true;
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(240, ctx.currentTime);
-      brownNoise.connect(filter);
-      filter.connect(gainNode);
-      brownNoise.start();
-      activeAudioChannels['brown'] = { nodes: [brownNoise, filter, gainNode], gainNode };
-    } else if (channel === 'rain') {
-      const bufferSize = ctx.sampleRate * 2;
-      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      let b0 = 0, b1 = 0, b2 = 0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + white * 0.0555179;
-        b1 = 0.99332 * b1 + white * 0.0750759;
-        b2 = 0.96900 * b2 + white * 0.1538520;
-        output[i] = (b0 + b1 + b2) * 0.1;
-      }
-      const rainNoise = ctx.createBufferSource();
-      rainNoise.buffer = noiseBuffer;
-      rainNoise.loop = true;
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(850, ctx.currentTime);
-      rainNoise.connect(filter);
-      filter.connect(gainNode);
-      rainNoise.start();
-      activeAudioChannels['rain'] = { nodes: [rainNoise, filter, gainNode], gainNode };
-    } else if (channel === 'lofi') {
-      const chords = [220, 261.63, 329.63, 392.00];
-      const nodes = [];
-      chords.forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const subGain = ctx.createGain();
-        osc.type = idx % 2 === 0 ? 'triangle' : 'sine';
-        osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        subGain.gain.setValueAtTime(1.0 / chords.length, ctx.currentTime);
-        osc.connect(subGain);
-        subGain.connect(gainNode);
-        osc.start();
-        nodes.push(osc, subGain);
-      });
-      nodes.push(gainNode);
-      activeAudioChannels['lofi'] = { nodes, gainNode };
-    }
-  }
-
-  function setAudioMixerMaster(val) {
-    audioMixer.master = Math.max(0, Math.min(1, parseFloat(val)));
-    if (masterGainNode && AppState.pomo.audioCtx) {
-      masterGainNode.gain.setValueAtTime(audioMixer.master, AppState.pomo.audioCtx.currentTime);
-    }
-  }
-
-  function stopAudioTone() {
-    Object.keys(activeAudioChannels).forEach(ch => {
-      activeAudioChannels[ch].nodes.forEach(n => {
-        try {
-          if (n.stop) n.stop();
-          if (n.disconnect) n.disconnect();
-        } catch(e) {}
-      });
-    });
-    activeAudioChannels = {};
-    audioMixer.gamma = 0;
-    audioMixer.rain = 0;
-    audioMixer.brown = 0;
-    audioMixer.lofi = 0;
-    syncMixerSlidersUI();
-  }
-
-  function syncMixerSlidersUI() {
-    const sGamma = document.getElementById('mixer-slider-gamma');
-    const sRain = document.getElementById('mixer-slider-rain');
-    const sBrown = document.getElementById('mixer-slider-brown');
-    const sLofi = document.getElementById('mixer-slider-lofi');
-    if (sGamma) sGamma.value = Math.round(audioMixer.gamma * 100);
-    if (sRain) sRain.value = Math.round(audioMixer.rain * 100);
-    if (sBrown) sBrown.value = Math.round(audioMixer.brown * 100);
-    if (sLofi) sLofi.value = Math.round(audioMixer.lofi * 100);
-  }
-
-  function speakVoiceCue(text) {
-    if (!audioMixer.voice || !('speechSynthesis' in window)) return;
+  function loadPersistedState() {
     try {
-      window.speechSynthesis.cancel();
-      const utt = new SpeechSynthesisUtterance(text);
-      utt.rate = 1.05;
-      utt.pitch = 0.95;
-      window.speechSynthesis.speak(utt);
-    } catch(e) {}
-  }
+      const savedTopics = localStorage.getItem(STORAGE_KEYS.COMPLETED_TOPICS);
+      if (savedTopics) state.completedTopics = new Set(JSON.parse(savedTopics));
 
-  // =========================================================================
-  // Interactive Hero Topology Canvas (Screenshot 1)
-  // =========================================================================
-  function initTopologyCanvas() {
-    const canvas = document.getElementById('topology-canvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let width = canvas.width = canvas.parentElement.clientWidth;
-    let height = canvas.height = canvas.parentElement.clientHeight;
+      const savedNotes = localStorage.getItem(STORAGE_KEYS.TOPIC_NOTES);
+      if (savedNotes) state.topicNotes = JSON.parse(savedNotes);
 
-    const nodes = [
-      { x: width * 0.18, y: height * 0.35, label: 'Distributed Systems', r: 6, vx: 0.2, vy: 0.15 },
-      { x: width * 0.42, y: height * 0.22, label: 'Raft Consensus', r: 7, vx: -0.15, vy: 0.18 },
-      { x: width * 0.35, y: height * 0.72, label: 'Paxos Algorithm', r: 5, vx: 0.18, vy: -0.2 },
-      { x: width * 0.65, y: height * 0.38, label: 'Vector Clocks', r: 6, vx: -0.12, vy: -0.14 },
-      { x: width * 0.78, y: height * 0.68, label: 'Byzantine Fault', r: 6, vx: 0.15, vy: 0.12 },
-      { x: width * 0.52, y: height * 0.55, label: 'Gossip Protocols', r: 5, vx: -0.2, vy: 0.16 }
-    ];
+      const savedFocus = localStorage.getItem(STORAGE_KEYS.FOCUS_SECONDS);
+      if (savedFocus) state.totalFocusSeconds = parseInt(savedFocus, 10) || 0;
 
-    function renderTopology() {
-      ctx.clearRect(0, 0, width, height);
+      const savedActivity = localStorage.getItem(STORAGE_KEYS.DAILY_ACTIVITY);
+      if (savedActivity) state.dailyActivity = JSON.parse(savedActivity);
 
-      // Draw subtle connective links
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 180) {
-            ctx.strokeStyle = `rgba(56, 189, 248, ${0.35 * (1 - dist / 180)})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.stroke();
-          }
-        }
-      }
+      const savedStreak = localStorage.getItem(STORAGE_KEYS.STREAK);
+      if (savedStreak) state.streak = JSON.parse(savedStreak);
 
-      // Draw nodes
-      nodes.forEach((n, idx) => {
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < 20 || n.x > width - 20) n.vx *= -1;
-        if (n.y < 20 || n.y > height - 20) n.vy *= -1;
+      const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME);
+      if (savedTheme) state.theme = savedTheme;
 
-        // Outer pulse
-        ctx.fillStyle = idx === 1 ? 'rgba(56, 189, 248, 0.2)' : 'rgba(16, 185, 129, 0.15)';
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r + 5, 0, Math.PI * 2);
-        ctx.fill();
+      const savedXp = localStorage.getItem(STORAGE_KEYS.XP);
+      if (savedXp) state.xp = parseInt(savedXp, 10) || 0;
 
-        // Node center
-        ctx.fillStyle = idx === 1 ? '#38bdf8' : '#10b981';
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Node label
-        ctx.font = '10px "DM Mono", monospace';
-        ctx.fillStyle = '#94a3b8';
-        ctx.fillText(n.label, n.x + 10, n.y + 3);
-      });
-
-      requestAnimationFrame(renderTopology);
-    }
-    renderTopology();
-
-    window.addEventListener('resize', () => {
-      if (canvas.parentElement) {
-        width = canvas.width = canvas.parentElement.clientWidth;
-        height = canvas.height = canvas.parentElement.clientHeight;
-      }
-    });
-  }
-
-  // =========================================================================
-  // Flashcards / Active Recall Engine (Screenshots 3 & 4)
-  // =========================================================================
-  function renderFlashcard() {
-    const card = AppState.flashcards.cards[AppState.flashcards.currentIndex];
-    if (!card) return;
-
-    if (els.fcCardNum) {
-      els.fcCardNum.textContent = `Card ${AppState.flashcards.currentIndex + 1} of ${AppState.flashcards.cards.length}`;
-    }
-    if (els.fcCardFill) {
-      const pct = ((AppState.flashcards.currentIndex + 1) / AppState.flashcards.cards.length) * 100;
-      els.fcCardFill.style.width = `${pct}%`;
-    }
-    if (els.fcQuestion) els.fcQuestion.textContent = card.question;
-    if (els.fcDiagram) els.fcDiagram.textContent = card.diagram;
-    if (els.fcAnswer) els.fcAnswer.innerHTML = card.answer.replace(/\n/g, '<br>');
-    if (els.fcFormula) els.fcFormula.textContent = card.formula;
-
-    if (els.fcCard) {
-      els.fcCard.classList.remove('flipped');
-    }
-    if (els.fcRatingPanel) {
-      els.fcRatingPanel.style.opacity = '0.35';
-      els.fcRatingPanel.style.pointerEvents = 'none';
-    }
-    AppState.flashcards.isFlipped = false;
-  }
-
-  function flipFlashcard() {
-    if (!els.fcCard) return;
-    AppState.flashcards.isFlipped = !AppState.flashcards.isFlipped;
-    els.fcCard.classList.toggle('flipped', AppState.flashcards.isFlipped);
-
-    if (els.fcRatingPanel) {
-      els.fcRatingPanel.style.opacity = AppState.flashcards.isFlipped ? '1' : '0.35';
-      els.fcRatingPanel.style.pointerEvents = AppState.flashcards.isFlipped ? 'auto' : 'none';
-    }
-  }
-
-  function nextFlashcard() {
-    AppState.flashcards.currentIndex = (AppState.flashcards.currentIndex + 1) % AppState.flashcards.cards.length;
-    renderFlashcard();
-  }
-
-  // =========================================================================
-  // Daily Cognitive Density Heatmap (Screenshot 5)
-  // =========================================================================
-  function initHeatmap() {
-    const heatmapContainer = document.getElementById('density-heatmap-grid');
-    if (!heatmapContainer) return;
-    heatmapContainer.innerHTML = '';
-
-    const history = JSON.parse(localStorage.getItem("studyPulseActivityHistory") || "{}");
-    const today = new Date();
-
-    // Render 196 cells (28 weeks x 7 days) ending today
-    for (let i = 195; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(d.getDate() - i);
-      const dStr = d.toISOString().split("T")[0];
-      const mins = history[dStr] || 0;
-
-      const cell = document.createElement('div');
-      cell.className = 'heatmap-cell';
-
-      if (mins >= 120) cell.classList.add('l4');
-      else if (mins >= 60) cell.classList.add('l3');
-      else if (mins >= 25) cell.classList.add('l2');
-      else if (mins > 0) cell.classList.add('l1');
-
-      cell.title = `${d.toLocaleDateString("en-US", { month: "short", day: "numeric" })}: ${mins} mins focus logged`;
-      heatmapContainer.appendChild(cell);
-    }
-  }
-
-  // =========================================================================
-  // Topic Checklist & Module Master Matrix (Screenshot 6)
-  // =========================================================================
-
-  // =========================================================================
-  // REAL USER STATE & PERSISTENCE ENGINE (No Fake Data)
-  // =========================================================================
-  function initUserActivityState() {
-    const todayStr = new Date().toISOString().split("T")[0];
-
-    // Today Focus Minutes
-    const focusData = JSON.parse(localStorage.getItem("studyPulseTodayFocus") || "{}");
-    let todayMinutes = 0;
-    if (focusData.date === todayStr) {
-      todayMinutes = focusData.minutes || 0;
-    } else {
-      focusData.date = todayStr;
-      focusData.minutes = 0;
-      localStorage.setItem("studyPulseTodayFocus", JSON.stringify(focusData));
+      const savedFsrs = localStorage.getItem(STORAGE_KEYS.FSRS);
+      if (savedFsrs) state.fsrs = JSON.parse(savedFsrs);
+    } catch (e) {
+      console.warn('[StudyPulse] Error loading localStorage state:', e);
     }
 
-    // Daily Streak Calculation
-    const streakData = JSON.parse(localStorage.getItem("studyPulseStreak") || "{}");
-    let streakCount = streakData.count || 1;
-    if (streakData.lastActiveDate) {
-      const lastDate = new Date(streakData.lastActiveDate);
-      const todayDate = new Date(todayStr);
-      const diffTime = todayDate - lastDate;
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-      if (diffDays === 1) {
-        streakCount += 1;
-      } else if (diffDays > 1) {
-        streakCount = 1; // streak broke
-      }
-    }
-    streakData.lastActiveDate = todayStr;
-    streakData.count = streakCount;
-    localStorage.setItem("studyPulseStreak", JSON.stringify(streakData));
-
-    updateDashboardMetricsUI(todayMinutes, streakCount);
+    validateStreak();
   }
 
-  function addFocusMinutes(mins) {
-    const todayStr = new Date().toISOString().split("T")[0];
-    const focusData = JSON.parse(localStorage.getItem("studyPulseTodayFocus") || "{}");
-    let currentMins = (focusData.date === todayStr ? focusData.minutes : 0) + mins;
-    focusData.date = todayStr;
-    focusData.minutes = currentMins;
-    localStorage.setItem("studyPulseTodayFocus", JSON.stringify(focusData));
-
-    // Daily activity history for heatmap
-    const history = JSON.parse(localStorage.getItem("studyPulseActivityHistory") || "{}");
-    history[todayStr] = (history[todayStr] || 0) + mins;
-    localStorage.setItem("studyPulseActivityHistory", JSON.stringify(history));
-
-    const streakData = JSON.parse(localStorage.getItem("studyPulseStreak") || "{}");
-    updateDashboardMetricsUI(currentMins, streakData.count || 1);
-  }
-
-  function updateDashboardMetricsUI(todayMinutes, streakCount) {
-    const hours = Math.floor(todayMinutes / 60);
-    const mins = todayMinutes % 60;
-    const focusStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
-
-    const elTodayFocus = document.getElementById("metric-today-focus");
-    if (elTodayFocus) elTodayFocus.textContent = focusStr;
-
-    const elStreak = document.getElementById("metric-active-streak");
-    if (elStreak) elStreak.textContent = `${streakCount} Day${streakCount > 1 ? "s" : ""}`;
-
-    const elHeaderStreak = document.getElementById("header-streak-val");
-    if (elHeaderStreak) elHeaderStreak.textContent = `${streakCount} Day${streakCount > 1 ? "s" : ""}`;
-
-    const elTotalVolume = document.getElementById("analytics-total-volume");
-    if (elTotalVolume) elTotalVolume.textContent = `${(todayMinutes / 60).toFixed(1)}h`;
-  }
-
-  function setupChecklistListeners() {
-    // Accordion expand/collapse
-    const headers = document.querySelectorAll('.module-header');
-    headers.forEach(h => {
-      h.addEventListener('click', () => {
-        const card = h.closest('.module-card');
-        card.classList.toggle('expanded');
-      });
-    });
-
-    // Load saved checklist state from localStorage
-    const savedChecked = JSON.parse(localStorage.getItem("studyPulseCheckedTopics") || "[]");
-    const allRows = document.querySelectorAll('.topic-row');
-
-    allRows.forEach(row => {
-      const titleSpan = row.querySelector('.topic-title-span');
-      const title = titleSpan ? titleSpan.textContent.trim() : "";
-      const cb = row.querySelector('.custom-checkbox');
-      if (!cb) return;
-
-      const isChecked = savedChecked.includes(title);
-      cb.classList.toggle('checked', isChecked);
-      row.classList.toggle('completed', isChecked);
-
-      cb.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const checkedList = JSON.parse(localStorage.getItem("studyPulseCheckedTopics") || "[]");
-        const nowChecked = !cb.classList.contains('checked');
-
-        cb.classList.toggle('checked', nowChecked);
-        row.classList.toggle('completed', nowChecked);
-
-        if (nowChecked) {
-          if (!checkedList.includes(title)) checkedList.push(title);
-          addXP(150, `Mastered: ${title.substring(0, 20)}...`);
-        } else {
-          const idx = checkedList.indexOf(title);
-          if (idx !== -1) checkedList.splice(idx, 1);
-        }
-
-        localStorage.setItem("studyPulseCheckedTopics", JSON.stringify(checkedList));
-        recalcMasteryGauge();
-      });
-    });
-
-    recalcMasteryGauge();
-  }
-
-  function recalcMasteryGauge() {
-    const allCbs = document.querySelectorAll('.custom-checkbox');
-    const checkedCbs = document.querySelectorAll('.custom-checkbox.checked');
-    const total = allCbs.length || 10;
-    const completed = checkedCbs.length;
-    const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
-
-    const gaugeVal = document.getElementById('matrix-gauge-val');
-    const gaugeCircle = document.getElementById('matrix-circle-fill');
-    const progressFill = document.getElementById('matrix-global-fill');
-    const statText = document.getElementById('matrix-mastered-stat');
-
-    if (gaugeVal) gaugeVal.textContent = `${pct}%`;
-    if (gaugeCircle) gaugeCircle.setAttribute('stroke-dasharray', `${pct}, 100`);
-    if (progressFill) progressFill.style.width = `${pct}%`;
-    if (statText) statText.textContent = `${completed} of ${total} Topics Mastered`;
-
-    // Dashboard 4-tile sync
-    const elDashMastered = document.getElementById("metric-topics-mastered");
-    const elDashPct = document.getElementById("metric-topics-pct");
-    if (elDashMastered) elDashMastered.textContent = `${completed} / ${total}`;
-    if (elDashPct) elDashPct.textContent = `${pct}%`;
-
-    // Update each module header progress stat dynamically
-    document.querySelectorAll('.module-card').forEach(mod => {
-      const modCbs = mod.querySelectorAll('.custom-checkbox');
-      const modDone = mod.querySelectorAll('.custom-checkbox.checked');
-      const modFill = mod.querySelector('.module-mini-fill');
-      const modStat = mod.querySelector('.module-progress-stat');
-      if (modCbs.length > 0 && modStat && modFill) {
-        const modPct = Math.round((modDone.length / modCbs.length) * 100);
-        modFill.style.width = `${modPct}%`;
-        modStat.textContent = `${modDone.length}/${modCbs.length} (${modPct}%)`;
-      }
-    });
-  }
-
-  function filterCurriculumBySubject(subj) {
-    const cards = document.querySelectorAll('.module-card');
-    cards.forEach(card => {
-      if (subj === 'all' || card.dataset.subject === subj) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
-    });
-  }
-
-  function filterCurriculumBySearch(query) {
-    const rows = document.querySelectorAll('.topic-row');
-    rows.forEach(row => {
-      const text = row.textContent.toLowerCase();
-      row.style.display = text.includes(query) ? 'flex' : 'none';
-    });
-  }
-
-  function handleGlobalKeydown(e) {
-    // Escape to close open book in 3D bookshelf
-    if (e.key === 'Escape') {
-      if (typeof window.bookshelf3DClose === 'function') {
-        window.bookshelf3DClose();
-      }
-    }
-    // Spacebar to flip flashcard
-    if (e.code === 'Space' && AppState.currentTab === 'flashcards' && e.target.tagName !== 'INPUT') {
-      e.preventDefault();
-      flipFlashcard();
-    }
-    // Number keys 1-4 for FSRS ratings
-    if (['1', '2', '3', '4'].includes(e.key) && AppState.currentTab === 'flashcards' && AppState.flashcards.isFlipped) {
-      nextFlashcard();
-    }
-  }
-
-  function escapeHtml(str) {
-    return str.replace(/[&<>'"]/g, tag => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      "'": '&#39;',
-      '"': '&quot;'
-    }[tag] || tag));
-  }
-
-  // Global Bridge Functions
-  window.launchStudySession = function(topicName) {
-    switchTab('dashboard');
-    const focusTaskPill = document.getElementById('pomo-task-name');
-    if (focusTaskPill) focusTaskPill.textContent = topicName;
-    startPomodoro();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  window.viewTopicInChecklist = function(shortTitle) {
-    switchTab('curriculum');
-    const searchInput = document.getElementById('checklist-search-input');
-    if (searchInput) {
-      searchInput.value = shortTitle;
-      filterCurriculumBySearch(shortTitle.toLowerCase());
-    }
-  };
-
-  window.switchAppTab = switchTab;
-
-  
-  // =========================================================================
-  // ENHANCEMENT: RPG Skill Tree & Level Progression Engine
-  // =========================================================================
-  const RPGState = {
-    xp: parseInt(localStorage.getItem('studyPulseXP') || '0', 10),
-    level: 14,
-    title: 'NEURAL ARCHITECT',
-    get levelNumber() {
-      return Math.floor(this.xp / 350) + 1;
-    },
-    get currentLevelXP() {
-      return this.xp % 350;
-    },
-    get nextLevelXP() {
-      return 350;
-    },
-    getTitle(lvl) {
-      if (lvl < 5) return 'CODE INITIATE';
-      if (lvl < 10) return 'ALGORITHM ALCHEMIST';
-      if (lvl < 18) return 'NEURAL ARCHITECT';
-      return 'AI SOVEREIGN';
-    }
-  };
-
-  function addXP(points, reason) {
-    const oldLevel = RPGState.levelNumber;
-    RPGState.xp += points;
-    localStorage.setItem('studyPulseXP', String(RPGState.xp));
-    const newLevel = RPGState.levelNumber;
-
-    updateRPGDisplay();
-    showToast(`⚡ +${points} XP: ${reason}`);
-
-    if (newLevel > oldLevel) {
-      playLevelUpSound();
-      showToast(`🎉 LEVEL UP! You attained Level ${newLevel}: ${RPGState.getTitle(newLevel)}!`, 4000);
-    }
-  }
-
-  function updateRPGDisplay() {
-    const lvlPill = document.getElementById('nav-rpg-level');
-    const xpFill = document.getElementById('nav-rpg-xp-fill');
-    const lvlTitle = document.getElementById('nav-rpg-title');
-    if (lvlPill) lvlPill.textContent = `LVL ${RPGState.levelNumber}`;
-    if (lvlTitle) lvlTitle.textContent = RPGState.getTitle(RPGState.levelNumber);
-    if (xpFill) {
-      const pct = Math.round((RPGState.currentLevelXP / RPGState.nextLevelXP) * 100);
-      xpFill.style.width = `${pct}%`;
-    }
-  }
-
-  // =========================================================================
-  // ENHANCEMENT: Advanced Web Audio Soundscapes (Lo-Fi, Brown Noise, Paper)
-  // =========================================================================
-  function playPaperFlutterSound() {
+  function savePersistedState(key) {
     try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioCtx();
-      const bufferSize = ctx.sampleRate * 0.22;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.05));
+      if (!key || key === STORAGE_KEYS.COMPLETED_TOPICS) {
+        localStorage.setItem(STORAGE_KEYS.COMPLETED_TOPICS, JSON.stringify(Array.from(state.completedTopics)));
       }
-      const noise = ctx.createBufferSource();
-      noise.buffer = buffer;
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(1400, ctx.currentTime);
-      filter.Q.setValueAtTime(1.5, ctx.currentTime);
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.18, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-      noise.start();
-    } catch(e) {}
-  }
-
-  function playShelfThudSound() {
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(110, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.25, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.16);
-    } catch(e) {}
-  }
-
-  function playLevelUpSound() {
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioCtx();
-      const notes = [440, 554.37, 659.25, 880];
-      notes.forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
-        gain.gain.setValueAtTime(0.12, ctx.currentTime + idx * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.3);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(ctx.currentTime + idx * 0.08);
-        osc.stop(ctx.currentTime + idx * 0.08 + 0.35);
-      });
-    } catch(e) {}
-  }
-
-  window.playPaperFlutterSound = playPaperFlutterSound;
-  window.playShelfThudSound = playShelfThudSound;
-
-  // =========================================================================
-  // ENHANCEMENT: Peer Review & Feedback Drawer
-  // =========================================================================
-  let selectedReviewRating = 5;
-
-  function initPeerReview() {
-    const stars = document.querySelectorAll('.review-star');
-    stars.forEach(s => {
-      s.addEventListener('click', () => {
-        const val = parseInt(s.dataset.val, 10);
-        selectedReviewRating = val;
-        stars.forEach(st => {
-          st.classList.toggle('selected', parseInt(st.dataset.val, 10) <= val);
-        });
-      });
-    });
-
-    renderPeerReviews();
-  }
-
-  function togglePeerReviewDrawer(forceState) {
-    const drawer = document.getElementById('peer-review-drawer');
-    if (!drawer) return;
-    if (typeof forceState === 'boolean') {
-      drawer.classList.toggle('open', forceState);
-    } else {
-      drawer.classList.toggle('open');
+      if (!key || key === STORAGE_KEYS.TOPIC_NOTES) {
+        localStorage.setItem(STORAGE_KEYS.TOPIC_NOTES, JSON.stringify(state.topicNotes));
+      }
+      if (!key || key === STORAGE_KEYS.FOCUS_SECONDS) {
+        localStorage.setItem(STORAGE_KEYS.FOCUS_SECONDS, String(state.totalFocusSeconds));
+      }
+      if (!key || key === STORAGE_KEYS.DAILY_ACTIVITY) {
+        localStorage.setItem(STORAGE_KEYS.DAILY_ACTIVITY, JSON.stringify(state.dailyActivity));
+      }
+      if (!key || key === STORAGE_KEYS.STREAK) {
+        localStorage.setItem(STORAGE_KEYS.STREAK, JSON.stringify(state.streak));
+      }
+      if (!key || key === STORAGE_KEYS.THEME) {
+        localStorage.setItem(STORAGE_KEYS.THEME, state.theme);
+      }
+      if (!key || key === STORAGE_KEYS.XP) {
+        localStorage.setItem(STORAGE_KEYS.XP, String(state.xp));
+      }
+      if (!key || key === STORAGE_KEYS.FSRS) {
+        localStorage.setItem(STORAGE_KEYS.FSRS, JSON.stringify(state.fsrs));
+      }
+    } catch (e) {
+      console.warn('[StudyPulse] Error saving to localStorage:', e);
     }
   }
 
-  function submitPeerReview() {
-    const nameInput = document.getElementById('review-author-name');
-    const commentInput = document.getElementById('review-comment-text');
-    const author = nameInput?.value.trim() || 'Anonymous Reviewer';
-    const comment = commentInput?.value.trim() || 'Impressive curriculum and smooth 3D interactions!';
-
-    const reviews = JSON.parse(localStorage.getItem('studyPulseReviews') || '[]');
-    const newRev = {
-      id: Date.now(),
-      author,
-      rating: selectedReviewRating,
-      comment,
-      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    };
-    reviews.unshift(newRev);
-    localStorage.setItem('studyPulseReviews', JSON.stringify(reviews));
-
-    if (commentInput) commentInput.value = '';
-    renderPeerReviews();
-    addXP(100, 'Peer Review Feedback Submitted');
-    showToast('⭐ Peer review recorded! Thank you!');
-  }
-
-  function renderPeerReviews() {
-    const list = document.getElementById('peer-reviews-list');
-    if (!list) return;
-    const reviews = JSON.parse(localStorage.getItem('studyPulseReviews') || '[]');
-
-    if (reviews.length === 0) {
-      list.innerHTML = `
-        <div class="review-item-card" style="text-align: center; padding: 1.5rem; color: var(--text-dim);">
-          <div style="font-size: 1.4rem; margin-bottom: 6px;">💬</div>
-          <div style="font-weight: 600; color: var(--text-muted);">No Peer Reviews Yet</div>
-          <p style="color: var(--text-dim); font-size: 0.74rem; margin-top: 4px;">Share your link with friends or submit your own study reflection above!</p>
-        </div>
-      `;
+  // =========================================================================
+  // STREAK & LOGGING
+  // =========================================================================
+  function validateStreak() {
+    const today = getTodayDateString();
+    if (!state.streak || !state.streak.lastActive) {
+      state.streak = { count: 1, lastActive: today };
+      savePersistedState(STORAGE_KEYS.STREAK);
       return;
     }
 
-    list.innerHTML = reviews.map(r => `
-      <div class="review-item-card">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="color: #fbbf24;">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
-          <span style="font-size:0.68rem; color:var(--text-dim);">${r.date}</span>
-        </div>
-        <div style="font-weight: 600; margin: 3px 0; color:#fff;">${escapeHtml(r.author)}</div>
-        <p style="color: var(--text-muted); font-size: 0.76rem;">"${escapeHtml(r.comment)}"</p>
-      </div>
-    `).join('');
-  }
+    const last = new Date(state.streak.lastActive);
+    const curr = new Date(today);
+    const diffDays = Math.round((curr - last) / (1000 * 60 * 60 * 24));
 
-  function copyReviewerLink() {
-    const url = window.location.origin + window.location.pathname + '?review=peer';
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(() => {
-        showToast('📋 Reviewer link copied to clipboard!');
-      }).catch(() => {
-        prompt('Copy this review link:', url);
-      });
-    } else {
-      prompt('Copy this review link:', url);
+    if (diffDays === 1) {
+      // Perfect streak continuation
+    } else if (diffDays > 1) {
+      // Streak broken, reset to 1
+      state.streak.count = 1;
+      state.streak.lastActive = today;
+      savePersistedState(STORAGE_KEYS.STREAK);
     }
   }
 
-  // =========================================================================
-  // ENHANCEMENT: Native Browser Notifications for FSRS
-  // =========================================================================
-  function requestFSRSNotifications() {
-    if (!('Notification' in window)) {
-      showToast('⚠️ Notifications not supported in this browser.');
-      return;
+  function recordActivity(type, amount = 1) {
+    const today = getTodayDateString();
+    if (!state.dailyActivity[today]) {
+      state.dailyActivity[today] = { topics: 0, focusMinutes: 0 };
     }
 
-    Notification.requestPermission().then(permission => {
-      if (permission === 'granted') {
-        showToast('🔔 FSRS Active Recall alerts enabled!');
-        new Notification('StudyPulse FOCUS ENGINE', {
-          body: '🎯 28 Flashcards due today for Raft Consensus & LeetCode!',
-          icon: 'favicon.svg'
-        });
+    if (type === 'topic') {
+      state.dailyActivity[today].topics += amount;
+    } else if (type === 'focus') {
+      state.dailyActivity[today].focusMinutes += amount;
+    }
+
+    // Update streak if not updated today
+    if (state.streak.lastActive !== today) {
+      state.streak.count += 1;
+      state.streak.lastActive = today;
+      savePersistedState(STORAGE_KEYS.STREAK);
+    }
+
+    savePersistedState(STORAGE_KEYS.DAILY_ACTIVITY);
+    updateDashboardUI();
+    renderActivityHeatmap();
+  }
+
+  // =========================================================================
+  // RPG XP ENGINE
+  // =========================================================================
+  function addXP(amount, reason = '') {
+    state.xp += amount;
+    savePersistedState(STORAGE_KEYS.XP);
+    updateRPGStatus();
+    showToast(`+${amount} XP ${reason ? '• ' + reason : ''}`);
+  }
+
+  function getCurrentRPGLevel() {
+    let current = RPG_LEVELS[0];
+    for (const lvl of RPG_LEVELS) {
+      if (state.xp >= lvl.minXp) {
+        current = lvl;
       } else {
-        showToast('ℹ️ Notification permission denied or closed.');
+        break;
       }
-    });
-  }
-
-  // Toast notice helper
-  function showToast(msg, duration = 3000) {
-    let toast = document.getElementById('study-toast-notice');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.id = 'study-toast-notice';
-      toast.className = 'toast-notice';
-      document.body.appendChild(toast);
     }
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, duration);
+    return current;
   }
 
-  // Toggle between 2D Topology Canvas and 3D Celestial Knowledge Galaxy
-  function toggleTopologyGalaxyView() {
-    const canvas = document.getElementById('topology-canvas');
-    const galaxyCont = document.getElementById('galaxy-3d-container');
-    const btn = document.getElementById('btn-toggle-topology-mode');
-    if (!canvas || !galaxyCont) return;
+  function updateRPGStatus() {
+    const lvl = getCurrentRPGLevel();
+    const nextLevel = RPG_LEVELS.find(l => l.lvl === lvl.lvl + 1);
 
-    if (galaxyCont.style.display === 'none' || !galaxyCont.style.display) {
-      canvas.style.display = 'none';
-      galaxyCont.style.display = 'block';
-      if (btn) btn.innerHTML = '📊 2D Topology Graph';
-      if (typeof window.init3DKnowledgeGalaxy === 'function') {
-        window.init3DKnowledgeGalaxy('galaxy-3d-container');
-      }
-      showToast('🌌 3D Knowledge Galaxy active: Drag to orbit, click nodes to jump to syllabus!');
-    } else {
-      galaxyCont.style.display = 'none';
-      canvas.style.display = 'block';
-      if (btn) btn.innerHTML = '🌌 3D Knowledge Galaxy';
+    let progressPct = 100;
+    if (nextLevel) {
+      const span = nextLevel.minXp - lvl.minXp;
+      const earned = state.xp - lvl.minXp;
+      progressPct = Math.min(100, Math.max(0, Math.round((earned / span) * 100)));
     }
+
+    // Update Header Pill
+    const headerLvl = document.getElementById('rpg-level-badge');
+    const headerTitle = document.getElementById('rpg-title-badge');
+    if (headerLvl) headerLvl.textContent = `LVL ${lvl.lvl}`;
+    if (headerTitle) headerTitle.textContent = lvl.title;
+
+    // Update Dashboard Card
+    const dashLvl = document.getElementById('dash-rpg-level');
+    const dashTitle = document.getElementById('dash-rpg-title');
+    const dashXp = document.getElementById('dash-rpg-xp');
+    const dashFill = document.getElementById('dash-rpg-fill');
+    if (dashLvl) dashLvl.textContent = `LEVEL ${lvl.lvl}`;
+    if (dashTitle) dashTitle.textContent = lvl.title;
+    if (dashXp) dashXp.textContent = `${state.xp.toLocaleString()} XP`;
+    if (dashFill) dashFill.style.width = `${progressPct}%`;
   }
-
-  function toggleMemoryPalaceMode() {
-    const deck = document.getElementById('flashcard-standard-container');
-    const palace = document.getElementById('memory-palace-container');
-    const btn = document.getElementById('btn-toggle-palace-mode');
-    if (!deck || !palace) return;
-
-    if (palace.style.display === 'none' || !palace.style.display) {
-      deck.style.display = 'none';
-      palace.style.display = 'block';
-      if (btn) btn.innerHTML = '📇 Classic Flashcards';
-      if (typeof window.initMemoryPalace === 'function') {
-        window.initMemoryPalace('memory-palace-canvas-container');
-      }
-      showToast('🏛️ Memory Palace active: Orbit around pedestals and click holographic crystals to recall!');
-    } else {
-      palace.style.display = 'none';
-      deck.style.display = 'block';
-      if (btn) btn.innerHTML = '🏛️ 3D Memory Palace Sanctuary';
-    }
-  }
-
-  function toggleAndroidAppMenu() {
-    const sheet = document.getElementById('android-app-sheet');
-    const backdrop = document.getElementById('android-sheet-backdrop');
-    if (!sheet || !backdrop) return;
-    const isOpen = sheet.classList.contains('show');
-    sheet.classList.toggle('show', !isOpen);
-    backdrop.classList.toggle('show', !isOpen);
-    if (navigator.vibrate) {
-      try { navigator.vibrate(15); } catch(e) {}
-    }
-  }
-
-  function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-      showToast("📱 Immersive Fullscreen App Mode Active");
-    } else {
-      if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
-      showToast("📱 Exited Fullscreen Mode");
-    }
-  }
-
-  function downloadApkDirect() {
-    const a = document.createElement('a');
-    a.href = "StudyPulse.apk";
-    a.download = "StudyPulse.apk";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    showToast("📦 Downloading StudyPulse.apk...");
-  }
-
-  window.addEventListener('popstate', (e) => {
-    if (e.state && e.state.view) {
-      switchTab(e.state.view, false);
-    }
-  });
 
   // =========================================================================
-  // THEME ENGINE: Light & Dark Modes
+  // THEME ENGINE
   // =========================================================================
   function initTheme() {
-    const saved = localStorage.getItem("studyPulseTheme") || "dark";
-    setTheme(saved);
-  }
-
-  function setTheme(theme) {
-    const isLight = theme === "light";
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("studyPulseTheme", theme);
-
-    // Update icons
-    const icon = document.getElementById("theme-toggle-icon");
-    if (icon) icon.textContent = isLight ? "🌙" : "☀️";
-
-    const sheetIcon = document.getElementById("sheet-theme-icon");
-    const sheetName = document.getElementById("sheet-theme-name");
-    if (sheetIcon) sheetIcon.textContent = isLight ? "🌙" : "☀️";
-    if (sheetName) sheetName.textContent = isLight ? "Dark Theme" : "Light Theme";
-
-    // Update Android status bar theme-color
-    const metaTheme = document.querySelector("meta[name='theme-color']");
-    if (metaTheme) {
-      metaTheme.setAttribute("content", isLight ? "#f1f5f9" : "#060913");
-    }
-
-    // Update Three.js scene backgrounds if initialized
-    if (typeof window.bookshelfUpdateTheme === "function") {
-      window.bookshelfUpdateTheme(theme);
-    }
-
-    if (window.showToast) {
-      window.showToast(isLight ? "☀️ Material Light Theme Active" : "🌙 Obsidian Dark Theme Active");
-    }
+    document.documentElement.setAttribute('data-theme', state.theme);
+    updateThemeColorMeta();
+    const icon = document.getElementById('theme-toggle-icon');
+    if (icon) icon.textContent = state.theme === 'dark' ? '☀️' : '🌙';
   }
 
   function toggleAppTheme() {
-    const cur = document.documentElement.getAttribute("data-theme") || "dark";
-    const next = cur === "light" ? "dark" : "light";
-    setTheme(next);
-    if (navigator.vibrate) {
-      try { navigator.vibrate(12); } catch(e) {}
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', state.theme);
+    savePersistedState(STORAGE_KEYS.THEME);
+    updateThemeColorMeta();
+
+    const icon = document.getElementById('theme-toggle-icon');
+    if (icon) icon.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+    hapticFeedback(12);
+  }
+
+  function updateThemeColorMeta() {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      meta.setAttribute('content', state.theme === 'dark' ? '#060913' : '#f8fafc');
     }
   }
 
-  function handleFabClick() {
-    if (AppState.currentTab === "dashboard") {
-      togglePomodoro();
+  // =========================================================================
+  // VIEW NAVIGATION & ROUTING
+  // =========================================================================
+  function switchView(viewName) {
+    if (state.activeView === viewName) return;
+    state.activeView = viewName;
+
+    // Update Nav Buttons (Desktop and Mobile)
+    document.querySelectorAll('[data-view]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === viewName);
+    });
+
+    // Update View Panels
+    document.querySelectorAll('.view-panel').forEach(panel => {
+      panel.classList.toggle('active', panel.id === `view-${viewName}`);
+    });
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    hapticFeedback(10);
+
+    // Initialize Specialized 3D & Canvas Modules on Demand
+    if (viewName === 'bookshelf' && typeof window.initBookshelf3D === 'function') {
+      setTimeout(() => window.initBookshelf3D(), 50);
+    }
+    if (viewName === 'palace' && typeof window.initMemoryPalace === 'function') {
+      setTimeout(() => window.initMemoryPalace(), 50);
+    }
+    if (viewName === 'chaos' && typeof window.initChaosSimulator === 'function') {
+      setTimeout(() => window.initChaosSimulator(), 50);
+    }
+    if (viewName === 'analytics') {
+      renderActivityHeatmap();
+    }
+  }
+
+  // =========================================================================
+  // CHRONO-BLOCK POMODORO FOCUS ENGINE
+  // =========================================================================
+  const TIMER_PRESETS = {
+    pomo: 25 * 60,
+    deep: 50 * 60,
+    short: 5 * 60,
+    long: 15 * 60
+  };
+
+  function setTimerMode(mode) {
+    if (!TIMER_PRESETS[mode]) return;
+    state.timer.mode = mode;
+    state.timer.duration = TIMER_PRESETS[mode];
+    state.timer.remaining = TIMER_PRESETS[mode];
+    pauseTimer();
+
+    document.querySelectorAll('.pomo-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.mode === mode);
+    });
+
+    updateTimerDisplay();
+    hapticFeedback(10);
+  }
+
+  function startTimer() {
+    if (state.timer.isRunning) return;
+    state.timer.isRunning = true;
+    
+    // Auto start audio synthesizer if user enabled
+    if (document.getElementById('audio-autostart-toggle')?.checked) {
+      startAudioSynthesizer();
+    }
+
+    const btn = document.getElementById('btn-timer-toggle');
+    if (btn) btn.innerHTML = '<span>⏸</span> <span>Pause Session</span>';
+
+    state.timer.intervalId = setInterval(() => {
+      if (state.timer.remaining > 0) {
+        state.timer.remaining -= 1;
+        state.totalFocusSeconds += 1;
+        
+        // Save focus every minute
+        if (state.totalFocusSeconds % 60 === 0) {
+          savePersistedState(STORAGE_KEYS.FOCUS_SECONDS);
+          recordActivity('focus', 1);
+        }
+
+        updateTimerDisplay();
+      } else {
+        completeTimerSession();
+      }
+    }, 1000);
+
+    hapticFeedback(16);
+  }
+
+  function pauseTimer() {
+    if (!state.timer.isRunning) return;
+    state.timer.isRunning = false;
+    clearInterval(state.timer.intervalId);
+    state.timer.intervalId = null;
+
+    const btn = document.getElementById('btn-timer-toggle');
+    if (btn) btn.innerHTML = '<span>▶</span> <span>Start Sprint</span>';
+    hapticFeedback(12);
+  }
+
+  function toggleTimer() {
+    if (state.timer.isRunning) {
+      pauseTimer();
     } else {
-      switchTab("dashboard");
-      startPomodoro();
-    }
-    if (navigator.vibrate) {
-      try { navigator.vibrate(20); } catch(e) {}
+      startTimer();
     }
   }
 
+  function resetTimer() {
+    pauseTimer();
+    state.timer.remaining = state.timer.duration;
+    updateTimerDisplay();
+    hapticFeedback(10);
+  }
+
+  function skipTimer() {
+    pauseTimer();
+    state.timer.remaining = 0;
+    completeTimerSession();
+  }
+
+  function completeTimerSession() {
+    pauseTimer();
+    playNotificationChime();
+    hapticFeedback([80, 50, 80]);
+
+    if (state.timer.mode === 'pomo' || state.timer.mode === 'deep') {
+      state.timer.sessionsCompleted += 1;
+      const xpEarned = state.timer.mode === 'deep' ? 200 : 100;
+      addXP(xpEarned, 'Flow State Sprint Completed');
+      showToast(`🎯 Session Completed! +${xpEarned} XP Awarded.`);
+      setTimerMode('short');
+    } else {
+      showToast(`⚡ Break Finished! Ready for next sprint.`);
+      setTimerMode('pomo');
+    }
+  }
+
+  function updateTimerDisplay() {
+    const mins = Math.floor(state.timer.remaining / 60);
+    const secs = state.timer.remaining % 60;
+    const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+    const digitEl = document.getElementById('timer-digits');
+    if (digitEl) digitEl.textContent = timeStr;
+
+    // SVG Circular Progress Ring (circumference = 2 * PI * 100 = ~628.3)
+    const progressEl = document.getElementById('timer-svg-progress');
+    if (progressEl) {
+      const total = state.timer.duration;
+      const progress = (total - state.timer.remaining) / total;
+      const offset = 628.3 * (1 - progress);
+      progressEl.style.strokeDashoffset = offset;
+    }
+
+    // Header mini timer
+    const navClock = document.getElementById('nav-timer-clock');
+    if (navClock) {
+      navClock.textContent = `${timeStr} | ${state.timer.mode.toUpperCase()}`;
+    }
+  }
+
+  function playNotificationChime() {
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+      osc.frequency.exponentialRampToValueAtTime(880.00, audioCtx.currentTime + 0.15); // A5
+
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.65);
+    } catch (e) {
+      // Web Audio blocked
+    }
+  }
+
+  // =========================================================================
+  // WEB AUDIO PROCEDURAL SYNTHESIZER
+  // =========================================================================
+  function initAudioContext() {
+    if (state.audio.ctx) return;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+
+    state.audio.ctx = new AudioCtx();
+    state.audio.analyser = state.audio.ctx.createAnalyser();
+    state.audio.analyser.fftSize = 64;
+    state.audio.masterGain = state.audio.ctx.createGain();
+    state.audio.masterGain.gain.setValueAtTime(0.5, state.audio.ctx.currentTime);
+
+    state.audio.masterGain.connect(state.audio.analyser);
+    state.audio.analyser.connect(state.audio.ctx.destination);
+
+    startVisualizerFFT();
+  }
+
+  function toggleAudioSynthesizer() {
+    initAudioContext();
+    if (!state.audio.ctx) return;
+
+    if (state.audio.ctx.state === 'suspended') {
+      state.audio.ctx.resume();
+    }
+
+    if (state.audio.isPlaying) {
+      stopAllAudioChannels();
+      state.audio.isPlaying = false;
+      document.getElementById('btn-audio-toggle')?.classList.remove('active');
+    } else {
+      startActiveAudioChannels();
+      state.audio.isPlaying = true;
+      document.getElementById('btn-audio-toggle')?.classList.add('active');
+    }
+    hapticFeedback(12);
+  }
+
+  function startAudioSynthesizer() {
+    initAudioContext();
+    if (!state.audio.ctx) return;
+    if (state.audio.ctx.state === 'suspended') state.audio.ctx.resume();
+    startActiveAudioChannels();
+    state.audio.isPlaying = true;
+    document.getElementById('btn-audio-toggle')?.classList.add('active');
+  }
+
+  function startActiveAudioChannels() {
+    const ctx = state.audio.ctx;
+    if (!ctx) return;
+
+    // 1. 40Hz Gamma Focus Binaural Beats
+    if (!state.audio.channels.binaural.osc1) {
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(state.audio.channels.binaural.vol, ctx.currentTime);
+
+      const oscL = ctx.createOscillator();
+      const oscR = ctx.createOscillator();
+      oscL.frequency.value = 200; // Left ear
+      oscR.frequency.value = 240; // Right ear (40Hz difference)
+
+      const merger = ctx.createChannelMerger(2);
+      oscL.connect(merger, 0, 0);
+      oscR.connect(merger, 0, 1);
+
+      merger.connect(g);
+      g.connect(state.audio.masterGain);
+
+      oscL.start();
+      oscR.start();
+
+      state.audio.channels.binaural.osc1 = oscL;
+      state.audio.channels.binaural.osc2 = oscR;
+      state.audio.channels.binaural.gain = g;
+    }
+
+    // 2. Nordic Rain (White noise buffer + low-pass filter)
+    if (!state.audio.channels.rain.node) {
+      const bufferSize = ctx.sampleRate * 2;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+
+      const whiteNoise = ctx.createBufferSource();
+      whiteNoise.buffer = buffer;
+      whiteNoise.loop = true;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 850;
+
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(state.audio.channels.rain.vol, ctx.currentTime);
+
+      whiteNoise.connect(filter);
+      filter.connect(g);
+      g.connect(state.audio.masterGain);
+      whiteNoise.start();
+
+      state.audio.channels.rain.node = whiteNoise;
+      state.audio.channels.rain.gain = g;
+    }
+
+    // 3. Deep Brown Noise
+    if (!state.audio.channels.brown.node) {
+      const bufferSize = ctx.sampleRate * 2;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        data[i] = (lastOut + (0.02 * white)) / 1.02;
+        lastOut = data[i];
+        data[i] *= 3.5;
+      }
+
+      const brownSource = ctx.createBufferSource();
+      brownSource.buffer = buffer;
+      brownSource.loop = true;
+
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(state.audio.channels.brown.vol, ctx.currentTime);
+
+      brownSource.connect(g);
+      g.connect(state.audio.masterGain);
+      brownSource.start();
+
+      state.audio.channels.brown.node = brownSource;
+      state.audio.channels.brown.gain = g;
+    }
+  }
+
+  function stopAllAudioChannels() {
+    try {
+      if (state.audio.channels.binaural.osc1) {
+        state.audio.channels.binaural.osc1.stop();
+        state.audio.channels.binaural.osc2.stop();
+        state.audio.channels.binaural.osc1 = null;
+        state.audio.channels.binaural.osc2 = null;
+      }
+      if (state.audio.channels.rain.node) {
+        state.audio.channels.rain.node.stop();
+        state.audio.channels.rain.node = null;
+      }
+      if (state.audio.channels.brown.node) {
+        state.audio.channels.brown.node.stop();
+        state.audio.channels.brown.node = null;
+      }
+    } catch (e) {
+      console.warn('[StudyPulse] Error stopping audio:', e);
+    }
+  }
+
+  function setChannelVolume(channel, val) {
+    const floatVal = parseFloat(val);
+    if (state.audio.channels[channel]) {
+      state.audio.channels[channel].vol = floatVal;
+      if (state.audio.channels[channel].gain && state.audio.ctx) {
+        state.audio.channels[channel].gain.gain.setValueAtTime(floatVal, state.audio.ctx.currentTime);
+      }
+    }
+  }
+
+  function startVisualizerFFT() {
+    const canvas = document.getElementById('audio-fft-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const analyser = state.audio.analyser;
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    function draw() {
+      requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const barWidth = (canvas.width / dataArray.length) * 1.5;
+      let x = 0;
+
+      for (let i = 0; i < dataArray.length; i++) {
+        const barHeight = (dataArray[i] / 255) * canvas.height;
+        ctx.fillStyle = state.audio.isPlaying ? '#00f2ff' : 'rgba(148, 163, 184, 0.25)';
+        ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
+        x += barWidth;
+      }
+    }
+    draw();
+  }
+
+  // =========================================================================
+  // CURRICULUM MASTER MATRIX ENGINE
+  // =========================================================================
+  function renderCourseSelector() {
+    const container = document.getElementById('course-selector-container');
+    if (!container || !window.ALL_COURSES_DATA) return;
+
+    container.innerHTML = '';
+    window.ALL_COURSES_DATA.courses.forEach(c => {
+      const chip = document.createElement('button');
+      chip.className = `course-chip ${c.id === state.activeCourseId ? 'active' : ''}`;
+      chip.innerHTML = `<span>${c.icon}</span> <span>${c.short_title || c.title}</span>`;
+      chip.onclick = () => {
+        state.activeCourseId = c.id;
+        document.querySelectorAll('.course-chip').forEach(el => el.classList.remove('active'));
+        chip.classList.add('active');
+        renderCurriculumMatrix();
+        hapticFeedback(10);
+      };
+      container.appendChild(chip);
+    });
+  }
+
+  function renderCurriculumMatrix() {
+    const listEl = document.getElementById('module-accordion-list');
+    if (!listEl || !window.ALL_COURSES_DATA) return;
+
+    const course = window.ALL_COURSES_DATA.courses.find(c => c.id === state.activeCourseId);
+    if (!course) return;
+
+    // Update Course Header Summary
+    const titleEl = document.getElementById('active-course-title');
+    const descEl = document.getElementById('active-course-desc');
+    const countEl = document.getElementById('active-course-stats');
+    if (titleEl) titleEl.textContent = course.title;
+    if (descEl) descEl.textContent = course.focus;
+    if (countEl) countEl.textContent = `${course.total_lectures} Lectures • ${course.total_topics} Topics • ${course.estimated_hours}h Content`;
+
+    listEl.innerHTML = '';
+    const query = state.searchQuery.toLowerCase().trim();
+
+    course.modules.forEach((mod, modIdx) => {
+      // Filter sessions & topics
+      let matchingSessions = [];
+
+      mod.sessions.forEach(sess => {
+        const matchingTopics = (sess.topics || []).filter(top => {
+          const matchesQuery = !query || top.title.toLowerCase().includes(query);
+          const isDone = state.completedTopics.has(top.id);
+
+          if (state.topicFilter === 'completed') return matchesQuery && isDone;
+          if (state.topicFilter === 'pending') return matchesQuery && !isDone;
+          return matchesQuery;
+        });
+
+        if (matchingTopics.length > 0 || (!query && (!sess.topics || sess.topics.length === 0))) {
+          matchingSessions.push({ ...sess, filteredTopics: matchingTopics });
+        }
+      });
+
+      if (matchingSessions.length === 0 && query) return;
+
+      // Module Progress Calculation
+      const allModTopics = mod.sessions.flatMap(s => s.topics || []);
+      const completedModTopics = allModTopics.filter(t => state.completedTopics.has(t.id));
+      const modPct = allModTopics.length > 0 ? Math.round((completedModTopics.length / allModTopics.length) * 100) : 0;
+
+      const modCard = document.createElement('div');
+      modCard.className = `module-card ${modIdx === 0 ? 'expanded' : ''}`;
+      modCard.id = `mod-card-${mod.id}`;
+
+      modCard.innerHTML = `
+        <div class="module-header" onclick="window.toggleModuleAccordion('${mod.id}')">
+          <div class="module-title-area">
+            <span style="font-size: 1.1rem;">${mod.phase_icon || '📁'}</span>
+            <div>
+              <div class="module-title">${escapeHtml(mod.title)}</div>
+              <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">
+                ${mod.sessions.length} Lectures • ${allModTopics.length} Topics
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="module-badge">${completedModTopics.length}/${allModTopics.length} (${modPct}%)</span>
+            <div class="module-progress-bar">
+              <div class="module-progress-fill" style="width: ${modPct}%;"></div>
+            </div>
+            <span class="module-chevron" style="transition: transform 0.2s ease;">▼</span>
+          </div>
+        </div>
+        <div class="module-body">
+          ${matchingSessions.map(sess => `
+            <div style="margin-top: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--surface-border);">
+              <div style="font-size: 0.84rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 8px;">
+                📖 ${escapeHtml(sess.title)}
+              </div>
+              <div class="topic-list">
+                ${(sess.filteredTopics || []).map(top => {
+                  const isDone = state.completedTopics.has(top.id);
+                  const hasNote = !!state.topicNotes[top.id];
+                  return `
+                    <div class="topic-row ${isDone ? 'completed' : ''}" id="row-${top.id}">
+                      <div class="topic-left">
+                        <input type="checkbox" class="topic-checkbox" ${isDone ? 'checked' : ''} 
+                               onchange="window.toggleTopicCheck('${top.id}', this.checked)">
+                        <div class="topic-title">${escapeHtml(top.title)}</div>
+                      </div>
+                      <div class="topic-actions">
+                        <button class="btn-topic-note" onclick="window.openTopicNoteModal('${top.id}', '${escapeAttr(top.title)}')" title="Study Notes">
+                          ${hasNote ? '📝' : '✏️'}
+                        </button>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      listEl.appendChild(modCard);
+    });
+  }
+
+  function toggleModuleAccordion(modId) {
+    const card = document.getElementById(`mod-card-${modId}`);
+    if (card) {
+      card.classList.toggle('expanded');
+      hapticFeedback(8);
+    }
+  }
+
+  function toggleTopicCheck(topicId, isChecked) {
+    if (isChecked) {
+      state.completedTopics.add(topicId);
+      addXP(150, 'Topic Mastered');
+      recordActivity('topic', 1);
+    } else {
+      state.completedTopics.delete(topicId);
+      state.xp = Math.max(0, state.xp - 150);
+      savePersistedState(STORAGE_KEYS.XP);
+      updateRPGStatus();
+    }
+
+    savePersistedState(STORAGE_KEYS.COMPLETED_TOPICS);
+    
+    // Toggle row completed style
+    const row = document.getElementById(`row-${topicId}`);
+    if (row) row.classList.toggle('completed', isChecked);
+
+    updateDashboardUI();
+    hapticFeedback(14);
+  }
+
+  // =========================================================================
+  // TOPIC NOTES MODAL
+  // =========================================================================
+  let currentEditingTopicId = null;
+
+  function openTopicNoteModal(topicId, topicTitle) {
+    currentEditingTopicId = topicId;
+    const modal = document.getElementById('notes-modal-overlay');
+    const titleEl = document.getElementById('notes-modal-topic-title');
+    const textarea = document.getElementById('notes-modal-textarea');
+
+    if (titleEl) titleEl.textContent = topicTitle;
+    if (textarea) textarea.value = state.topicNotes[topicId] || '';
+    if (modal) modal.style.display = 'flex';
+  }
+
+  function saveTopicNote() {
+    if (!currentEditingTopicId) return;
+    const textarea = document.getElementById('notes-modal-textarea');
+    const text = textarea ? textarea.value.trim() : '';
+
+    if (text) {
+      state.topicNotes[currentEditingTopicId] = text;
+      showToast('💾 Note saved successfully!');
+    } else {
+      delete state.topicNotes[currentEditingTopicId];
+    }
+
+    savePersistedState(STORAGE_KEYS.TOPIC_NOTES);
+    closeTopicNoteModal();
+    renderCurriculumMatrix();
+    hapticFeedback(10);
+  }
+
+  function closeTopicNoteModal() {
+    const modal = document.getElementById('notes-modal-overlay');
+    if (modal) modal.style.display = 'none';
+    currentEditingTopicId = null;
+  }
+
+  // =========================================================================
+  // COGNITIVE DASHBOARD & HEATMAP
+  // =========================================================================
+  function updateDashboardUI() {
+    const completedCount = state.completedTopics.size;
+    const totalTopics = 1769;
+    const focusHours = (state.totalFocusSeconds / 3600).toFixed(1);
+
+    // Update Hero Stats
+    const countEl = document.getElementById('dash-completed-count');
+    const streakEl = document.getElementById('dash-streak-count');
+    const hoursEl = document.getElementById('dash-focus-hours');
+    const headerStreak = document.getElementById('header-streak-val');
+
+    if (countEl) countEl.textContent = `${completedCount} / ${totalTopics}`;
+    if (streakEl) streakEl.textContent = `${state.streak.count} Days`;
+    if (hoursEl) hoursEl.textContent = `${focusHours}h`;
+    if (headerStreak) headerStreak.textContent = `${state.streak.count} Days`;
+
+    updateRPGStatus();
+  }
+
+  function renderActivityHeatmap() {
+    const svg = document.getElementById('heatmap-grid-svg');
+    if (!svg) return;
+
+    svg.innerHTML = '';
+    const today = new Date();
+    const cellSize = 11;
+    const cellGap = 3;
+    const totalWeeks = 52;
+
+    // Calculate dates backwards for 52 weeks
+    const days = [];
+    for (let i = 364; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      days.push({ date: dateStr, dayOfWeek: d.getDay() });
+    }
+
+    days.forEach((item, index) => {
+      const weekIndex = Math.floor(index / 7);
+      const dayIndex = item.dayOfWeek;
+      const x = weekIndex * (cellSize + cellGap);
+      const y = dayIndex * (cellSize + cellGap);
+
+      const activity = state.dailyActivity[item.date] || { topics: 0, focusMinutes: 0 };
+      const score = (activity.topics * 2) + Math.floor(activity.focusMinutes / 15);
+
+      let color = 'rgba(148, 163, 184, 0.12)';
+      if (score >= 8) color = '#00f2ff';
+      else if (score >= 4) color = '#0284c7';
+      else if (score >= 2) color = '#0369a1';
+      else if (score >= 1) color = '#075985';
+
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', x);
+      rect.setAttribute('y', y);
+      rect.setAttribute('width', cellSize);
+      rect.setAttribute('height', cellSize);
+      rect.setAttribute('fill', color);
+      rect.setAttribute('class', 'heatmap-cell');
+
+      rect.innerHTML = `<title>${item.date}: ${activity.topics} topics mastered, ${activity.focusMinutes}m focus</title>`;
+      svg.appendChild(rect);
+    });
+  }
+
+  // =========================================================================
+  // UTILITIES & FEEDBACK
+  // =========================================================================
+  function hapticFeedback(pattern = 14) {
+    if (typeof navigator.vibrate === 'function') {
+      try { navigator.vibrate(pattern); } catch (e) {}
+    }
+  }
+
+  function showToast(message) {
+    let toast = document.getElementById('studypulse-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'studypulse-toast';
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 84px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(15, 23, 42, 0.95);
+        color: #f8fafc;
+        border: 1px solid rgba(0, 242, 255, 0.4);
+        padding: 10px 18px;
+        border-radius: 9999px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        backdrop-filter: blur(12px);
+        z-index: 3000;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+        opacity: 0;
+        pointer-events: none;
+      `;
+      document.body.appendChild(toast);
+    }
+
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translate(-50%, 0)';
+
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translate(-50%, 8px)';
+    }, 2400);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function escapeAttr(str) {
+    if (!str) return '';
+    return str.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  // =========================================================================
+  // GLOBAL EXPORTS
+  // =========================================================================
+  window.switchView = switchView;
   window.toggleAppTheme = toggleAppTheme;
-  window.handleFabClick = handleFabClick;
+  window.toggleTimer = toggleTimer;
+  window.resetTimer = resetTimer;
+  window.skipTimer = skipTimer;
+  window.setTimerMode = setTimerMode;
+  window.toggleAudioSynthesizer = toggleAudioSynthesizer;
+  window.setChannelVolume = setChannelVolume;
+  window.toggleModuleAccordion = toggleModuleAccordion;
+  window.toggleTopicCheck = toggleTopicCheck;
+  window.openTopicNoteModal = openTopicNoteModal;
+  window.saveTopicNote = saveTopicNote;
+  window.closeTopicNoteModal = closeTopicNoteModal;
 
-  window.toggleAndroidAppMenu = toggleAndroidAppMenu;
-  window.toggleFullscreen = toggleFullscreen;
-  window.downloadApkDirect = downloadApkDirect;
-  window.toggleMemoryPalaceMode = toggleMemoryPalaceMode;
-  window.applyAudioPreset = applyAudioPreset;
-  window.setAudioMixerChannel = setAudioMixerChannel;
-  window.setAudioMixerMaster = setAudioMixerMaster;
-  window.toggleVoiceAlerts = (checked) => { audioMixer.voice = checked; };
-  window.testVoiceCue = () => { speakVoiceCue('Voice protocol operational. Focus session ready.'); };
-  window.toggleTopologyGalaxyView = toggleTopologyGalaxyView;
-  window.togglePeerReviewDrawer = togglePeerReviewDrawer;
-  window.submitPeerReview = submitPeerReview;
-  window.copyReviewerLink = copyReviewerLink;
-  window.requestFSRSNotifications = requestFSRSNotifications;
-  window.addXP = addXP;
+  // External Action Bridges
+  window.launchStudySession = (topicName) => {
+    switchView('dashboard');
+    showToast(`⚡ Focused on: ${topicName}`);
+    startTimer();
+  };
 
-  // Run on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
-  } else {
-    initApp();
-  }
+  window.viewTopicInChecklist = (query) => {
+    switchView('curriculum');
+    const input = document.getElementById('curriculum-search-input');
+    if (input) {
+      input.value = query;
+      state.searchQuery = query;
+      renderCurriculumMatrix();
+    }
+  };
+
+  // =========================================================================
+  // INITIALIZATION ON DOM READY
+  // =========================================================================
+  document.addEventListener('DOMContentLoaded', () => {
+    loadPersistedState();
+    initTheme();
+    updateTimerDisplay();
+    renderCourseSelector();
+    renderCurriculumMatrix();
+    updateDashboardUI();
+    renderActivityHeatmap();
+
+    // Attach search input listener
+    const searchInput = document.getElementById('curriculum-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        state.searchQuery = e.target.value;
+        renderCurriculumMatrix();
+      });
+    }
+
+    // Attach filter chip listeners
+    document.querySelectorAll('.filter-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-chip').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        state.topicFilter = btn.dataset.filter;
+        renderCurriculumMatrix();
+        hapticFeedback(8);
+      });
+    });
+
+    console.log('[StudyPulse FOCUS ENGINE] Successfully initialized for Piyush Tiwari.');
+  });
 
 })();
