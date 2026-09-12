@@ -25,18 +25,32 @@
        ========================================================================= -->
   <header class="app-header">
     <div class="header-container">
-      <div class="brand-wrapper" onclick="window.switchView('dashboard')">
-        <div class="brand-monogram">PT</div>
-        <div class="brand-text-block">
-          <div class="brand-title">Piyush Tiwari</div>
-          <div class="brand-subtitle">Study Desk & Library</div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button class="icon-btn" onclick="window.toggleRegainDrawer()" title="Regain Menu Drawer">
+          <span style="font-size: 1.25rem;">≡</span>
+        </button>
+        <div class="brand-wrapper" onclick="window.switchView('dashboard')">
+          <div class="brand-monogram">PT</div>
+          <div class="brand-text-block">
+            <div class="brand-title">Piyush Tiwari</div>
+            <div class="brand-subtitle">Study Desk & Library</div>
+          </div>
         </div>
       </div>
 
-      <!-- Desktop Navigation Tabs -->
+      <!-- Desktop Navigation Tabs (Regain + Engineering Ecosystem) -->
       <nav class="desktop-nav-tabs" aria-label="Desktop Navigation">
         <button class="nav-tab-btn active" data-view="dashboard" onclick="window.switchView('dashboard')">
-          <span>🏠</span> <span>Desk</span>
+          <span>⏱</span> <span>Focus</span>
+        </button>
+        <button class="nav-tab-btn" data-view="liveroom" onclick="window.switchView('liveroom')">
+          <span>👥</span> <span>Live Room</span>
+        </button>
+        <button class="nav-tab-btn" data-view="leaderboard" onclick="window.switchView('leaderboard')">
+          <span>🏆</span> <span>Leaderboard</span>
+        </button>
+        <button class="nav-tab-btn" data-view="shield" onclick="window.switchView('shield')">
+          <span>🛡️</span> <span>Shield</span>
         </button>
         <button class="nav-tab-btn" data-view="curriculum" onclick="window.switchView('curriculum')">
           <span>📋</span> <span>Syllabus</span>
@@ -48,7 +62,7 @@
           <span>🏛️</span> <span>Recall</span>
         </button>
         <button class="nav-tab-btn" data-view="chaos" onclick="window.switchView('chaos')">
-          <span>⚡</span> <span>Systems Lab</span>
+          <span>⚡</span> <span>Systems</span>
         </button>
         <button class="nav-tab-btn" data-view="analytics" onclick="window.switchView('analytics')">
           <span>📊</span> <span>Journal</span>
@@ -57,9 +71,12 @@
 
       <!-- Actions & Profile -->
       <div class="header-actions">
-        <div class="live-focus-badge" title="Engineering Focus Studio">
-          <span>🟢</span> <span>Focus Mode</span>
+        <div class="live-focus-badge" onclick="window.switchView('liveroom')" style="cursor: pointer;" title="Live Focus with Peers (Regain)">
+          <span>🟢</span> <span id="header-live-count">520k+ focusing</span>
         </div>
+        <button class="icon-btn" id="header-strict-lock-btn" onclick="window.toggleStrictMode()" title="Toggle Strict Study Mode">
+          <span>🔒</span>
+        </button>
         <div class="streak-pill" title="Current Daily Streak">
           <span>🔥</span> <span id="header-streak-val">0 Days</span>
         </div>
@@ -169,7 +186,7 @@
             </div>
           </div>
 
-          <!-- Focus Sprints & Reading Timer -->
+          <!-- Focus Sprints & Reading Timer (Regain Signature Architecture) -->
           <div class="focus-card" style="margin-top: 24px;">
             <div class="pomo-mode-selector">
               <button class="pomo-tab active" data-mode="pomo" onclick="window.setTimerMode('pomo')">Deep Work (25m)</button>
@@ -178,19 +195,62 @@
               <button class="pomo-tab" data-mode="long" onclick="window.setTimerMode('long')">Reflect (15m)</button>
             </div>
 
-            <div class="timer-ring-container">
+            <div class="timer-ring-container" style="position: relative;">
               <svg class="timer-svg" viewBox="0 0 220 220">
                 <circle class="timer-track" cx="110" cy="110" r="100"></circle>
                 <circle class="timer-progress" id="timer-svg-progress" cx="110" cy="110" r="100"></circle>
               </svg>
               <div class="timer-display">
-                <div class="regain-session-pill" onclick="window.switchView('curriculum')" title="Switch Curriculum Program">Study ▾</div>
+                <div class="regain-session-pill" id="regain-session-pill" onclick="window.toggleTagPopover(event)" title="Click to Change Subject Tag">
+                  <span id="active-tag-label">Study</span> ▾
+                </div>
+                <!-- Regain Tag Dropdown Popover -->
+                <div class="regain-tag-popover" id="regain-tag-popover">
+                  <button class="regain-tag-option selected" onclick="window.selectTag('Study')">📚 General Study</button>
+                  <button class="regain-tag-option" onclick="window.selectTag('DSA & LeetCode')">⚡ DSA & LeetCode</button>
+                  <button class="regain-tag-option" onclick="window.selectTag('Generative AI & LLMs')">🤖 Generative AI & LLMs</button>
+                  <button class="regain-tag-option" onclick="window.selectTag('Machine Learning & DSMP')">📈 CampusX DSMP</button>
+                  <button class="regain-tag-option" onclick="window.selectTag('Systems & Docker')">🐳 Docker & Systems</button>
+                  <button class="regain-tag-option" onclick="window.selectTag('Deep Learning')">🧠 Deep Learning</button>
+                </div>
+
+                <div style="font-size: 0.76rem; font-family: var(--font-mono); color: var(--text-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em;">Timer</div>
                 <div class="timer-digits" id="timer-digits">25:00</div>
                 <div class="timer-status-pill" id="timer-status-pill">QUIET CONCENTRATION</div>
               </div>
             </div>
 
-            <div class="pomo-controls-row">
+            <!-- Regain Focus Subactions: Menu | Companion Mascot | Strict Lock (Shot 0) -->
+            <div class="regain-timer-subactions">
+              <button class="regain-circle-icon-btn" onclick="window.toggleRegainDrawer()" title="Quick Routines & Settings">
+                <span>≡</span>
+              </button>
+
+              <div class="regain-mascot-wrapper" onclick="window.mascotInteract()" title="Your Focus Mascot (Tap to Talk)">
+                <div class="regain-speech-bubble" id="regain-speech-bubble" style="display: none;">
+                  Let's master algorithms today, Piyush! 🚀
+                </div>
+                <div class="regain-mascot-avatar" id="regain-mascot-avatar">
+                  <svg viewBox="0 0 100 100" width="38" height="38">
+                    <circle cx="50" cy="50" r="45" fill="#84cc16"/>
+                    <circle cx="36" cy="46" r="6" fill="#1e293b"/>
+                    <circle cx="64" cy="46" r="6" fill="#1e293b"/>
+                    <circle cx="38" cy="43" r="2.2" fill="#ffffff"/>
+                    <circle cx="66" cy="43" r="2.2" fill="#ffffff"/>
+                    <ellipse cx="27" cy="53" rx="6" ry="3" fill="#f472b6" opacity="0.65"/>
+                    <ellipse cx="73" cy="53" rx="6" ry="3" fill="#f472b6" opacity="0.65"/>
+                    <path d="M 42 56 Q 50 63 58 56" stroke="#1e293b" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              </div>
+
+              <button class="regain-circle-icon-btn" id="btn-timer-lock" onclick="window.toggleStrictMode()" title="Toggle Strict Study Lock Mode">
+                <span>🔒</span>
+              </button>
+            </div>
+
+            <!-- Primary Control Buttons (Regain Wide Action Button) -->
+            <div class="pomo-controls-row" style="margin-top: 20px;">
               <button class="btn-pomo-main" id="btn-timer-toggle" onclick="window.toggleTimer()">
                 <span>▶</span> <span>Start Sprint</span>
               </button>
@@ -200,6 +260,36 @@
               <button class="btn-pomo-sec" onclick="window.skipTimer()">
                 <span>⏭</span> <span>Skip</span>
               </button>
+            </div>
+          </div>
+
+          <!-- Regain Daily Study Schedule / Routines (Shot 6) -->
+          <div class="regain-routines-section">
+            <div class="regain-section-title-row">
+              <span class="regain-section-title"><span>📅</span> Daily Study Schedule</span>
+              <span style="font-size: 0.72rem; color: var(--accent-orange); font-family: var(--font-mono); font-weight: 600;">TIMETABLE</span>
+            </div>
+            <div class="regain-routines-grid">
+              <div class="regain-routine-card active" id="routine-card-morning" onclick="window.activateRoutine('morning', 'DSA & LeetCode', 25)">
+                <div class="regain-routine-icon">🌤</div>
+                <div class="regain-routine-name">Morning Study</div>
+                <div class="regain-routine-time">6:00 AM - 8:00 AM</div>
+              </div>
+              <div class="regain-routine-card" id="routine-card-afternoon" onclick="window.activateRoutine('afternoon', 'Generative AI & LLMs', 50)">
+                <div class="regain-routine-icon">☀️</div>
+                <div class="regain-routine-name">Afternoon Deep Dive</div>
+                <div class="regain-routine-time">2:00 PM - 4:00 PM</div>
+              </div>
+              <div class="regain-routine-card" id="routine-card-physics" onclick="window.activateRoutine('physics', 'CampusX DSMP', 50)">
+                <div class="regain-routine-icon">📚</div>
+                <div class="regain-routine-name">Machine Learning</div>
+                <div class="regain-routine-time">8:00 AM - 10:00 AM</div>
+              </div>
+              <div class="regain-routine-card" id="routine-card-maths" onclick="window.activateRoutine('maths', 'Systems & Docker', 25)">
+                <div class="regain-routine-icon">📐</div>
+                <div class="regain-routine-name">Systems & Maths</div>
+                <div class="regain-routine-time">6:00 PM - 9:00 PM</div>
+              </div>
             </div>
           </div>
         </div>
@@ -259,17 +349,80 @@
             <canvas class="audio-fft-canvas" id="audio-fft-canvas" width="600" height="56"></canvas>
           </div>
 
-          <!-- Quick Navigation Cards -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--surface-border-subtle);">
-            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('bookshelf')">
-              <div style="font-size: 1.6rem; margin-bottom: 6px;">📚</div>
-              <div style="font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600;">The 3D Library</div>
-              <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">18 tactile volumes in Three.js</div>
+          <!-- Regain Study Time Analytics & Weekly Tracker (Shot 7) -->
+          <div class="regain-tracker-panel hero-card" style="margin-top: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <button class="icon-btn" style="font-size: 0.85rem;" onclick="window.navigateChartDay(-1)" title="Previous Day">‹</button>
+              <div style="text-align: center;">
+                <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: var(--text-primary);" id="regain-today-focus-time">0h 00m</div>
+                <div style="font-size: 0.76rem; color: var(--text-muted);" id="regain-chart-date-label">Today - Active Tracking</div>
+              </div>
+              <button class="icon-btn" style="font-size: 0.85rem;" onclick="window.navigateChartDay(1)" title="Next Day">›</button>
             </div>
-            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('chaos')">
-              <div style="font-size: 1.6rem; margin-bottom: 6px;">⚡</div>
-              <div style="font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600;">Systems Lab</div>
-              <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Raft, Redis & Kafka Architecture</div>
+            
+            <div class="regain-week-chart-container" id="regain-week-chart">
+              <div class="regain-chart-col"><div class="regain-chart-bar-bg"><div class="regain-chart-bar-fill" style="height: 40%;"></div></div><span class="regain-chart-label">M</span></div>
+              <div class="regain-chart-col"><div class="regain-chart-bar-bg"><div class="regain-chart-bar-fill" style="height: 65%;"></div></div><span class="regain-chart-label">T</span></div>
+              <div class="regain-chart-col"><div class="regain-chart-bar-bg"><div class="regain-chart-bar-fill" style="height: 50%;"></div></div><span class="regain-chart-label">W</span></div>
+              <div class="regain-chart-col"><div class="regain-chart-bar-bg"><div class="regain-chart-bar-fill" style="height: 75%;"></div></div><span class="regain-chart-label">T</span></div>
+              <div class="regain-chart-col"><div class="regain-chart-bar-bg"><div class="regain-chart-bar-fill" style="height: 35%;"></div></div><span class="regain-chart-label">F</span></div>
+              <div class="regain-chart-col"><div class="regain-chart-bar-bg"><div class="regain-chart-bar-fill" style="height: 85%;"></div></div><span class="regain-chart-label">S</span></div>
+              <div class="regain-chart-col is-today"><div class="regain-chart-bar-bg"><div class="regain-chart-bar-fill" id="today-bar-fill" style="height: 70%;"></div></div><span class="regain-chart-label">S</span></div>
+            </div>
+
+            <!-- Regain Tag Distribution Breakdown -->
+            <div class="regain-tag-dist-card" style="border: none; padding: 0;">
+              <div class="regain-tag-dist-header">
+                <span style="font-weight: 700; font-size: 0.88rem;">Tag distribution</span>
+                <span style="font-size: 0.72rem; color: var(--accent-orange); font-family: var(--font-mono); font-weight: 600;">LIVE HOURS</span>
+              </div>
+              <div class="regain-tag-row">
+                <div class="regain-tag-info">
+                  <span style="font-weight: 600; font-size: 0.84rem;">DSA & LeetCode</span>
+                  <span id="regain-tag-dsa-time" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">1h 45m</span>
+                </div>
+                <div class="regain-tag-bar"><div class="regain-tag-fill orange" style="width: 75%;"></div></div>
+              </div>
+              <div class="regain-tag-row">
+                <div class="regain-tag-info">
+                  <span style="font-weight: 600; font-size: 0.84rem;">Generative AI & LLMs</span>
+                  <span id="regain-tag-ai-time" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">1h 12m</span>
+                </div>
+                <div class="regain-tag-bar"><div class="regain-tag-fill blue" style="width: 55%;"></div></div>
+              </div>
+              <div class="regain-tag-row">
+                <div class="regain-tag-info">
+                  <span style="font-weight: 600; font-size: 0.84rem;">CampusX Machine Learning</span>
+                  <span id="regain-tag-ml-time" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">56m</span>
+                </div>
+                <div class="regain-tag-bar"><div class="regain-tag-fill orange" style="width: 45%;"></div></div>
+              </div>
+              <div class="regain-tag-row">
+                <div class="regain-tag-info">
+                  <span style="font-weight: 600; font-size: 0.84rem;">Systems & Docker</span>
+                  <span id="regain-tag-sys-time" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">45m</span>
+                </div>
+                <div class="regain-tag-bar"><div class="regain-tag-fill blue" style="width: 35%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Access Cards to Regain Hubs & 3D Environments -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--surface-border-subtle);">
+            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('liveroom')">
+              <div style="font-size: 1.4rem; margin-bottom: 4px;">👥</div>
+              <div style="font-size: 0.85rem; font-weight: 700;">Live Room</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);">520k+ focusing</div>
+            </div>
+            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('leaderboard')">
+              <div style="font-size: 1.4rem; margin-bottom: 4px;">🏆</div>
+              <div style="font-size: 0.85rem; font-weight: 700;">Leaderboard</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);">Podium & ranks</div>
+            </div>
+            <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('shield')">
+              <div style="font-size: 1.4rem; margin-bottom: 4px;">🛡️</div>
+              <div style="font-size: 0.85rem; font-weight: 700;">Shield</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);">Block Shorts & Reels</div>
             </div>
           </div>
         </div>
@@ -518,11 +671,374 @@
       </div>
     </section>
 
+    <!-- VIEW 7: REGAIN LIVE STUDY ROOM WITH PEERS (Shot 3) -->
+    <section class="view-panel" id="view-liveroom">
+      <div class="regain-liveroom-panel">
+        <div class="regain-room-hero">
+          <h2 class="regain-room-title">AI & Engineering Aspirants</h2>
+          <div class="regain-live-counter-pill">
+            <span>🟢</span> <span id="liveroom-live-count">520,248 focusing</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;">
+            Deep work circle with students across India mastering Data Science, LLMs, and System Design.
+          </p>
+        </div>
+
+        <!-- Live Peers Grid with Pulsing Focus Rings -->
+        <div class="regain-peers-grid" id="regain-peers-container">
+          <!-- 1: Current User (Piyush) -->
+          <div class="regain-peer-card">
+            <div class="regain-peer-avatar-wrap focusing">
+              <div class="regain-peer-avatar" style="background: radial-gradient(circle at 30% 30%, #ff8a3d, #ea580c); color: #fff; font-size: 1.1rem; font-weight: 800;">
+                PT
+              </div>
+              <div class="regain-peer-live-dot">✓</div>
+            </div>
+            <div class="regain-peer-name">You (Piyush)</div>
+            <div class="regain-peer-time" id="peer-user-time">2h 45m</div>
+            <div class="regain-peer-tag" id="peer-user-tag">DSA & Algorithms</div>
+          </div>
+
+          <!-- 2: Peer Rohan -->
+          <div class="regain-peer-card">
+            <div class="regain-peer-avatar-wrap focusing">
+              <div class="regain-peer-avatar" style="background: #3b82f6;">👨‍💻</div>
+              <div class="regain-peer-live-dot">✓</div>
+            </div>
+            <div class="regain-peer-name">Rohan</div>
+            <div class="regain-peer-time">2h 30m</div>
+            <div class="regain-peer-tag">CampusX DSMP</div>
+          </div>
+
+          <!-- 3: Peer Ayaan -->
+          <div class="regain-peer-card">
+            <div class="regain-peer-avatar-wrap focusing">
+              <div class="regain-peer-avatar" style="background: #a855f7;">⚡</div>
+              <div class="regain-peer-live-dot">✓</div>
+            </div>
+            <div class="regain-peer-name">Ayaan Khan</div>
+            <div class="regain-peer-time">2h 15m</div>
+            <div class="regain-peer-tag">LangChain Agents</div>
+          </div>
+
+          <!-- 4: Peer Rajesh -->
+          <div class="regain-peer-card">
+            <div class="regain-peer-avatar-wrap focusing">
+              <div class="regain-peer-avatar" style="background: #0284c7;">☕</div>
+              <div class="regain-peer-live-dot">✓</div>
+            </div>
+            <div class="regain-peer-name">Rajesh Kumar</div>
+            <div class="regain-peer-time">1h 20m</div>
+            <div class="regain-peer-tag">Deep Learning</div>
+          </div>
+
+          <!-- 5: Peer Nisha -->
+          <div class="regain-peer-card">
+            <div class="regain-peer-avatar-wrap focusing">
+              <div class="regain-peer-avatar" style="background: #ec4899;">👩‍🔬</div>
+              <div class="regain-peer-live-dot">✓</div>
+            </div>
+            <div class="regain-peer-name">Nisha Sharma</div>
+            <div class="regain-peer-time">1h 15m</div>
+            <div class="regain-peer-tag">LeetCode 75</div>
+          </div>
+
+          <!-- 6: Peer Aarav -->
+          <div class="regain-peer-card">
+            <div class="regain-peer-avatar-wrap focusing">
+              <div class="regain-peer-avatar" style="background: #10b981;">🐳</div>
+              <div class="regain-peer-live-dot">✓</div>
+            </div>
+            <div class="regain-peer-name">Aarav Mehta</div>
+            <div class="regain-peer-time">1h 05m</div>
+            <div class="regain-peer-tag">Docker & MLOps</div>
+          </div>
+        </div>
+
+        <!-- Floating Reactions Bar (Shot 3) -->
+        <div class="regain-reactions-bar">
+          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('❤️')" title="Send Love">❤️</button>
+          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('💯')" title="100% Focus">💯</button>
+          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('👏')" title="Applause">👏</button>
+          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('😲')" title="Astonished">😲</button>
+          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('🔥')" title="On Fire">🔥</button>
+          <button class="regain-reaction-btn" onclick="window.sendEmojiReaction('🫡')" title="Respect">🫡</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 8: REGAIN COMPETITIVE LEADERBOARD (Shot 4) -->
+    <section class="view-panel" id="view-leaderboard">
+      <div class="regain-leaderboard-panel">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h2 style="font-size: 1.55rem; font-weight: 800;">Compete in Leaderboard</h2>
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 4px;">Compare weekly deep work hours with dedicated engineering peers</p>
+        </div>
+
+        <div class="leaderboard-tabs-row">
+          <button class="leaderboard-tab-pill active" onclick="window.switchLeaderboardTab('week')">This Week</button>
+          <button class="leaderboard-tab-pill" onclick="window.switchLeaderboardTab('today')">Today</button>
+          <button class="leaderboard-tab-pill" onclick="window.switchLeaderboardTab('all')">All-Time</button>
+        </div>
+
+        <!-- Top 3 Podium (Shot 4) -->
+        <div class="regain-podium-row">
+          <!-- Rank 2: Silver (Left) -->
+          <div class="podium-slot rank-2">
+            <div class="podium-avatar-wrap">
+              <div class="podium-avatar" style="background: #3b82f6;">👩‍💻</div>
+              <div class="podium-rank-badge">2</div>
+            </div>
+            <div class="podium-user-name">Sara Chen</div>
+            <div class="podium-time-pill">19h 15m</div>
+          </div>
+
+          <!-- Rank 1: Gold (Center Elevated) -->
+          <div class="podium-slot rank-1">
+            <div style="font-size: 1.4rem; margin-bottom: -6px;">👑</div>
+            <div class="podium-avatar-wrap">
+              <div class="podium-avatar" style="background: #f59e0b;">👨‍🎓</div>
+              <div class="podium-rank-badge">1</div>
+            </div>
+            <div class="podium-user-name">Arjun K.</div>
+            <div class="podium-time-pill">23h 20m</div>
+          </div>
+
+          <!-- Rank 3: Bronze (Right) -->
+          <div class="podium-slot rank-3">
+            <div class="podium-avatar-wrap">
+              <div class="podium-avatar" style="background: radial-gradient(circle at 30% 30%, #ff8a3d, #ea580c); color: #fff; font-weight: 800; font-size: 1.1rem;">PT</div>
+              <div class="podium-rank-badge">3</div>
+            </div>
+            <div class="podium-user-name">Piyush (You)</div>
+            <div class="podium-time-pill" id="leaderboard-user-time">19h 15m</div>
+          </div>
+        </div>
+
+        <!-- Ranked List (Positions 4+) -->
+        <div class="regain-rank-list">
+          <div class="regain-rank-row is-user">
+            <span class="rank-num">3</span>
+            <div class="rank-avatar" style="background: var(--accent-orange-soft); color: var(--accent-orange); font-weight: 800; font-size: 0.85rem;">YOU</div>
+            <div class="rank-details">
+              <div class="rank-name">Piyush Tiwari (You)</div>
+              <div class="rank-meta">Data Science & Systems Engineer • 7 Programs</div>
+            </div>
+            <span class="rank-time" id="leaderboard-row-user-time">19h 15m</span>
+          </div>
+
+          <div class="regain-rank-row">
+            <span class="rank-num">4</span>
+            <div class="rank-avatar">👩‍🔬</div>
+            <div class="rank-details">
+              <div class="rank-name">Amina</div>
+              <div class="rank-meta">Natural Language Processing</div>
+            </div>
+            <span class="rank-time">16h 00m</span>
+          </div>
+
+          <div class="regain-rank-row">
+            <span class="rank-num">5</span>
+            <div class="rank-avatar">👨‍💻</div>
+            <div class="rank-details">
+              <div class="rank-name">Rami</div>
+              <div class="rank-meta">Distributed Systems</div>
+            </div>
+            <span class="rank-time">13h 35m</span>
+          </div>
+
+          <div class="regain-rank-row">
+            <span class="rank-num">6</span>
+            <div class="rank-avatar">🧑‍💼</div>
+            <div class="rank-details">
+              <div class="rank-name">Omar</div>
+              <div class="rank-meta">Computer Vision & PyTorch</div>
+            </div>
+            <span class="rank-time">10h 12m</span>
+          </div>
+
+          <div class="regain-rank-row">
+            <span class="rank-num">7</span>
+            <div class="rank-avatar">👩‍🎨</div>
+            <div class="rank-details">
+              <div class="rank-name">Priya Patel</div>
+              <div class="rank-meta">Frontend & WebGL Systems</div>
+            </div>
+            <span class="rank-time">9h 45m</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 9: REGAIN DISTRACTION SHIELD & APP BLOCKER (Shots 1, 2, 5) -->
+    <section class="view-panel" id="view-shield">
+      <div class="regain-shield-panel">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <h2 style="font-size: 1.55rem; font-weight: 800;">Digital Wellbeing & Shield</h2>
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 4px;">Guard your focus against short-form video dopamine loops and notification noise</p>
+        </div>
+
+        <div class="shield-hero-card">
+          <div class="shield-toggle-item">
+            <div class="shield-toggle-info">
+              <h4><span>🚫</span> Block Reels & Shorts</h4>
+              <p>Intercepts addictive scroll feeds on Instagram, YouTube & TikTok</p>
+            </div>
+            <label class="regain-switch">
+              <input type="checkbox" id="shield-toggle-reels" checked onchange="window.toggleReelsBlock(this.checked)">
+              <span class="regain-slider"></span>
+            </label>
+          </div>
+
+          <div class="shield-toggle-item">
+            <div class="shield-toggle-info">
+              <h4><span>🔒</span> Strict Focus Lock Mode</h4>
+              <p>Penalizes tab-switching and leaves full-immersion full screen</p>
+            </div>
+            <label class="regain-switch">
+              <input type="checkbox" id="shield-toggle-strict" onchange="window.toggleStrictSwitch(this.checked)">
+              <span class="regain-slider"></span>
+            </label>
+          </div>
+
+          <div class="shield-toggle-item">
+            <div class="shield-toggle-info">
+              <h4><span>📺</span> Watch Only Study Videos on YouTube</h4>
+              <p>Whitelists CampusX, Krish Naik, Physics Wallah, and MIT OCW only</p>
+            </div>
+            <label class="regain-switch">
+              <input type="checkbox" id="shield-toggle-youtube" checked onchange="window.toggleYoutubeStudyMode(this.checked)">
+              <span class="regain-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Blocked Apps Status Grid -->
+        <div class="hero-card" style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <span style="font-weight: 700; font-size: 0.9rem;">App Protection Status</span>
+            <span class="meta-pill highlight">Active Shield</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-md); background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2);">
+              <span style="font-size: 1.3rem;">📸</span>
+              <div>
+                <div style="font-size: 0.82rem; font-weight: 700;">Instagram</div>
+                <div style="font-size: 0.7rem; color: #f87171;">Reels Blocked</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-md); background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2);">
+              <span style="font-size: 1.3rem;">▶️</span>
+              <div>
+                <div style="font-size: 0.82rem; font-weight: 700;">YouTube Shorts</div>
+                <div style="font-size: 0.7rem; color: #f87171;">Feed Blocked</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-md); background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2);">
+              <span style="font-size: 1.3rem;">🤖</span>
+              <div>
+                <div style="font-size: 0.82rem; font-weight: 700;">Reddit</div>
+                <div style="font-size: 0.7rem; color: #f87171;">Distractions Blocked</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-md); background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.2);">
+              <span style="font-size: 1.3rem;">🎓</span>
+              <div>
+                <div style="font-size: 0.82rem; font-weight: 700;">Educational Channels</div>
+                <div style="font-size: 0.7rem; color: #4ade80;">Whitelisted</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trigger Interactive Regain Shield Demo -->
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="btn-pomo-main" onclick="window.triggerShieldDemo()" style="width: 100%; max-width: 380px;">
+            <span>🛡️</span> <span>Test Distraction Shield Popup (Regain)</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- =========================================================================
        OVERLAYS & MODALS
        ========================================================================= -->
+  <!-- Regain Distraction Shield Modal Overlay (Authentic Shot 5) -->
+  <div class="regain-shield-overlay" id="regain-shield-overlay" onclick="if(event.target === this) window.closeShieldModal()">
+    <div class="regain-shield-card">
+      <div class="shield-card-header">
+        <span class="shield-hourglass-icon">⏳</span>
+        <div class="shield-settings-pill">
+          <span>⚙️</span> <span>Settings</span>
+        </div>
+      </div>
+
+      <div class="shield-blocked-app-icon">
+        🎬
+      </div>
+
+      <h3 class="shield-blocked-title">Instagram Reels is blocked!</h3>
+      <p class="shield-blocked-desc">
+        Stay focused on your engineering goals. 25 minutes of algorithmic focus today builds lasting career mastery tomorrow.
+      </p>
+
+      <button class="shield-btn-action" onclick="window.closeShieldModal()">
+        Back to Deep Work
+      </button>
+    </div>
+  </div>
+
+  <!-- Regain Slide-In Navigation Drawer (≡ Button) -->
+  <div class="regain-drawer-overlay" id="regain-drawer-overlay" onclick="window.toggleRegainDrawer(false)">
+    <div class="regain-drawer" id="regain-drawer" onclick="event.stopPropagation()">
+      <div class="drawer-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="brand-monogram">PT</div>
+          <span style="font-weight: 800; font-size: 1rem;">StudyPulse</span>
+        </div>
+        <button class="icon-btn" onclick="window.toggleRegainDrawer(false)">✕</button>
+      </div>
+
+      <div class="drawer-nav-list">
+        <button class="drawer-item active" onclick="window.switchView('dashboard'); window.toggleRegainDrawer(false);">
+          <span>⏱</span> <span>Focus Console</span>
+        </button>
+        <button class="drawer-item" onclick="window.switchView('liveroom'); window.toggleRegainDrawer(false);">
+          <span>👥</span> <span>Live Study Room</span>
+        </button>
+        <button class="drawer-item" onclick="window.switchView('leaderboard'); window.toggleRegainDrawer(false);">
+          <span>🏆</span> <span>Leaderboard</span>
+        </button>
+        <button class="drawer-item" onclick="window.switchView('shield'); window.toggleRegainDrawer(false);">
+          <span>🛡️</span> <span>Distraction Shield</span>
+        </button>
+        <button class="drawer-item" onclick="window.switchView('curriculum'); window.toggleRegainDrawer(false);">
+          <span>📋</span> <span>7 Master Curricula</span>
+        </button>
+        <button class="drawer-item" onclick="window.switchView('bookshelf'); window.toggleRegainDrawer(false);">
+          <span>📚</span> <span>3D Library (18 Vol.)</span>
+        </button>
+        <button class="drawer-item" onclick="window.switchView('palace'); window.toggleRegainDrawer(false);">
+          <span>🏛️</span> <span>3D Memory Palace</span>
+        </button>
+        <button class="drawer-item" onclick="window.switchView('chaos'); window.toggleRegainDrawer(false);">
+          <span>⚡</span> <span>Systems Lab</span>
+        </button>
+        <button class="drawer-item" onclick="window.switchView('analytics'); window.toggleRegainDrawer(false);">
+          <span>📊</span> <span>Annual Journal</span>
+        </button>
+      </div>
+
+      <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--surface-border-subtle);">
+        <a href="StudyPulse.apk" download="StudyPulse.apk" class="btn-pomo-main" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.88rem; padding: 10px;">
+          <span>📥</span> <span>Download Android APK</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- Personal Study Notes Modal -->
   <div class="notes-modal-overlay" id="notes-modal-overlay">
     <div class="notes-card">
@@ -542,12 +1058,24 @@
   </div>
 
   <!-- =========================================================================
-       MOBILE BOTTOM NAVIGATION
+       MOBILE BOTTOM NAVIGATION (REGAIN COMPLETE BAR)
        ========================================================================= -->
   <nav class="bottom-nav" aria-label="Mobile Bottom Navigation">
     <button class="bottom-nav-item active" data-view="dashboard" onclick="window.switchView('dashboard')">
-      <span class="nav-icon">🏠</span>
-      <span>Desk</span>
+      <span class="nav-icon">⏱</span>
+      <span>Focus</span>
+    </button>
+    <button class="bottom-nav-item" data-view="liveroom" onclick="window.switchView('liveroom')">
+      <span class="nav-icon">👥</span>
+      <span>Live</span>
+    </button>
+    <button class="bottom-nav-item" data-view="leaderboard" onclick="window.switchView('leaderboard')">
+      <span class="nav-icon">🏆</span>
+      <span>Ranks</span>
+    </button>
+    <button class="bottom-nav-item" data-view="shield" onclick="window.switchView('shield')">
+      <span class="nav-icon">🛡️</span>
+      <span>Shield</span>
     </button>
     <button class="bottom-nav-item" data-view="curriculum" onclick="window.switchView('curriculum')">
       <span class="nav-icon">📋</span>
@@ -555,15 +1083,7 @@
     </button>
     <button class="bottom-nav-item" data-view="bookshelf" onclick="window.switchView('bookshelf')">
       <span class="nav-icon">📚</span>
-      <span>3D Library</span>
-    </button>
-    <button class="bottom-nav-item" data-view="palace" onclick="window.switchView('palace')">
-      <span class="nav-icon">🏛️</span>
-      <span>Recall</span>
-    </button>
-    <button class="bottom-nav-item" data-view="chaos" onclick="window.switchView('chaos')">
-      <span class="nav-icon">⚡</span>
-      <span>Systems</span>
+      <span>3D</span>
     </button>
     <button class="bottom-nav-item" data-view="analytics" onclick="window.switchView('analytics')">
       <span class="nav-icon">📊</span>
