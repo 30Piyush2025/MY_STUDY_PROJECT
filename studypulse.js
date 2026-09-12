@@ -18,7 +18,15 @@
     STREAK: 'studypulse_streak_v2',
     THEME: 'studypulse_theme_v2',
     XP: 'studypulse_xp_v2',
-    FSRS: 'studypulse_fsrs_v2'
+    FSRS: 'studypulse_fsrs_v2',
+    MILESTONES: 'studypulse_milestones_v2'
+  };
+
+  const DEFAULT_MILESTONES = {
+    weeklyGoalHours: 15,
+    targetTopicsCount: 20,
+    examTitle: "Data Science & Distributed Systems Mastery",
+    targetDate: "2026-11-15"
   };
 
   const RPG_LEVELS = [
@@ -56,6 +64,7 @@
     streak: { count: 0, lastActive: null },
     xp: 0,
     fsrs: {},
+    milestones: { ...DEFAULT_MILESTONES },
     
     // Pomodoro Timer State
     timer: {
@@ -117,6 +126,13 @@
       const savedFsrs = localStorage.getItem(STORAGE_KEYS.FSRS);
       if (savedFsrs) state.fsrs = JSON.parse(savedFsrs);
 
+      const savedMilestones = localStorage.getItem(STORAGE_KEYS.MILESTONES);
+      if (savedMilestones) {
+        state.milestones = Object.assign({}, DEFAULT_MILESTONES, JSON.parse(savedMilestones));
+      } else {
+        state.milestones = { ...DEFAULT_MILESTONES };
+      }
+
       // Remove stale dummy data: if user hasn't studied yet, reset streak to 0
       if (state.completedTopics.size === 0 && state.totalFocusSeconds === 0 && (!state.dailyActivity || Object.keys(state.dailyActivity).length === 0)) {
         state.streak = { count: 0, lastActive: null };
@@ -154,6 +170,9 @@
       }
       if (!key || key === STORAGE_KEYS.FSRS) {
         localStorage.setItem(STORAGE_KEYS.FSRS, JSON.stringify(state.fsrs));
+      }
+      if (!key || key === STORAGE_KEYS.MILESTONES) {
+        localStorage.setItem(STORAGE_KEYS.MILESTONES, JSON.stringify(state.milestones));
       }
     } catch (e) {
       console.warn('[StudyPulse] Error saving to localStorage:', e);
@@ -901,6 +920,206 @@
   }
 
   // =========================================================================
+  // FEATURE 5: WEEKLY TARGET & EXAM MILESTONE ENGINE
+  // =========================================================================
+  function getCurrentWeekDates() {
+    const now = new Date();
+    const dayOfWeek = now.getDay(); // 0 = Sunday, 1 = Monday
+    const distToMonday = (dayOfWeek + 6) % 7;
+
+    const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distToMonday);
+    monday.setHours(0, 0, 0, 0);
+
+    const dates = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      dates.push(`${yyyy}-${mm}-${dd}`);
+    }
+    return { monday, dates };
+  }
+
+  function calculateWeeklyProgress() {
+    const { dates } = getCurrentWeekDates();
+    let totalFocusMinutes = 0;
+    let totalTopics = 0;
+
+    dates.forEach(dateStr => {
+      const act = state.dailyActivity ? state.dailyActivity[dateStr] : null;
+      if (act) {
+        totalFocusMinutes += (Number(act.focusMinutes) || 0);
+        totalTopics += (Number(act.topics) || 0);
+      }
+    });
+
+    const loggedHours = totalFocusMinutes / 60;
+    const goalHours = Number(state.milestones.weeklyGoalHours) || 15;
+    const goalTopics = Number(state.milestones.targetTopicsCount) || 20;
+
+    const hoursPct = goalHours > 0 ? Math.min(100, Math.round((loggedHours / goalHours) * 100)) : 0;
+    const rawHoursPct = goalHours > 0 ? Math.round((loggedHours / goalHours) * 100) : 0;
+    const topicsPct = goalTopics > 0 ? Math.min(100, Math.round((totalTopics / goalTopics) * 100)) : 0;
+
+    return {
+      loggedMinutes: totalFocusMinutes,
+      loggedHours: parseFloat(loggedHours.toFixed(1)),
+      goalHours,
+      hoursPct,
+      rawHoursPct,
+      loggedTopics: totalTopics,
+      goalTopics,
+      topicsPct
+    };
+  }
+
+  function calculateMilestoneCountdown() {
+    const targetStr = state.milestones.targetDate || '2026-11-15';
+    const now = new Date();
+    const parts = targetStr.split('-');
+
+    if (parts.length !== 3) {
+      return { days: 0, hours: 0, totalHours: 0, isPast: true, formatted: 'Invalid date' };
+    }
+
+    const target = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 23, 59, 59);
+    const diffMs = target.getTime() - now.getTime();
+
+    if (diffMs <= 0) {
+      return { days: 0, hours: 0, totalHours: 0, isPast: true, formatted: 'Goal reached' };
+    }
+
+    const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(totalHours / 24);
+    const hours = totalHours % 24;
+
+    return {
+      days,
+      hours,
+      totalHours,
+      isPast: false,
+      formatted: `${days}d ${hours}h`
+    };
+  }
+
+  function updateMilestoneWidget() {
+    const weekly = calculateWeeklyProgress();
+    const countdown = calculateMilestoneCountdown();
+
+    const hoursEl = document.getElementById('milestone-logged-hours');
+    const goalHoursEl = document.getElementById('milestone-goal-hours');
+    const barFillEl = document.getElementById('milestone-progress-bar-fill');
+    const pctBadgeEl = document.getElementById('milestone-hours-pct');
+    const topicsEl = document.getElementById('milestone-topics-progress');
+
+    if (hoursEl) hoursEl.textContent = `${weekly.loggedHours.toFixed(1)}h`;
+    if (goalHoursEl) goalHoursEl.textContent = `${weekly.goalHours}h`;
+    if (barFillEl) barFillEl.style.width = `${weekly.hoursPct}%`;
+    if (pctBadgeEl) pctBadgeEl.textContent = `${weekly.rawHoursPct}%`;
+    if (topicsEl) topicsEl.textContent = `${weekly.loggedTopics} / ${weekly.goalTopics} topics`;
+
+    const titleEl = document.getElementById('milestone-exam-title');
+    const targetDateEl = document.getElementById('milestone-target-date-display');
+    const daysEl = document.getElementById('milestone-countdown-days');
+    const hoursElCountdown = document.getElementById('milestone-countdown-hours');
+    const statusPillEl = document.getElementById('milestone-status-pill');
+
+    if (titleEl) titleEl.textContent = state.milestones.examTitle || 'Data Science & Distributed Systems Mastery';
+
+    if (targetDateEl) {
+      try {
+        const parts = (state.milestones.targetDate || '2026-11-15').split('-');
+        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        targetDateEl.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      } catch (e) {
+        targetDateEl.textContent = state.milestones.targetDate;
+      }
+    }
+
+    if (daysEl) daysEl.textContent = countdown.days;
+    if (hoursElCountdown) hoursElCountdown.textContent = countdown.hours;
+
+    if (statusPillEl) {
+      if (countdown.isPast) {
+        statusPillEl.textContent = 'Due Today';
+        statusPillEl.className = 'milestone-status-pill due';
+      } else if (countdown.days <= 7) {
+        statusPillEl.textContent = 'Sprint Mode';
+        statusPillEl.className = 'milestone-status-pill sprint';
+      } else {
+        statusPillEl.textContent = `${countdown.days}d left`;
+        statusPillEl.className = 'milestone-status-pill active';
+      }
+    }
+  }
+
+  function editMilestoneGoal(customSettings) {
+    if (customSettings && typeof customSettings === 'object' && !(customSettings instanceof Event)) {
+      if (customSettings.weeklyGoalHours !== undefined) {
+        state.milestones.weeklyGoalHours = Math.max(1, parseFloat(customSettings.weeklyGoalHours) || 15);
+      }
+      if (customSettings.targetTopicsCount !== undefined) {
+        state.milestones.targetTopicsCount = Math.max(1, parseInt(customSettings.targetTopicsCount, 10) || 20);
+      }
+      if (customSettings.examTitle !== undefined) {
+        state.milestones.examTitle = String(customSettings.examTitle).trim() || 'Mastery Milestone';
+      }
+      if (customSettings.targetDate !== undefined) {
+        state.milestones.targetDate = String(customSettings.targetDate);
+      }
+      savePersistedState(STORAGE_KEYS.MILESTONES);
+      updateMilestoneWidget();
+      showToast('🎯 Milestone targets updated!');
+      hapticFeedback(12);
+      return;
+    }
+
+    const modal = document.getElementById('milestone-modal-overlay');
+    const hoursInput = document.getElementById('milestone-input-weekly-hours');
+    const topicsInput = document.getElementById('milestone-input-weekly-topics');
+    const titleInput = document.getElementById('milestone-input-exam-title');
+    const dateInput = document.getElementById('milestone-input-target-date');
+
+    if (hoursInput) hoursInput.value = state.milestones.weeklyGoalHours || 15;
+    if (topicsInput) topicsInput.value = state.milestones.targetTopicsCount || 20;
+    if (titleInput) titleInput.value = state.milestones.examTitle || 'Data Science & Distributed Systems Mastery';
+    if (dateInput) dateInput.value = state.milestones.targetDate || '2026-11-15';
+
+    if (modal) modal.style.display = 'flex';
+    hapticFeedback(10);
+  }
+
+  function saveMilestoneGoal() {
+    const hoursInput = document.getElementById('milestone-input-weekly-hours');
+    const topicsInput = document.getElementById('milestone-input-weekly-topics');
+    const titleInput = document.getElementById('milestone-input-exam-title');
+    const dateInput = document.getElementById('milestone-input-target-date');
+
+    const newWeeklyHours = hoursInput ? Math.max(1, parseFloat(hoursInput.value) || 15) : state.milestones.weeklyGoalHours;
+    const newWeeklyTopics = topicsInput ? Math.max(1, parseInt(topicsInput.value, 10) || 20) : state.milestones.targetTopicsCount;
+    const newTitle = titleInput && titleInput.value.trim() ? titleInput.value.trim() : state.milestones.examTitle;
+    const newDate = dateInput && dateInput.value ? dateInput.value : state.milestones.targetDate;
+
+    state.milestones.weeklyGoalHours = newWeeklyHours;
+    state.milestones.targetTopicsCount = newWeeklyTopics;
+    state.milestones.examTitle = newTitle;
+    state.milestones.targetDate = newDate;
+
+    savePersistedState(STORAGE_KEYS.MILESTONES);
+    closeMilestoneModal();
+    updateMilestoneWidget();
+    showToast('🎯 Milestone targets updated successfully!');
+    hapticFeedback(12);
+  }
+
+  function closeMilestoneModal() {
+    const modal = document.getElementById('milestone-modal-overlay');
+    if (modal) modal.style.display = 'none';
+    hapticFeedback(8);
+  }
+
+  // =========================================================================
   // COGNITIVE DASHBOARD & HEATMAP
   // =========================================================================
   function updateDashboardUI() {
@@ -935,6 +1154,7 @@
     }
 
     updateRPGStatus();
+    updateMilestoneWidget();
   }
 
   function renderActivityHeatmap() {
@@ -965,11 +1185,11 @@
       const activity = state.dailyActivity[item.date] || { topics: 0, focusMinutes: 0 };
       const score = (activity.topics * 2) + Math.floor(activity.focusMinutes / 15);
 
-      let color = 'rgba(255, 255, 255, 0.06)';
-      if (score >= 8) color = '#ff8a3d'; // Light Orange
-      else if (score >= 4) color = '#ffa25b'; // Soft Tangerine
-      else if (score >= 2) color = '#38bdf8'; // Light Blue
-      else if (score >= 1) color = '#0284c7'; // Deep Azure
+      let color = 'rgba(245, 235, 224, 0.06)';
+      if (score >= 8) color = '#f59e0b'; // Warm Amber
+      else if (score >= 4) color = '#ea580c'; // Terracotta
+      else if (score >= 2) color = '#10b981'; // Warm Sage
+      else if (score >= 1) color = 'rgba(245, 158, 11, 0.4)'; // Soft Amber
 
       const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       rect.setAttribute('x', x);
@@ -1003,19 +1223,20 @@
         bottom: 84px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(15, 23, 42, 0.95);
-        color: #f8fafc;
-        border: 1px solid rgba(0, 242, 255, 0.4);
+        background: rgba(28, 25, 23, 0.96);
+        color: #fafaf9;
+        border: 1px solid rgba(245, 158, 11, 0.45);
         padding: 10px 18px;
         border-radius: 9999px;
-        font-size: 0.82rem;
+        font-size: 0.84rem;
         font-weight: 600;
+        font-family: var(--font-sans);
+        z-index: 9999;
+        pointer-events: none;
+        box-shadow: 0 10px 30px rgba(18, 14, 12, 0.6);
         backdrop-filter: blur(12px);
-        z-index: 3000;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         transition: opacity 0.25s ease, transform 0.25s ease;
         opacity: 0;
-        pointer-events: none;
       `;
       document.body.appendChild(toast);
     }
@@ -1365,6 +1586,10 @@
   window.activateRoutine = activateRoutine;
   window.navigateChartDay = navigateChartDay;
   window.toggleRegainDrawer = toggleRegainDrawer;
+  window.editMilestoneGoal = editMilestoneGoal;
+  window.saveMilestoneGoal = saveMilestoneGoal;
+  window.closeMilestoneModal = closeMilestoneModal;
+  window.updateMilestoneWidget = updateMilestoneWidget;
 
   // =========================================================================
   // INITIALIZATION ON DOM READY

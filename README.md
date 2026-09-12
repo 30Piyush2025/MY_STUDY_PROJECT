@@ -98,10 +98,16 @@ StudyPulse is available as a signed, standalone Android APK with zero external r
 * **RPG XP & Level Engine**: Earn **+150 XP** for each topic mastered, advancing from **Level 1 (Code Initiate)** to **Level 20 (AI Sovereign)**.
 * Dynamic SVG circular mastery gauge updating in real time as topics are completed.
 
-### 7. 🌗 Obsidian Dark & Material Light Themes
-* **Obsidian Dark (AMOLED)**: High-contrast deep cybernetic black (`#060913`) with cyan and purple laser accents.
-* **Material Light Studio**: Crisp white cards (`#ffffff`), soft drop shadows, and high-contrast slate typography (`#0f172a`).
-* Instant toggle switch (`☀️ / 🌙`) with persistent user preference storage.
+### 7. 🌗 Warm Editorial Palette & Daylight Studio (Zero Black, Zero Blue)
+* **Warm Espresso / Mocha Stone Canvas**: Warm roasted coffee and dark mocha stone (`#1c1917`, `#292524`) with golden honey amber (`#f59e0b`), sunset terracotta (`#ea580c`), and warm sage (`#10b981`) accents. 0% pitch black, 0% navy/cold blue.
+* **Warm Cream / Almond Daylight**: Organic linen paper and ivory cream (`#faf7f2`, `#f4ede4`) designed for comfortable daytime concentration without eye strain.
+* **Instant Toggle**: Smooth transition between Warm Espresso and Almond Cream with persistent user preference storage.
+
+### 8. 🎯 Weekly Target & Exam Milestone Countdown Widget
+* **Weekly Focus Commitment**: Dynamic tracking of logged focus hours from Monday to Sunday (`focusMinutes` aggregated from `state.dailyActivity` and active sessions) against customizable weekly hour targets.
+* **Exam Horizon Countdown**: Real-time arithmetic computing days and hours remaining until target examination/milestone dates (`state.milestones.targetDate`).
+* **Sprint Velocity & Topics Progress**: Tracks curriculum sprint targets against mastered topics.
+* **In-App Modal Configuration**: Clean interactive modal to customize exam title, target deadline, weekly hour goals, and sprint topics with instant local persistence (`studypulse_milestones_v2`).
 
 ---
 

@@ -98,9 +98,22 @@ This document logs the comprehensive development trajectory, architectural miles
   * **Strict Viewport Containment**: Configured `html, body` with `overflow-x: hidden !important;`, `overscroll-behavior-x: none !important;`, and `touch-action: pan-y pinch-zoom;`.
   * **WebView Hardening (`MainActivity.java`)**: Configured `webView.setHorizontalScrollBarEnabled(false);`, `webView.setOverScrollMode(View.OVER_SCROLL_NEVER);`, `s.setSupportZoom(false);`, and `s.setBuiltInZoomControls(false);`.
   * **Responsive UI Re-architecting**: Wrapped flex rows (`.hero-btn-row`, `.pomo-controls-row`, `.filter-controls-row`), made buttons stack vertically on mobile, and reduced the mobile top header footprint on `<= 600px` screens.
-  * **Runtime Scroll Clamping (`studypulse.js`)**: Real-time event listener locking `window.scrollX` to 0 on scroll and touchmove events.
+### Phase 8: Feature 5 (Weekly Target & Exam Countdown) & Warm Non-Black, Non-Blue Palette
+* **Warm Editorial Palette Overhaul (0% Pitch Black, 0% Cold Navy/Blue)**:
+  * Transitioned the entire visual system to a warm, organic study desk palette:
+    * **Default Dark Mode**: Warm Roasted Espresso / Mocha Stone (`#1c1917`, `#292524`) with Golden Honey Amber (`#f59e0b`) and Sunset Terracotta (`#ea580c`).
+    * **Daylight Mode**: Organic Linen / Ivory Cream (`#faf7f2`, `#f4ede4`) eliminating eye strain and glare.
+  * Replaced all body radial gradients, header, drawer, and bottom navigation translucent glass backgrounds with warm espresso and almond tones.
+  * Scrubbed every occurrence of `#000000`, `#0a0e17`, `#0f1523`, `#151d30`, `#060913`, `#0284c7`, and `#38bdf8` from CSS and HTML.
+* **Feature 5: Weekly Target & Exam Milestone Countdown Widget**:
+  * Implemented dual-card dashboard cockpit:
+    * **Card A (Weekly Focus Commitment)**: Dynamically aggregates current week's focus hours (Monday–Sunday) from `state.dailyActivity` and active timer sessions, comparing against a weekly goal (e.g., 15h) with linear animated progress fill and pace indicators.
+    * **Card B (Exam Horizon Countdown)**: Real-time countdown engine computing days and hours remaining until target milestones (`state.milestones.targetDate`).
+  * **Interactive Target Modal**: Full modal dialog (`#milestone-modal-overlay`) to configure weekly study hours, sprint target topics, exam title, and target exam date, with client-side persistence in `studypulse_milestones_v2`.
+  * Fully rebuilt, signed with v2/v3 schemes, and verified `StudyPulse.apk`.
 
 ---
+
 
 ## 🏆 Key Architectural Principles
 1. **Zero External Backend Dependencies**: The entire web app runs completely client-side. Web Audio is synthesized in real time; 3D models and leather textures are generated procedurally in memory.

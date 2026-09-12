@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#0d1118">
+  <meta name="theme-color" content="#1c1917">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Piyush Tiwari • Engineering Study Desk & 3D Library</title>
@@ -251,6 +251,74 @@
               <button class="btn-pomo-sec" onclick="window.skipTimer()">
                 <span>⏭</span> <span>Skip</span>
               </button>
+            </div>
+          </div>
+
+          <!-- =========================================================================
+               FEATURE 5: WEEKLY TARGET & EXAM MILESTONE COUNTDOWN WIDGET
+               ========================================================================= -->
+          <div class="milestone-widget-section" id="milestone-widget-container">
+            <div class="milestone-header-row">
+              <div class="milestone-title-group">
+                <span class="milestone-title-icon">🎯</span>
+                <span class="milestone-title-text">Weekly Target & Exam Milestone</span>
+              </div>
+              <button class="milestone-edit-btn" onclick="window.editMilestoneGoal()" title="Configure Milestone Goals & Exam Target">
+                <span>⚙️</span> <span>Edit Target</span>
+              </button>
+            </div>
+
+            <div class="milestone-dual-grid">
+              <!-- Card A: Current Week Sprint Progress -->
+              <div class="milestone-card sprint-card">
+                <div class="milestone-card-header">
+                  <span class="milestone-badge week-badge">WEEKLY FOCUS COMMITMENT</span>
+                  <span class="milestone-pct-pill" id="milestone-hours-pct">0%</span>
+                </div>
+
+                <div class="milestone-stat-main">
+                  <span class="milestone-stat-val" id="milestone-logged-hours">0.0h</span>
+                  <span class="milestone-stat-target">/ <span id="milestone-goal-hours">15h</span> target</span>
+                </div>
+
+                <!-- Linear Progress Bar -->
+                <div class="milestone-progress-track">
+                  <div class="milestone-progress-fill" id="milestone-progress-bar-fill" style="width: 0%;"></div>
+                </div>
+
+                <div class="milestone-card-footer">
+                  <span class="milestone-footer-label">Sprint Mastery:</span>
+                  <span class="milestone-footer-val" id="milestone-topics-progress">0 / 20 topics</span>
+                </div>
+              </div>
+
+              <!-- Card B: Exam & Milestone Countdown -->
+              <div class="milestone-card exam-card">
+                <div class="milestone-card-header">
+                  <span class="milestone-badge exam-badge">UPCOMING EXAM HORIZON</span>
+                  <span class="milestone-status-pill active" id="milestone-status-pill">On Track</span>
+                </div>
+
+                <div class="milestone-exam-title-text" id="milestone-exam-title" title="Data Science & Distributed Systems Mastery">
+                  Data Science & Distributed Systems Mastery
+                </div>
+
+                <div class="milestone-countdown-display">
+                  <div class="milestone-countdown-box">
+                    <span class="milestone-countdown-num" id="milestone-countdown-days">0</span>
+                    <span class="milestone-countdown-lbl">DAYS</span>
+                  </div>
+                  <div class="milestone-countdown-sep">:</div>
+                  <div class="milestone-countdown-box">
+                    <span class="milestone-countdown-num" id="milestone-countdown-hours">0</span>
+                    <span class="milestone-countdown-lbl">HOURS</span>
+                  </div>
+                  <div class="milestone-target-subdate">
+                    <span>Target Date:</span>
+                    <strong id="milestone-target-date-display">Nov 15, 2026</strong>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -559,7 +627,7 @@
             <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 12px;" id="palace-card-answer">
               Answer...
             </div>
-            <pre style="background: #06090e; padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.78rem; overflow-x: auto; margin-bottom: 16px; border: 1px solid var(--surface-border);"><code id="palace-card-code">code</code></pre>
+            <pre style="background: var(--bg-tertiary); padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.78rem; overflow-x: auto; margin-bottom: 16px; border: 1px solid var(--surface-border);"><code id="palace-card-code">code</code></pre>
             
             <div class="fsrs-rating-buttons">
               <button class="btn-fsrs again" onclick="window.palaceGradeCard('again')">Again (&lt;10m)</button>
@@ -624,11 +692,11 @@
             </div>
             <div style="display: flex; gap: 5px; align-items: center; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
               <span>Less</span>
-              <span style="width: 10px; height: 10px; background: rgba(56, 189, 248, 0.12); border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #0284c7; border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #38bdf8; border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #ffa25b; border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #ff8a3d; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: rgba(245, 235, 224, 0.08); border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: rgba(245, 158, 11, 0.4); border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #10b981; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #ea580c; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #f59e0b; border-radius: 2px;"></span>
               <span>More</span>
             </div>
           </div>
@@ -714,6 +782,51 @@
       <div class="notes-footer">
         <button class="btn-pomo-sec" onclick="window.closeTopicNoteModal()">Cancel</button>
         <button class="btn-pomo-main" style="padding: 8px 22px; font-size: 0.88rem;" onclick="window.saveTopicNote()">Save to Notebook</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 5: Milestone & Exam Target Modal -->
+  <div class="notes-modal-overlay" id="milestone-modal-overlay">
+    <div class="notes-card milestone-modal-card">
+      <div style="font-size: 0.74rem; font-family: var(--font-mono); font-weight: 700; color: var(--accent-orange); letter-spacing: 0.08em; text-transform: uppercase;">
+        Study Target & Milestone Architecture
+      </div>
+      <h3 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600; margin: 4px 0 16px; color: var(--text-primary);">
+        Configure Target & Exam Countdown
+      </h3>
+
+      <div class="milestone-form-grid">
+        <div class="milestone-field">
+          <label for="milestone-input-weekly-hours" class="milestone-label">Weekly Focus Goal (Hours)</label>
+          <div class="milestone-input-wrap">
+            <input type="number" id="milestone-input-weekly-hours" min="1" max="168" step="0.5" class="milestone-form-input" placeholder="15">
+            <span class="milestone-input-suffix">hrs/wk</span>
+          </div>
+        </div>
+
+        <div class="milestone-field">
+          <label for="milestone-input-weekly-topics" class="milestone-label">Target Topics per Week</label>
+          <div class="milestone-input-wrap">
+            <input type="number" id="milestone-input-weekly-topics" min="1" max="200" step="1" class="milestone-form-input" placeholder="20">
+            <span class="milestone-input-suffix">topics</span>
+          </div>
+        </div>
+
+        <div class="milestone-field full-width">
+          <label for="milestone-input-exam-title" class="milestone-label">Exam / Milestone Title</label>
+          <input type="text" id="milestone-input-exam-title" class="milestone-form-input" placeholder="Data Science & Distributed Systems Mastery">
+        </div>
+
+        <div class="milestone-field full-width">
+          <label for="milestone-input-target-date" class="milestone-label">Target Milestone Date</label>
+          <input type="date" id="milestone-input-target-date" class="milestone-form-input">
+        </div>
+      </div>
+
+      <div class="notes-footer" style="margin-top: 24px;">
+        <button class="btn-pomo-sec" onclick="window.closeMilestoneModal()">Cancel</button>
+        <button class="btn-pomo-main" style="padding: 9px 24px; font-size: 0.88rem;" onclick="window.saveMilestoneGoal()">Save Targets</button>
       </div>
     </div>
   </div>
