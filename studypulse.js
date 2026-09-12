@@ -305,13 +305,15 @@
   function recordActivity(type, amount = 1) {
     const today = getTodayDateString();
     if (!state.dailyActivity[today]) {
-      state.dailyActivity[today] = { topics: 0, focusMinutes: 0 };
+      state.dailyActivity[today] = { topics: 0, focusMinutes: 0, habits: 0 };
     }
 
     if (type === 'topic') {
-      state.dailyActivity[today].topics += amount;
+      state.dailyActivity[today].topics = (state.dailyActivity[today].topics || 0) + amount;
     } else if (type === 'focus') {
-      state.dailyActivity[today].focusMinutes += amount;
+      state.dailyActivity[today].focusMinutes = (state.dailyActivity[today].focusMinutes || 0) + amount;
+    } else if (type === 'habit') {
+      state.dailyActivity[today].habits = (state.dailyActivity[today].habits || 0) + amount;
     }
 
     // Update streak if not updated today
@@ -324,6 +326,9 @@
     savePersistedState(STORAGE_KEYS.DAILY_ACTIVITY);
     updateDashboardUI();
     renderActivityHeatmap();
+    if (typeof window.initStudyStatsHub === 'function') {
+      window.initStudyStatsHub();
+    }
   }
 
   // =========================================================================
@@ -379,21 +384,35 @@
   // =========================================================================
   // THEME ENGINE
   // =========================================================================
+  function getThemeIcon(theme) {
+    if (theme === 'crimson') return '🔴';
+    if (theme === 'dark') return '🌙';
+    return '☀️';
+  }
+
   function initTheme() {
     document.documentElement.setAttribute('data-theme', state.theme);
     updateThemeColorMeta();
     const icon = document.getElementById('theme-toggle-icon');
-    if (icon) icon.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+    if (icon) icon.textContent = getThemeIcon(state.theme);
   }
 
   function toggleAppTheme() {
-    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    // Theme switching cycle: Light (☀️) → Dark Mocha (🌙) → Crimson OLED (🔴) → Light (☀️)
+    if (state.theme === 'light') {
+      state.theme = 'dark';
+    } else if (state.theme === 'dark') {
+      state.theme = 'crimson';
+    } else {
+      state.theme = 'light';
+    }
+
     document.documentElement.setAttribute('data-theme', state.theme);
     savePersistedState(STORAGE_KEYS.THEME);
     updateThemeColorMeta();
 
     const icon = document.getElementById('theme-toggle-icon');
-    if (icon) icon.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+    if (icon) icon.textContent = getThemeIcon(state.theme);
     
     // Re-render heatmap blocks so SVG colors match the active theme
     renderActivityHeatmap();
@@ -403,7 +422,13 @@
   function updateThemeColorMeta() {
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
-      meta.setAttribute('content', state.theme === 'dark' ? '#2e2521' : '#faf7f2');
+      if (state.theme === 'crimson') {
+        meta.setAttribute('content', '#000000');
+      } else if (state.theme === 'dark') {
+        meta.setAttribute('content', '#2e2521');
+      } else {
+        meta.setAttribute('content', '#faf7f2');
+      }
     }
   }
 
@@ -465,6 +490,9 @@
     }
     if (viewName === 'analytics') {
       renderActivityHeatmap();
+      if (typeof window.initStudyStatsHub === 'function') {
+        window.initStudyStatsHub();
+      }
     }
     if (viewName === 'dashboard') {
       updateDashboardUI();
@@ -1369,7 +1397,9 @@
     if (!svg) return;
 
     svg.innerHTML = '';
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const currentTheme = document.documentElement.getAttribute('data-theme') || state.theme;
+    const isCrimson = currentTheme === 'crimson';
+    const isDark = currentTheme === 'dark';
 
     const lightColors = [
       '#e5ddd0',                      // 0: visible warm parchment block
@@ -1385,8 +1415,16 @@
       '#ea580c',                      // 3: terracotta
       '#f59e0b'                       // 4: vivid amber
     ];
-    const palette = isDark ? darkColors : lightColors;
-    const strokeColor = isDark ? 'rgba(245, 235, 224, 0.04)' : 'rgba(68, 54, 42, 0.10)';
+    const crimsonColors = [
+      '#181112',                      // 0: dark smoked red-tinted box with rgba(239, 68, 68, 0.15) border
+      'rgba(239, 68, 68, 0.40)',      // 1: soft crimson accent
+      '#dc2626',                      // 2: pure crimson scarlet
+      '#ef4444',                      // 3: electric crimson red
+      '#ff3b3b'                       // 4: neon scarlet glow
+    ];
+    const palette = isCrimson ? crimsonColors : (isDark ? darkColors : lightColors);
+    const strokeColor = isCrimson ? 'rgba(239, 68, 68, 0.15)' : (isDark ? 'rgba(245, 235, 224, 0.04)' : 'rgba(68, 54, 42, 0.10)');
+    const textColor = isCrimson ? '#fca5a5' : (isDark ? '#ab9e95' : '#8c827a');
 
     const today = new Date();
     const cellSize = 11;
@@ -1404,7 +1442,7 @@
       const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttribute('x', 6);
       text.setAttribute('y', yOffset + (dl.row * (cellSize + cellGap)) + 9);
-      text.setAttribute('fill', isDark ? '#ab9e95' : '#8c827a');
+      text.setAttribute('fill', textColor);
       text.setAttribute('font-family', 'var(--font-mono)');
       text.setAttribute('font-size', '9');
       text.setAttribute('font-weight', '600');
@@ -1436,7 +1474,7 @@
         const mText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         mText.setAttribute('x', x);
         mText.setAttribute('y', 13);
-        mText.setAttribute('fill', isDark ? '#ab9e95' : '#8c827a');
+        mText.setAttribute('fill', textColor);
         mText.setAttribute('font-family', 'var(--font-mono)');
         mText.setAttribute('font-size', '9');
         mText.setAttribute('font-weight', '600');
@@ -2299,7 +2337,16 @@
       });
     });
 
+    // Initialize Study Stats Hub
+    if (typeof window.initStudyStatsHub === 'function') {
+      window.initStudyStatsHub();
+    }
+
     console.log('[StudyPulse FOCUS ENGINE] Successfully initialized for Piyush Tiwari.');
   });
+
+  // Expose state to window for analytics engine
+  window.studyPulseState = state;
+  window.state = window.state || state;
 
 })();

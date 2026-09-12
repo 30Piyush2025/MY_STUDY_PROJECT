@@ -1,0 +1,49 @@
+<!-- =========================================================================
+     MULTI-DIMENSIONAL STUDY STATS & ANALYTICS HUB
+     Piyush Tiwari — StudyPulse Focus & Pacing Telemetry
+     Dimensions: Date-wise Inspector, Weekly Mon-Sun Deep Dive, Monthly Consistency, Weekday Patterns
+     ========================================================================= -->
+<div id="study-stats-hub" class="stats-hub-container">
+  <div class="stats-hub-card">
+    <div class="stats-hub-header">
+      <div>
+        <div class="stats-hub-badge">
+          <span class="stats-hub-badge-dot"></span>
+          ANALYTICS &amp; STUDY STATS ENGINE
+        </div>
+        <h2 class="stats-hub-title">Multi-Dimensional Study Analytics</h2>
+        <p class="stats-hub-subtitle">Comprehensive temporal telemetry across Date, Week, Month &amp; Weekday cycles</p>
+      </div>
+      <div class="stats-hub-quick-pills">
+        <span class="stats-lifetime-pill" id="stats-quick-focus">⏱️ 0.0h Deep Focus</span>
+        <span class="stats-lifetime-pill" id="stats-quick-streak">🔥 0-Day Streak</span>
+      </div>
+    </div>
+
+    <!-- Segmented Pill Navigation Tabs -->
+    <div class="stats-hub-tabs" role="tablist" aria-label="Study Stats Multi-Dimensional Views">
+      <button class="stats-tab-btn active" data-tab="date" onclick="window.switchStatsTab('date')" role="tab" aria-selected="true">
+        <span>📅</span> <span>Date Inspector</span>
+      </button>
+      <button class="stats-tab-btn" data-tab="week" onclick="window.switchStatsTab('week')" role="tab" aria-selected="false">
+        <span>📊</span> <span>Weekly Deep Dive</span>
+      </button>
+      <button class="stats-tab-btn" data-tab="month" onclick="window.switchStatsTab('month')" role="tab" aria-selected="false">
+        <span>🗓️</span> <span>Monthly Summary</span>
+      </button>
+      <button class="stats-tab-btn" data-tab="weekday" onclick="window.switchStatsTab('weekday')" role="tab" aria-selected="false">
+        <span>⚡</span> <span>Weekday Patterns</span>
+      </button>
+    </div>
+
+    <!-- Multi-Dimensional View Panels -->
+    <div class="stats-hub-panels">
+      <div id="stats-panel-content">
+        <!-- Dynamically rendered by js/stats-analytics.js -->
+        <div class="stats-panel-loading" style="padding: 30px; text-align: center; color: var(--text-muted, #8c827a); font-family: var(--font-mono, monospace); font-size: 0.85rem;">
+          ⚡ Initializing StudyPulse Analytics Engine...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

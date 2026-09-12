@@ -1,0 +1,1314 @@
+/**
+ * StudyPulse — Crimson Void OLED Theme
+ * Palette: Pure OLED Pitch Black (#000000) & Electric Neon Scarlet Red (#ef4444 / #dc2626 / #ff2b2b / #b91c1c)
+ * Scoped: [data-theme="crimson"]
+ */
+
+[data-theme="crimson"] {
+  /* Canvas & Surface Tokens — Smoked Obsidian on Pure OLED Black */
+  --bg-primary: #000000;              /* Pure OLED Pitch Black Canvas */
+  --bg-secondary: #0a0808;            /* Level 1 Smoked Obsidian Card */
+  --bg-tertiary: #120d0e;             /* Level 2 Deep Smoked Obsidian */
+  --bg-elevated: #181113;             /* Level 3 Smoked Ruby Obsidian */
+  
+  /* Borders & Dividers */
+  --surface-border: rgba(239, 68, 68, 0.18);
+  --surface-border-subtle: rgba(239, 68, 68, 0.09);
+  --surface-border-active: #ef4444;
+  --surface-border-glow: rgba(239, 68, 68, 0.45);
+  
+  /* High-Contrast Crisp Typography */
+  --text-primary: #fef2f2;            /* High-contrast crisp ivory/platinum */
+  --text-secondary: #fca5a5;          /* Warm rose gray */
+  --text-muted: #b91c1c;              /* Deep crimson muted rose */
+  
+  /* Electric Crimson Red Accents */
+  --accent-orange: #ef4444;           /* Primary electric scarlet red */
+  --accent-orange-light: #ff3b3b;     /* Vivid neon crimson */
+  --accent-orange-soft: rgba(239, 68, 68, 0.16);
+  --accent-orange-border: rgba(239, 68, 68, 0.38);
+  --accent-orange-glow: 0 0 18px rgba(239, 68, 68, 0.28);
+
+  --accent-blue: #dc2626;             /* Secondary deep crimson scarlet */
+  --accent-blue-light: #ef4444;
+  --accent-blue-soft: rgba(220, 38, 38, 0.16);
+  --accent-blue-border: rgba(220, 38, 38, 0.38);
+  --accent-blue-glow: 0 0 18px rgba(220, 38, 38, 0.28);
+
+  --accent-gold: #ff2b2b;             /* Pure electric crimson neon */
+  --accent-gold-soft: rgba(255, 43, 43, 0.16);
+  --accent-gold-border: rgba(255, 43, 43, 0.38);
+  
+  --accent-navy: #b91c1c;
+  --accent-sage: #ef4444;             /* In Crimson theme, success elements glow neon red */
+  --accent-sage-soft: rgba(239, 68, 68, 0.16);
+  --accent-terracotta: #dc2626;
+  --accent-crimson: #ff2b2b;
+  
+  /* OLED Cyber Shadows & Neon Halos */
+  --shadow-crimson-glow: 0 0 18px rgba(239, 68, 68, 0.28);
+  --shadow-crimson-intense: 0 0 24px rgba(255, 43, 43, 0.50), 0 0 45px rgba(239, 68, 68, 0.25);
+  --shadow-card-oled: 0 8px 32px rgba(0, 0, 0, 0.96), 0 0 1px rgba(239, 68, 68, 0.25);
+}
+
+/* ==========================================================================
+   1. CANVAS & BODY BACKGROUND
+   ========================================================================== */
+[data-theme="crimson"] body {
+  background-color: #000000 !important;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(239, 68, 68, 0.14), transparent 70%),
+    radial-gradient(ellipse 65% 45% at 95% 15%, rgba(185, 28, 28, 0.10), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 5% 75%, rgba(220, 38, 38, 0.08), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 85% 90%, rgba(239, 68, 68, 0.11), transparent 60%) !important;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] ::selection {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+/* OLED Cyber Scrollbar */
+[data-theme="crimson"] ::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+[data-theme="crimson"] ::-webkit-scrollbar-track {
+  background: #000000;
+}
+[data-theme="crimson"] ::-webkit-scrollbar-thumb {
+  background: rgba(239, 68, 68, 0.35);
+  border-radius: var(--radius-full);
+}
+[data-theme="crimson"] ::-webkit-scrollbar-thumb:hover {
+  background: #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.7);
+}
+
+/* ==========================================================================
+   2. APP HEADER & BOTTOM NAVIGATION DOCK
+   ========================================================================== */
+[data-theme="crimson"] .app-header {
+  background: rgba(0, 0, 0, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.22);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.92);
+}
+
+[data-theme="crimson"] .bottom-nav {
+  background: rgba(0, 0, 0, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(239, 68, 68, 0.22);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.92);
+}
+
+[data-theme="crimson"] .bottom-nav-item {
+  color: #b91c1c;
+}
+
+[data-theme="crimson"] .bottom-nav-item:hover {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .bottom-nav-item.active {
+  color: #ff3b3b;
+  text-shadow: 0 0 12px rgba(239, 68, 68, 0.65);
+}
+
+/* Brand Monogram & Typography */
+[data-theme="crimson"] .brand-monogram {
+  background: linear-gradient(135deg, #ef4444, #991b1b);
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.45);
+  color: #ffffff;
+}
+
+[data-theme="crimson"] .brand-title {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .brand-subtitle {
+  color: #ef4444;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.35);
+}
+
+/* Navigation Tabs */
+[data-theme="crimson"] .nav-tab-btn {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .nav-tab-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .nav-tab-btn.active {
+  background: rgba(239, 68, 68, 0.20);
+  color: #ff3b3b;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.28);
+}
+
+/* Icon Buttons & Header Badges */
+[data-theme="crimson"] .icon-btn {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.22);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .icon-btn:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  color: #ff3b3b;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.38);
+}
+
+[data-theme="crimson"] .streak-pill {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.38);
+  color: #ff3b3b;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.24);
+}
+
+[data-theme="crimson"] .live-focus-badge,
+[data-theme="crimson"] .rpg-badge-pill,
+[data-theme="crimson"] .btn-apk-pill {
+  background: rgba(185, 28, 28, 0.18);
+  border-color: rgba(239, 68, 68, 0.38);
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .btn-apk-pill:hover {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.50);
+}
+
+/* ==========================================================================
+   3. HERO & DASHBOARD OVERVIEW
+   ========================================================================== */
+[data-theme="crimson"] .hero-title {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .hero-title .gradient-text,
+[data-theme="crimson"] .hero-title em {
+  background: linear-gradient(135deg, #ff3b3b, #dc2626);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.40));
+}
+
+[data-theme="crimson"] .hero-subtitle {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .handwritten-note {
+  color: #ff3b3b;
+  text-shadow: 0 0 12px rgba(239, 68, 68, 0.45);
+}
+
+/* Stat Item Metrics */
+[data-theme="crimson"] .stats-counter-grid {
+  border-top-color: rgba(239, 68, 68, 0.16);
+  border-bottom-color: rgba(239, 68, 68, 0.16);
+}
+
+[data-theme="crimson"] .stats-counter-grid .stat-num,
+[data-theme="crimson"] .stats-counter-grid .stat-item:nth-child(odd) .stat-num,
+[data-theme="crimson"] .stats-counter-grid .stat-item:nth-child(even) .stat-num {
+  color: #ff3b3b;
+  text-shadow: 0 0 16px rgba(239, 68, 68, 0.35);
+}
+
+[data-theme="crimson"] .stat-label {
+  color: #b91c1c;
+}
+
+/* Tag Distribution Bars */
+[data-theme="crimson"] .regain-tag-dist-card {
+  border-bottom-color: rgba(239, 68, 68, 0.16);
+}
+
+[data-theme="crimson"] .regain-tag-dist-header {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .regain-tag-bar {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+[data-theme="crimson"] .regain-tag-fill.orange {
+  background: linear-gradient(90deg, #ef4444, #ff3b3b);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.45);
+}
+
+[data-theme="crimson"] .regain-tag-fill.blue {
+  background: linear-gradient(90deg, #b91c1c, #dc2626);
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.40);
+}
+
+[data-theme="crimson"] .regain-tag-fill.purple {
+  background: linear-gradient(90deg, #991b1b, #ef4444);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
+}
+
+/* ==========================================================================
+   4. CIRCULAR POMODORO TIMER & REGAIN CONSOLE
+   ========================================================================== */
+[data-theme="crimson"] .pomo-mode-selector {
+  background: #0a0808;
+  border: 1px solid rgba(239, 68, 68, 0.22);
+}
+
+[data-theme="crimson"] .pomo-tab {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .pomo-tab:hover {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .pomo-tab.active {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.55);
+}
+
+/* Neon Red Circular Timer Ring */
+[data-theme="crimson"] .timer-track {
+  stroke: rgba(239, 68, 68, 0.14);
+}
+
+[data-theme="crimson"] .timer-progress {
+  stroke: #ff2b2b;
+  filter: drop-shadow(0 0 14px rgba(255, 43, 43, 0.85));
+}
+
+[data-theme="crimson"] .regain-session-pill {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(239, 68, 68, 0.38);
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .regain-session-pill:hover {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.50);
+}
+
+[data-theme="crimson"] .timer-digits {
+  color: #fef2f2;
+  text-shadow: 0 0 24px rgba(239, 68, 68, 0.40);
+}
+
+[data-theme="crimson"] .timer-status-pill {
+  color: #b91c1c;
+}
+
+[data-theme="crimson"] .btn-pomo-main {
+  background: linear-gradient(135deg, #ff3b3b, #b91c1c);
+  color: #ffffff;
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.55);
+}
+
+[data-theme="crimson"] .btn-pomo-main:hover {
+  box-shadow: 0 0 32px rgba(255, 59, 59, 0.80);
+}
+
+[data-theme="crimson"] .btn-pomo-sec {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .btn-pomo-sec:hover {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.45);
+}
+
+/* ==========================================================================
+   5. AMBIENT SOUNDSCAPES & AUDIO SLIDERS
+   ========================================================================== */
+[data-theme="crimson"] .audio-channel {
+  border-bottom-color: rgba(239, 68, 68, 0.12);
+}
+
+[data-theme="crimson"] .audio-slider {
+  accent-color: #ef4444;
+  background: rgba(239, 68, 68, 0.22);
+}
+
+[data-theme="crimson"] .audio-slider::-webkit-slider-thumb {
+  background: #ff3b3b;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.85);
+}
+
+[data-theme="crimson"] .audio-slider::-moz-range-thumb {
+  background: #ff3b3b;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.85);
+}
+
+[data-theme="crimson"] .audio-fft-canvas {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.22);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.8);
+}
+
+/* ==========================================================================
+   6. CURRICULUM SYLLABUS, SEARCH & TOPICS
+   ========================================================================== */
+[data-theme="crimson"] .curriculum-header-panel {
+  border-bottom-color: rgba(239, 68, 68, 0.14);
+}
+
+[data-theme="crimson"] .course-chip {
+  background: #0a0808;
+  border: 1px solid rgba(239, 68, 68, 0.20);
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .course-chip:hover {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: #ef4444;
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .course-chip.active {
+  background: rgba(239, 68, 68, 0.22);
+  color: #ff3b3b;
+  border-color: #ef4444;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.35);
+}
+
+[data-theme="crimson"] .search-input {
+  background: #0a0808;
+  border: 1px solid rgba(239, 68, 68, 0.24);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .search-input:focus {
+  background: #120d0e;
+  border-color: #ff3b3b;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.35);
+}
+
+[data-theme="crimson"] .search-icon-pos {
+  color: #ef4444;
+}
+
+[data-theme="crimson"] .module-card {
+  border-bottom-color: rgba(239, 68, 68, 0.12);
+}
+
+[data-theme="crimson"] .module-card:hover {
+  background: rgba(239, 68, 68, 0.04);
+}
+
+[data-theme="crimson"] .module-badge {
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(239, 68, 68, 0.32);
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .module-progress-bar {
+  background: rgba(239, 68, 68, 0.14);
+}
+
+[data-theme="crimson"] .module-progress-fill {
+  background: linear-gradient(90deg, #dc2626, #ff3b3b);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.50);
+}
+
+[data-theme="crimson"] .topic-row {
+  border-bottom-color: rgba(239, 68, 68, 0.09);
+}
+
+[data-theme="crimson"] .topic-row:hover {
+  background: rgba(239, 68, 68, 0.06);
+}
+
+[data-theme="crimson"] .topic-checkbox {
+  accent-color: #ef4444;
+}
+
+[data-theme="crimson"] .topic-title {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .topic-row.completed .topic-title {
+  color: #7f1d1d;
+}
+
+[data-theme="crimson"] .btn-topic-note {
+  color: #b91c1c;
+}
+
+[data-theme="crimson"] .btn-topic-note:hover {
+  color: #ff3b3b;
+  background: rgba(239, 68, 68, 0.16);
+}
+
+/* ==========================================================================
+   7. 3D BOOKSHELF & DOSSIER OVERLAY
+   ========================================================================== */
+[data-theme="crimson"] .bookshelf-container {
+  background: radial-gradient(circle at center, #120d0e 0%, #000000 100%);
+  border-color: rgba(239, 68, 68, 0.28);
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.15);
+}
+
+[data-theme="crimson"] .bookshelf-hud-badge {
+  background: rgba(10, 8, 8, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(239, 68, 68, 0.38);
+  color: #ff3b3b;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.22);
+}
+
+[data-theme="crimson"] .bookshelf-hud-badge.hint-badge {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: #ef4444;
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .bookshelf-hud-btn {
+  background: rgba(10, 8, 8, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(239, 68, 68, 0.40);
+  color: #ff3b3b;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="crimson"] .bookshelf-hud-btn:hover {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.60);
+}
+
+[data-theme="crimson"] .bookshelf-dossier-overlay {
+  background: rgba(10, 8, 8, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(239, 68, 68, 0.38);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 24px rgba(239, 68, 68, 0.28);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .bookshelf-tooltip-chip {
+  background: rgba(10, 8, 8, 0.96);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  color: #fef2f2;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.85), 0 0 14px rgba(239, 68, 68, 0.28);
+}
+
+[data-theme="crimson"] .dossier-title {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .dossier-code {
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .dossier-status {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: #ef4444;
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .dossier-track {
+  color: #ef4444;
+}
+
+[data-theme="crimson"] .dossier-subtitle {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .dossier-curriculum-badge {
+  background: #120d0e;
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .dossier-section-title {
+  color: #b91c1c;
+}
+
+[data-theme="crimson"] .dossier-concepts {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .dossier-concepts .bullet {
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .dossier-formula-box {
+  background: #120d0e;
+  border: 1px solid rgba(239, 68, 68, 0.28);
+}
+
+[data-theme="crimson"] .formula-label {
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .dossier-formula-box code {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .dossier-meta-row {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .dossier-meta-row .val {
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .btn-dossier.primary {
+  background: linear-gradient(135deg, #ff3b3b, #b91c1c);
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.45);
+}
+
+[data-theme="crimson"] .btn-dossier.secondary {
+  background: rgba(239, 68, 68, 0.16);
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .btn-dossier.close-btn {
+  background: #120d0e;
+  color: #fef2f2;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+[data-theme="crimson"] .btn-dossier.close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ff3b3b;
+}
+
+/* ==========================================================================
+   8. 3D ACTIVE RECALL MEMORY PALACE
+   ========================================================================== */
+[data-theme="crimson"] .palace-container {
+  background: radial-gradient(circle at center, #120d0e 0%, #000000 100%);
+  border-color: rgba(239, 68, 68, 0.28);
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.15);
+}
+
+[data-theme="crimson"] .palace-card-modal {
+  background: rgba(10, 8, 8, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(239, 68, 68, 0.40);
+  color: #fef2f2;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 24px rgba(239, 68, 68, 0.28);
+}
+
+[data-theme="crimson"] .btn-fsrs.again {
+  background: rgba(239, 68, 68, 0.32);
+  color: #ff3b3b;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+}
+
+[data-theme="crimson"] .btn-fsrs.hard {
+  background: rgba(185, 28, 28, 0.28);
+  color: #fca5a5;
+  border: 1px solid rgba(185, 28, 28, 0.45);
+}
+
+[data-theme="crimson"] .btn-fsrs.good {
+  background: rgba(220, 38, 38, 0.32);
+  color: #ff3b3b;
+  border: 1px solid rgba(220, 38, 38, 0.45);
+}
+
+[data-theme="crimson"] .btn-fsrs.easy {
+  background: rgba(255, 59, 59, 0.38);
+  color: #ffffff;
+  border: 1px solid #ff3b3b;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.45);
+}
+
+/* ==========================================================================
+   9. CHAOS SIMULATOR LAB
+   ========================================================================== */
+[data-theme="crimson"] .btn-arch-tab {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.22);
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .btn-arch-tab.active {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: #ef4444;
+  color: #ff3b3b;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.32);
+}
+
+[data-theme="crimson"] .chaos-canvas-wrapper {
+  background: #0a0808;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.95);
+}
+
+[data-theme="crimson"] .btn-chaos-action {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .btn-chaos-action:hover {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: #ef4444;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.30);
+}
+
+[data-theme="crimson"] .btn-chaos-action.kill {
+  border-color: rgba(239, 68, 68, 0.50);
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .btn-chaos-action.surge {
+  border-color: rgba(255, 59, 59, 0.50);
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .btn-chaos-action.heal {
+  border-color: rgba(220, 38, 38, 0.50);
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .chaos-console-logs {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+}
+
+/* ==========================================================================
+   10. ANNUAL ACTIVITY HEATMAP & JOURNAL
+   ========================================================================== */
+[data-theme="crimson"] .journal-stat-card {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.22);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.90);
+}
+
+[data-theme="crimson"] .journal-stat-val {
+  color: #ff3b3b;
+  text-shadow: 0 0 14px rgba(239, 68, 68, 0.38);
+}
+
+[data-theme="crimson"] .journal-stat-lbl {
+  color: #b91c1c;
+}
+
+[data-theme="crimson"] .heatmap-card {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.22);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.95);
+}
+
+/* Heatmap SVG Blocks */
+[data-theme="crimson"] .heatmap-cell.level-0 {
+  fill: #181112;
+  stroke: rgba(239, 68, 68, 0.15);
+  stroke-width: 0.5px;
+}
+[data-theme="crimson"] .heatmap-cell.level-1 {
+  fill: rgba(239, 68, 68, 0.40);
+  stroke: rgba(239, 68, 68, 0.25);
+  stroke-width: 0.5px;
+}
+[data-theme="crimson"] .heatmap-cell.level-2 {
+  fill: #dc2626;
+  stroke: rgba(220, 38, 38, 0.45);
+  stroke-width: 0.5px;
+}
+[data-theme="crimson"] .heatmap-cell.level-3 {
+  fill: #ef4444;
+  stroke: rgba(239, 68, 68, 0.60);
+  stroke-width: 0.5px;
+}
+[data-theme="crimson"] .heatmap-cell.level-4 {
+  fill: #ff3b3b;
+  stroke: #ff3b3b;
+  stroke-width: 0.5px;
+  filter: drop-shadow(0 0 5px rgba(255, 59, 59, 0.75));
+}
+
+[data-theme="crimson"] .heatmap-cell:hover {
+  stroke: #ff3b3b !important;
+  stroke-width: 1.5px !important;
+  filter: drop-shadow(0 0 10px rgba(255, 59, 59, 0.90)) brightness(1.25);
+}
+
+/* Heatmap Legend Cells */
+[data-theme="crimson"] .legend-cell {
+  border-color: rgba(239, 68, 68, 0.25);
+}
+[data-theme="crimson"] .legend-cell.level-0 {
+  background: #181112;
+  border-color: rgba(239, 68, 68, 0.15);
+}
+[data-theme="crimson"] .legend-cell.level-1 {
+  background: rgba(239, 68, 68, 0.40);
+}
+[data-theme="crimson"] .legend-cell.level-2 {
+  background: #dc2626;
+}
+[data-theme="crimson"] .legend-cell.level-3 {
+  background: #ef4444;
+}
+[data-theme="crimson"] .legend-cell.level-4 {
+  background: #ff3b3b;
+  box-shadow: 0 0 8px rgba(255, 59, 59, 0.70);
+}
+
+/* ==========================================================================
+   11. MODALS & INPUTS (NOTES, MILESTONES, HABITS, ADVISOR)
+   ========================================================================== */
+[data-theme="crimson"] .notes-modal-overlay {
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(16px);
+}
+
+[data-theme="crimson"] .notes-card,
+[data-theme="crimson"] .milestone-modal-card,
+[data-theme="crimson"] .habit-modal-card,
+[data-theme="crimson"] .focuspro-ai-modal-card {
+  background: #0a0808;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fef2f2;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.98), 0 0 25px rgba(239, 68, 68, 0.25);
+}
+
+[data-theme="crimson"] .notes-textarea {
+  background: #000000;
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .notes-textarea:focus {
+  border-color: #ff3b3b;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.38);
+}
+
+[data-theme="crimson"] .milestone-label {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .milestone-form-input,
+[data-theme="crimson"] .habit-field input,
+[data-theme="crimson"] .habit-field select {
+  background: #000000;
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .milestone-form-input:focus,
+[data-theme="crimson"] .habit-field input:focus,
+[data-theme="crimson"] .habit-field select:focus {
+  border-color: #ff3b3b;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.38);
+}
+
+/* ==========================================================================
+   12. PACE FORECASTER ("KITNA TIME LAGEGA?")
+   ========================================================================== */
+[data-theme="crimson"] .forecaster-card {
+  border-bottom-color: rgba(239, 68, 68, 0.14);
+}
+
+[data-theme="crimson"] .pace-val-badge {
+  color: #ff3b3b;
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.40);
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.25);
+}
+
+[data-theme="crimson"] .forecaster-table-wrapper {
+  border-color: rgba(239, 68, 68, 0.20);
+}
+
+[data-theme="crimson"] .forecaster-table th {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ff3b3b;
+  border-bottom-color: rgba(239, 68, 68, 0.20);
+}
+
+[data-theme="crimson"] .forecaster-table td {
+  border-bottom-color: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .forecaster-table tr:hover td {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+[data-theme="crimson"] .meta-pill {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(239, 68, 68, 0.32);
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .meta-pill.highlight {
+  color: #ff3b3b;
+  border-color: #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.30);
+}
+
+/* ==========================================================================
+   13. REGAIN DRAWER, POPOVER & ROUTINES
+   ========================================================================== */
+[data-theme="crimson"] .regain-speech-bubble {
+  background: rgba(10, 8, 8, 0.98);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fef2f2;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.95), 0 0 16px rgba(239, 68, 68, 0.25);
+}
+
+[data-theme="crimson"] .regain-speech-bubble::after {
+  border-color: rgba(239, 68, 68, 0.35) transparent transparent transparent;
+}
+
+[data-theme="crimson"] .regain-section-title {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .regain-routine-card {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.20);
+}
+
+[data-theme="crimson"] .regain-routine-card:hover {
+  background: #120d0e;
+  border-color: #ef4444;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.28);
+}
+
+[data-theme="crimson"] .regain-routine-card.active {
+  border-color: #ff3b3b;
+  background: rgba(239, 68, 68, 0.18);
+  box-shadow: 0 0 22px rgba(239, 68, 68, 0.40);
+}
+
+[data-theme="crimson"] .regain-routine-name {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .regain-drawer-overlay {
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(12px);
+}
+
+[data-theme="crimson"] .regain-drawer {
+  background: #0a0808;
+  border-right: 1px solid rgba(239, 68, 68, 0.25);
+  box-shadow: 12px 0 36px rgba(0, 0, 0, 0.95);
+}
+
+[data-theme="crimson"] .drawer-item {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .drawer-item:hover,
+[data-theme="crimson"] .drawer-item.active {
+  background: rgba(239, 68, 68, 0.16);
+  color: #ff3b3b;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.25);
+}
+
+[data-theme="crimson"] .regain-tag-popover {
+  background: rgba(10, 8, 8, 0.98);
+  border: 1px solid rgba(239, 68, 68, 0.38);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.98), 0 0 20px rgba(239, 68, 68, 0.28);
+}
+
+[data-theme="crimson"] .regain-tag-option {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .regain-tag-option:hover {
+  background: rgba(239, 68, 68, 0.18);
+  color: #ff3b3b;
+}
+
+/* ==========================================================================
+   14. MILESTONES & EXAM TRACKER
+   ========================================================================== */
+[data-theme="crimson"] .milestone-card {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.22);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.90);
+}
+
+[data-theme="crimson"] .milestone-card:hover {
+  border-color: #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.30);
+}
+
+[data-theme="crimson"] .milestone-badge.week-badge {
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .milestone-badge.exam-badge {
+  color: #ef4444;
+}
+
+[data-theme="crimson"] .milestone-progress-track {
+  background: rgba(239, 68, 68, 0.14);
+}
+
+[data-theme="crimson"] .milestone-progress-fill {
+  background: linear-gradient(90deg, #dc2626, #ff3b3b);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.50);
+}
+
+[data-theme="crimson"] .milestone-countdown-box {
+  background: #120d0e;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+[data-theme="crimson"] .countdown-val {
+  color: #ff3b3b;
+}
+
+/* ==========================================================================
+   15. FOCUSPRO AI ADVISOR
+   ========================================================================== */
+[data-theme="crimson"] .focuspro-status-bar {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.24);
+}
+
+[data-theme="crimson"] .focuspro-cycle-pill {
+  color: #fef2f2;
+  background: #120d0e;
+  border: 1px solid rgba(239, 68, 68, 0.20);
+}
+
+[data-theme="crimson"] .focuspro-cycle-pill:hover {
+  background: rgba(239, 68, 68, 0.20);
+  border-color: #ef4444;
+}
+
+[data-theme="crimson"] .focuspro-score-pill {
+  color: #ff3b3b;
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(239, 68, 68, 0.38);
+}
+
+[data-theme="crimson"] .focuspro-score-pill:hover {
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.40);
+}
+
+[data-theme="crimson"] .focuspro-advisor-card {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.25);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.90);
+}
+
+[data-theme="crimson"] .advisor-title-text {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .advisor-live-tag {
+  color: #ff3b3b;
+  background: rgba(239, 68, 68, 0.20);
+  border-color: rgba(239, 68, 68, 0.40);
+}
+
+[data-theme="crimson"] .btn-advisor-action {
+  color: #ef4444;
+}
+
+[data-theme="crimson"] .btn-advisor-action:hover {
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .focuspro-advisor-body {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .advisor-pill {
+  background: #120d0e;
+  border-color: rgba(239, 68, 68, 0.24);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .advisor-pill:hover {
+  background: rgba(239, 68, 68, 0.20);
+  border-color: #ef4444;
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .focuspro-metric-pill {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.22);
+}
+
+[data-theme="crimson"] .focuspro-metric-pill .lbl {
+  color: #b91c1c;
+}
+
+[data-theme="crimson"] .focuspro-metric-pill .val {
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .focuspro-feed-card {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.22);
+}
+
+[data-theme="crimson"] .focuspro-feed-header {
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .focuspro-feed-header .rec-time {
+  background: #120d0e;
+  color: #b91c1c;
+}
+
+[data-theme="crimson"] .focuspro-feed-card p {
+  color: #fca5a5;
+}
+
+[data-theme="crimson"] .btn-prompt-chip {
+  background: #120d0e;
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .btn-prompt-chip:hover {
+  background: rgba(239, 68, 68, 0.20);
+  border-color: #ef4444;
+  color: #ff3b3b;
+}
+
+/* ==========================================================================
+   16. HABIT TRACKER: ROUTINES, 7-DAY DOTS & CHECKMARKS
+   ========================================================================== */
+[data-theme="crimson"] .habits-progress-track {
+  background: rgba(239, 68, 68, 0.14);
+}
+
+[data-theme="crimson"] .habits-progress-fill {
+  background: linear-gradient(90deg, #dc2626, #ff3b3b);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.50);
+}
+
+[data-theme="crimson"] .habits-progress-labels {
+  color: #b91c1c;
+}
+
+[data-theme="crimson"] .habit-card {
+  background: #0a0808;
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.90);
+}
+
+[data-theme="crimson"] .habit-card:hover {
+  border-color: #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.30);
+}
+
+[data-theme="crimson"] .habit-card.completed {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+[data-theme="crimson"] .habit-category-tag {
+  color: #ef4444;
+}
+
+[data-theme="crimson"] .habit-streak-badge {
+  background: rgba(239, 68, 68, 0.18);
+  color: #ff3b3b;
+}
+
+[data-theme="crimson"] .habit-title {
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .habit-card.completed .habit-title {
+  color: #7f1d1d;
+}
+
+[data-theme="crimson"] .habit-target-desc {
+  color: #fca5a5;
+}
+
+/* 7-Day History Mini-Dots in Crimson */
+[data-theme="crimson"] .history-dot-letter {
+  color: #b91c1c;
+}
+
+[data-theme="crimson"] .history-dot {
+  background: #181112;
+  border: 0.5px solid rgba(239, 68, 68, 0.20);
+}
+
+[data-theme="crimson"] .history-dot.active {
+  background: #ef4444;
+  border-color: #ff3b3b;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.70);
+}
+
+/* Neon Red Habit Checkmark Button */
+[data-theme="crimson"] .btn-habit-toggle {
+  background: #0a0808;
+  border-color: rgba(239, 68, 68, 0.30);
+  color: #fef2f2;
+}
+
+[data-theme="crimson"] .btn-habit-toggle:hover {
+  border-color: #ef4444;
+  color: #ff3b3b;
+  background: rgba(239, 68, 68, 0.16);
+}
+
+[data-theme="crimson"] .btn-habit-toggle.done {
+  background: #dc2626;
+  border-color: #ff3b3b;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.60);
+}
+
+[data-theme="crimson"] .btn-icon-opt {
+  background: #0a0808;
+  border: 1.5px solid rgba(239, 68, 68, 0.22);
+}
+
+[data-theme="crimson"] .btn-icon-opt:hover {
+  border-color: #ef4444;
+  transform: scale(1.08);
+}
+
+[data-theme="crimson"] .btn-icon-opt.active {
+  border-color: #ff3b3b;
+  background: rgba(239, 68, 68, 0.22);
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.40);
+}
+
+[data-theme="crimson"] .btn-add-habit {
+  background: linear-gradient(135deg, #ff3b3b, #b91c1c);
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.50);
+}
+
+/* ==========================================================================
+   17. MULTI-DIMENSIONAL STUDY STATS & ANALYTICS HUB
+   ========================================================================== */
+[data-theme="crimson"] .stats-hub-card {
+  background: #0a0808 !important;
+  border: 1px solid rgba(239, 68, 68, 0.25) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.98), 0 0 1px rgba(239, 68, 68, 0.35) !important;
+}
+
+[data-theme="crimson"] .stats-hub-header {
+  border-bottom-color: rgba(239, 68, 68, 0.16) !important;
+}
+
+[data-theme="crimson"] .stats-hub-badge {
+  background: rgba(239, 68, 68, 0.16) !important;
+  color: #ff3b3b !important;
+  border: 1px solid rgba(239, 68, 68, 0.38) !important;
+}
+
+[data-theme="crimson"] .stats-hub-badge-dot {
+  background: #ff3b3b !important;
+  box-shadow: 0 0 8px #ff3b3b !important;
+}
+
+[data-theme="crimson"] .stats-hub-title {
+  color: #fef2f2 !important;
+}
+
+[data-theme="crimson"] .stats-hub-subtitle {
+  color: #fca5a5 !important;
+}
+
+[data-theme="crimson"] .stats-lifetime-pill {
+  background: #120d0e !important;
+  border: 1px solid rgba(239, 68, 68, 0.25) !important;
+  color: #fef2f2 !important;
+}
+
+[data-theme="crimson"] .stats-hub-tabs {
+  background: #120d0e !important;
+  border: 1px solid rgba(239, 68, 68, 0.22) !important;
+}
+
+[data-theme="crimson"] .stats-tab-btn {
+  color: #fca5a5 !important;
+}
+
+[data-theme="crimson"] .stats-tab-btn:hover {
+  color: #fef2f2 !important;
+  background: rgba(239, 68, 68, 0.14) !important;
+}
+
+[data-theme="crimson"] .stats-tab-btn.active {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.55) !important;
+}
+
+[data-theme="crimson"] .stats-quick-bar,
+[data-theme="crimson"] .stats-hero-banner,
+[data-theme="crimson"] .stats-metric-card,
+[data-theme="crimson"] .stats-chart-card {
+  background: #0a0808 !important;
+  border-color: rgba(239, 68, 68, 0.22) !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.90) !important;
+}
+
+[data-theme="crimson"] .btn-stats-quick,
+[data-theme="crimson"] .btn-date-nav,
+[data-theme="crimson"] .stats-date-input {
+  background: #120d0e !important;
+  border-color: rgba(239, 68, 68, 0.28) !important;
+  color: #fef2f2 !important;
+}
+
+[data-theme="crimson"] .btn-stats-quick:hover,
+[data-theme="crimson"] .btn-date-nav:hover:not(:disabled) {
+  border-color: #ef4444 !important;
+  color: #ff3b3b !important;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.35) !important;
+}
+
+[data-theme="crimson"] .btn-stats-quick.active {
+  background: #dc2626 !important;
+  border-color: #ff3b3b !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.45) !important;
+}
+
+[data-theme="crimson"] .stats-hero-date {
+  color: #fef2f2 !important;
+}
+
+[data-theme="crimson"] .stats-hero-sub {
+  color: #fca5a5 !important;
+}
+
+/* Date input calendar picker icon in neon red */
+[data-theme="crimson"] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(1) saturate(5) hue-rotate(320deg);
+  cursor: pointer;
+}
+
+/* Form Select Dropdowns */
+[data-theme="crimson"] select.milestone-form-input,
+[data-theme="crimson"] select.milestone-form-input option {
+  background-color: #0a0808 !important;
+  color: #fef2f2 !important;
+}
+

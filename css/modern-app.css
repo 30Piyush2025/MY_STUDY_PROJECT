@@ -1,0 +1,1432 @@
+/**
+ * StudyPulse — Modern App UI & Fluid Ergonomics Design System
+ * File: css/modern-app.css
+ *
+ * Guidelines: iOS 17 & Material 3 Fluid Architecture
+ * - Squircle Curvatures (18px - 24px main cards; 12px - 16px chips/buttons; 9999px pills)
+ * - Multi-layer Elevation Shadows (light mode warm depth; dark mode deep ambient shade)
+ * - Soft Border Treatments (1px subtle border with inner glow on hover)
+ * - Segmented Controls with spring-like physics transitions
+ * - Tactile Touch Ergonomics (44px+ hit areas, zero horizontal overflow, safe-area padding)
+ * - Native Mobile Bottom Sheet modals with drag pill indicators
+ * - Glowing Icon Badges and High-End Typography Hierarchy
+ */
+
+/* ==========================================================================
+   1. DESIGN TOKENS & SYSTEM VARIABLES
+   ========================================================================== */
+:root {
+  --radius-card-sm: 18px;
+  --radius-card-md: 20px;
+  --radius-card-lg: 24px;
+  --radius-card-xl: 28px;
+  --radius-chip: 12px;
+  --radius-control: 14px;
+  --radius-pill: 9999px;
+
+  /* Multi-Layer Physical Elevation Shadows (Light Mode Warm Stone Depth) */
+  --shadow-elevation-1: 0 2px 8px -1px rgba(60, 45, 30, 0.05), 0 1px 3px -1px rgba(60, 45, 30, 0.03);
+  --shadow-elevation-2: 0 4px 20px -2px rgba(60, 45, 30, 0.06), 0 2px 6px -1px rgba(60, 45, 30, 0.04);
+  --shadow-elevation-3: 0 10px 28px -4px rgba(60, 45, 30, 0.10), 0 4px 10px -2px rgba(60, 45, 30, 0.05);
+  --shadow-elevation-modal: 0 24px 60px -8px rgba(60, 45, 30, 0.22), 0 8px 24px -4px rgba(60, 45, 30, 0.10);
+
+  /* Subtle Inner Borders & Focus Rings */
+  --border-card-subtle: 1px solid var(--surface-border-subtle);
+  --border-card-hover: 1px solid var(--surface-border-active);
+  --border-glass-specular: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+
+  /* Physics Transitions */
+  --spring-micro: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring-bounce: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --fluid-smooth: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] {
+  /* Multi-Layer Physical Elevation Shadows (Dark Roasted Mocha Depth) */
+  --shadow-elevation-1: 0 4px 14px -2px rgba(0, 0, 0, 0.35);
+  --shadow-elevation-2: 0 8px 24px -4px rgba(0, 0, 0, 0.45), 0 2px 8px -1px rgba(0, 0, 0, 0.30);
+  --shadow-elevation-3: 0 14px 34px -4px rgba(0, 0, 0, 0.60), 0 6px 14px -2px rgba(0, 0, 0, 0.40);
+  --shadow-elevation-modal: 0 28px 70px -8px rgba(0, 0, 0, 0.75), 0 12px 30px -4px rgba(0, 0, 0, 0.50);
+  --border-glass-specular: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="crimson"] {
+  /* Multi-Layer Cyber Halo Shadows (Pure OLED Black & Neon Scarlet) */
+  --shadow-elevation-1: 0 4px 16px rgba(0, 0, 0, 0.85), 0 0 1px rgba(239, 68, 68, 0.25);
+  --shadow-elevation-2: 0 8px 28px -4px rgba(0, 0, 0, 0.90), 0 0 1px rgba(239, 68, 68, 0.35);
+  --shadow-elevation-3: 0 14px 38px -4px rgba(0, 0, 0, 0.95), 0 0 16px rgba(239, 68, 68, 0.25);
+  --shadow-elevation-modal: 0 30px 80px rgba(0, 0, 0, 0.98), 0 0 24px rgba(239, 68, 68, 0.35);
+  --border-glass-specular: inset 0 1px 0 rgba(239, 68, 68, 0.25);
+}
+
+/* Base Body Ergonomics & Zero Horizontal Jitter */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   2. JOURNAL SUMMARY STATS GRID & MODERN SQUIRCLE METRIC CARDS
+   ========================================================================== */
+.journal-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.journal-stat-card {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: var(--radius-card-md);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-elevation-2);
+  box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
+  position: relative;
+  overflow: hidden;
+  transition: var(--fluid-smooth);
+}
+
+.journal-stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.journal-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevation-3);
+  border-color: var(--surface-border-active);
+}
+
+/* Glowing Icon Badge Container */
+.journal-stat-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: var(--radius-control);
+  background: var(--accent-orange-soft);
+  border: 1px solid var(--accent-orange-border);
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: var(--spring-micro);
+}
+
+[data-theme="dark"] .journal-stat-icon {
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.22);
+}
+
+[data-theme="crimson"] .journal-stat-icon {
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.35);
+}
+
+.journal-stat-card:nth-child(2) .journal-stat-icon {
+  background: var(--accent-blue-soft);
+  border-color: var(--accent-blue-border);
+  box-shadow: 0 4px 14px rgba(194, 65, 12, 0.16);
+}
+
+.journal-stat-card:hover .journal-stat-icon {
+  transform: scale(1.08) rotate(3deg);
+}
+
+.journal-stat-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.journal-stat-val {
+  font-family: var(--font-sans);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  line-height: 1.15;
+}
+
+.journal-stat-lbl {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   3. ANNUAL JOURNAL HEATMAP CARD (GENEROUS 24px ROUNDED SQUIRCLE FRAME)
+   ========================================================================== */
+.heatmap-card {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: var(--radius-card-lg);
+  padding: 24px 28px;
+  box-shadow: var(--shadow-elevation-2);
+  box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
+  margin-bottom: 26px;
+  position: relative;
+  overflow: hidden;
+  transition: var(--fluid-smooth);
+}
+
+.heatmap-card:hover {
+  border-color: var(--surface-border-active);
+  box-shadow: var(--shadow-elevation-3);
+}
+
+.heatmap-scroll-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 10px;
+  margin-top: 6px;
+  scrollbar-width: thin;
+}
+
+/* Fluid Slim Scrollbar */
+.heatmap-scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.heatmap-scroll-container::-webkit-scrollbar-track {
+  background: rgba(140, 130, 122, 0.10);
+  border-radius: var(--radius-pill);
+}
+
+.heatmap-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(140, 130, 122, 0.28);
+  border-radius: var(--radius-pill);
+  transition: background 0.2s ease;
+}
+
+.heatmap-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-orange);
+}
+
+/* Smooth Squircle Legend Cells */
+.legend-cell {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  display: inline-block;
+  border: 0.5px solid var(--surface-border-subtle);
+  transition: transform 0.15s ease;
+}
+
+.legend-cell:hover {
+  transform: scale(1.2);
+}
+
+/* ==========================================================================
+   4. HABIT TRACKER: DAILY ROUTINE WIDGET & CARDS
+   ========================================================================== */
+.habits-widget-section {
+  margin-top: 36px;
+  margin-bottom: 32px;
+}
+
+.habits-progress-pill {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-orange-soft);
+  border: 1px solid var(--accent-orange-border);
+  color: var(--accent-orange);
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.10);
+}
+
+.btn-add-habit {
+  min-height: 44px;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: var(--shadow-elevation-1);
+  transition: var(--spring-micro);
+}
+
+.btn-add-habit:hover {
+  background: var(--accent-orange);
+  color: #ffffff;
+  border-color: var(--accent-orange);
+  box-shadow: var(--accent-orange-glow);
+  transform: translateY(-1px);
+}
+
+.btn-add-habit:active {
+  transform: scale(0.96);
+}
+
+/* Habits Linear Progress Bar */
+.habits-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(140, 130, 122, 0.14);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  border: none;
+}
+
+[data-theme="dark"] .habits-progress-track {
+  background: rgba(245, 235, 224, 0.10);
+}
+
+.habits-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 12px rgba(217, 119, 6, 0.35);
+  transition: width 0.4s var(--fluid-smooth);
+}
+
+/* Habit Card (Modern Card Depth & Subtle Hover Glow) */
+.habits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.habit-card {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: var(--radius-card-md);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-elevation-2);
+  box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
+  transition: var(--fluid-smooth);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.habit-card:hover {
+  border-color: var(--surface-border-active);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-elevation-3);
+}
+
+.habit-card.completed {
+  border-color: rgba(5, 150, 105, 0.32);
+  background: rgba(5, 150, 105, 0.04);
+}
+
+[data-theme="dark"] .habit-card.completed {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.06);
+}
+
+[data-theme="crimson"] .habit-card.completed {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+/* Pill Category Tag & Streak */
+.habit-category-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  background: var(--accent-blue-soft);
+  border: 1px solid var(--accent-blue-border);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.habit-streak-badge {
+  font-family: var(--font-mono);
+  font-size: 0.70rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+  border: 1px solid var(--accent-orange-border);
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+}
+
+/* Squircle Icon Badge inside Habit Card */
+.habit-icon-wrap {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: var(--radius-control);
+  background: rgba(0, 0, 0, 0.035);
+  border: 1px solid var(--surface-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.65rem;
+  line-height: 1;
+  flex-shrink: 0;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: var(--spring-micro);
+}
+
+[data-theme="dark"] .habit-icon-wrap {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.habit-card:hover .habit-icon-wrap {
+  transform: scale(1.06);
+}
+
+.habit-title {
+  font-family: var(--font-sans);
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+  line-height: 1.35;
+}
+
+.habit-target-desc {
+  font-size: 0.80rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+/* History Mini Dots */
+.history-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 6px;
+  background: rgba(140, 130, 122, 0.20);
+  border: 0.5px solid rgba(68, 54, 42, 0.10);
+  transition: var(--spring-micro);
+}
+
+.history-dot.active {
+  background: var(--accent-orange);
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 10px rgba(217, 119, 6, 0.45);
+}
+
+/* Tactile Checkmark Toggle Button */
+.btn-habit-toggle {
+  min-height: 44px;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.80rem;
+  font-weight: 700;
+  background: var(--bg-primary);
+  border: 1.5px solid var(--surface-border);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: var(--shadow-elevation-1);
+  transition: var(--spring-micro);
+}
+
+.btn-habit-toggle:hover {
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+  transform: scale(1.02);
+}
+
+.btn-habit-toggle:active {
+  transform: scale(0.94);
+}
+
+.btn-habit-toggle.done {
+  background: var(--accent-sage);
+  border-color: var(--accent-sage);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+}
+
+[data-theme="dark"] .btn-habit-toggle.done {
+  background: #10b981;
+  border-color: #10b981;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.40);
+}
+
+[data-theme="crimson"] .btn-habit-toggle.done {
+  background: #ef4444;
+  border-color: #ef4444;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.50);
+}
+
+/* ==========================================================================
+   5. MILESTONE & EXAM HORIZON WIDGET (SQUIRCLE CHIPS & PROGRESS TRACKS)
+   ========================================================================== */
+.milestone-widget-section {
+  margin-top: 32px;
+  margin-bottom: 28px;
+}
+
+.milestone-edit-btn {
+  min-height: 42px;
+  padding: 7px 16px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.80rem;
+  font-weight: 700;
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-elevation-1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--spring-micro);
+}
+
+.milestone-edit-btn:hover {
+  background: var(--accent-orange);
+  color: #ffffff;
+  border-color: var(--accent-orange);
+  box-shadow: var(--accent-orange-glow);
+  transform: translateY(-1px);
+}
+
+.milestone-edit-btn:active {
+  transform: scale(0.96);
+}
+
+.milestone-dual-grid {
+  gap: 16px;
+}
+
+.milestone-card {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: var(--radius-card-lg);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-elevation-2);
+  box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
+  position: relative;
+  overflow: hidden;
+  transition: var(--fluid-smooth);
+}
+
+.milestone-card:hover {
+  border-color: var(--surface-border-active);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevation-3);
+}
+
+/* Modern Pill Badges */
+.milestone-badge {
+  font-family: var(--font-mono);
+  font-size: 0.70rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] .milestone-badge {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.milestone-pct-pill,
+.milestone-status-pill {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+}
+
+/* Modern Smooth Progress Track */
+.milestone-progress-track {
+  width: 100%;
+  height: 9px;
+  background: rgba(140, 130, 122, 0.14);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-bottom: 14px;
+  border: none;
+}
+
+[data-theme="dark"] .milestone-progress-track {
+  background: rgba(245, 235, 224, 0.10);
+}
+
+.milestone-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
+  transition: width 0.5s var(--fluid-smooth);
+}
+
+/* Squircle Countdown Boxes (Replaces rigid flat box) */
+.milestone-countdown-box {
+  background: var(--bg-primary);
+  border: var(--border-card-subtle);
+  border-radius: 16px;
+  padding: 10px 16px;
+  text-align: center;
+  min-width: 64px;
+  box-shadow: var(--shadow-elevation-1);
+  transition: var(--fluid-smooth);
+}
+
+.milestone-countdown-box:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent-orange-border);
+  box-shadow: var(--shadow-elevation-2);
+}
+
+.milestone-countdown-num {
+  font-family: var(--font-mono);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--accent-orange);
+  line-height: 1;
+}
+
+.milestone-countdown-lbl {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+.milestone-countdown-sep {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   6. FOCUSPRO AI ADVISOR CARD (FUTURISTIC YET ORGANIC COACHING CARD)
+   ========================================================================== */
+.focuspro-advisor-card {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: var(--radius-card-lg);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-elevation-2);
+  box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
+  position: relative;
+  overflow: hidden;
+  transition: var(--fluid-smooth);
+  margin-top: 24px;
+}
+
+.focuspro-advisor-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-orange), var(--accent-blue));
+  opacity: 0.85;
+}
+
+.focuspro-advisor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevation-3);
+  border-color: var(--surface-border-active);
+}
+
+.advisor-robot-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-control);
+  background: var(--accent-orange-soft);
+  border: 1px solid var(--accent-orange-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);
+}
+
+.advisor-live-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+  border: 1px solid var(--accent-orange-border);
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.06em;
+}
+
+.advisor-live-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-orange);
+  display: inline-block;
+  animation: pulseLiveDot 1.8s infinite;
+}
+
+@keyframes pulseLiveDot {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 6px var(--accent-orange); }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.btn-advisor-action {
+  min-height: 42px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--surface-border-subtle);
+  color: var(--accent-blue);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--spring-micro);
+}
+
+.btn-advisor-action:hover {
+  background: var(--accent-orange);
+  color: #ffffff;
+  border-color: var(--accent-orange);
+  box-shadow: var(--accent-orange-glow);
+}
+
+/* Prompt Chips */
+.btn-prompt-chip {
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: var(--shadow-elevation-1);
+  transition: var(--spring-micro);
+}
+
+.btn-prompt-chip:hover {
+  background: var(--accent-orange-soft);
+  border-color: var(--accent-orange-border);
+  color: var(--accent-orange);
+  transform: translateY(-1px);
+}
+
+.btn-prompt-chip:active {
+  transform: scale(0.96);
+}
+
+/* FocusPro Modal Cards & Feed */
+.focuspro-metric-pill {
+  background: var(--bg-primary);
+  border: var(--border-card-subtle);
+  border-radius: 16px;
+  padding: 12px 14px;
+  text-align: center;
+  box-shadow: var(--shadow-elevation-1);
+}
+
+.focuspro-feed-card {
+  background: var(--bg-primary);
+  border: var(--border-card-subtle);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow-elevation-1);
+  transition: var(--fluid-smooth);
+}
+
+.focuspro-feed-card:hover {
+  border-color: var(--surface-border-active);
+}
+
+/* ==========================================================================
+   7. NOTES CARDS & MODALS (DESKTOP SQUIRCLE & MOBILE NATIVE BOTTOM SHEET)
+   ========================================================================== */
+.notes-modal-overlay {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  z-index: 2500;
+  transition: opacity 0.28s ease;
+}
+
+.notes-card {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: var(--radius-card-lg);
+  max-width: 580px;
+  width: 100%;
+  padding: 30px 32px;
+  box-shadow: var(--shadow-elevation-modal);
+  position: relative;
+  transition: var(--fluid-smooth);
+}
+
+.notes-textarea,
+.milestone-form-input {
+  border-radius: var(--radius-control);
+  min-height: 44px;
+  background: var(--bg-primary);
+  border: var(--border-card-subtle);
+  padding: 12px 16px;
+  font-family: var(--font-sans);
+  font-size: 16px; /* Prevents auto-zoom on iOS */
+  color: var(--text-primary);
+  transition: var(--fluid-smooth);
+  outline: none;
+}
+
+.notes-textarea:focus,
+.milestone-form-input:focus {
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 0 3px var(--accent-orange-soft);
+}
+
+.btn-icon-opt {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  min-height: 46px;
+  border-radius: var(--radius-control);
+  background: var(--bg-primary);
+  border: var(--border-card-subtle);
+  font-size: 1.35rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--spring-micro);
+}
+
+.btn-icon-opt:hover {
+  border-color: var(--accent-orange);
+  transform: scale(1.1);
+}
+
+.btn-icon-opt.active {
+  border-color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+  box-shadow: var(--accent-orange-glow);
+}
+
+/* Modern Native Mobile Bottom Sheet (< 640px) */
+@media (max-width: 640px) {
+  .notes-modal-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  .notes-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 26px 26px 0 0 !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    margin: 0 !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 18px 22px calc(24px + var(--safe-bottom)) 22px !important;
+    animation: modernSheetSlideUp 0.35s var(--fluid-smooth) !important;
+  }
+
+  /* iOS-Style Drag Pill Indicator */
+  .notes-card::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 5px;
+    background: rgba(140, 130, 122, 0.35);
+    border-radius: var(--radius-pill);
+    margin: 0 auto 16px auto;
+  }
+
+  [data-theme="dark"] .notes-card::before {
+    background: rgba(245, 235, 224, 0.25);
+  }
+
+  [data-theme="crimson"] .notes-card::before {
+    background: rgba(239, 68, 68, 0.40);
+  }
+}
+
+@keyframes modernSheetSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* ==========================================================================
+   8. 3D BOOKSHELF DOSSIER OVERLAY (GLASSMORPHIC SHEET WITH 20px RADIUS)
+   ========================================================================== */
+.bookshelf-dossier-overlay {
+  border-radius: 20px;
+  background: rgba(254, 252, 248, 0.94);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--accent-blue-border);
+  box-shadow: 0 20px 50px -10px rgba(60, 45, 30, 0.18), 0 0 20px rgba(217, 119, 6, 0.12);
+  transition: opacity 0.32s var(--fluid-smooth), transform 0.32s var(--fluid-smooth);
+}
+
+[data-theme="dark"] .bookshelf-dossier-overlay {
+  background: rgba(46, 37, 33, 0.94);
+  border-color: rgba(245, 158, 11, 0.30);
+  box-shadow: 0 24px 60px -8px rgba(0, 0, 0, 0.70), 0 0 24px rgba(245, 158, 11, 0.14);
+}
+
+[data-theme="crimson"] .bookshelf-dossier-overlay {
+  background: rgba(10, 8, 8, 0.96);
+  border-color: rgba(239, 68, 68, 0.45);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.98), 0 0 24px rgba(239, 68, 68, 0.35);
+}
+
+.dossier-formula-box {
+  border-radius: 16px;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  box-shadow: var(--shadow-elevation-1);
+}
+
+.dossier-curriculum-badge {
+  border-radius: var(--radius-control);
+  padding: 10px 14px;
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+}
+
+.btn-dossier {
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  font-weight: 700;
+  transition: var(--spring-micro);
+}
+
+.btn-dossier:active {
+  transform: scale(0.96);
+}
+
+/* Mobile Bookshelf Dossier Sheet */
+@media (max-width: 640px) {
+  .bookshelf-dossier-overlay {
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 82vh !important;
+    border-radius: 24px 24px 0 0 !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    transform: translateY(100%);
+  }
+
+  .bookshelf-dossier-overlay.active {
+    transform: translateY(0);
+  }
+
+  .dossier-inner::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 5px;
+    background: rgba(140, 130, 122, 0.35);
+    border-radius: var(--radius-pill);
+    margin: 0 auto 16px auto;
+  }
+}
+
+/* ==========================================================================
+   9. AUDIO CONTROLS & SYNTHESIZER STUDIO COCKPIT
+   ========================================================================== */
+.audio-studio-card {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: var(--radius-card-lg);
+  padding: 24px 26px;
+  box-shadow: var(--shadow-elevation-2);
+  box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
+  margin-top: 24px;
+  margin-bottom: 24px;
+  transition: var(--fluid-smooth);
+}
+
+.audio-studio-card:hover {
+  border-color: var(--surface-border-active);
+  box-shadow: var(--shadow-elevation-3);
+}
+
+.audio-channel {
+  background: rgba(0, 0, 0, 0.025);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  box-shadow: none;
+  transition: var(--fluid-smooth);
+}
+
+[data-theme="dark"] .audio-channel {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.audio-channel:hover {
+  background: rgba(0, 0, 0, 0.045);
+  border-color: var(--surface-border-subtle);
+  transform: translateX(2px);
+}
+
+[data-theme="dark"] .audio-channel:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Fluid Slider Ergonomics */
+.audio-slider {
+  height: 8px;
+  border-radius: var(--radius-pill);
+  accent-color: var(--accent-orange);
+  cursor: pointer;
+  background: rgba(217, 119, 6, 0.18);
+  transition: opacity 0.2s ease;
+}
+
+.audio-fft-canvas {
+  border-radius: 16px;
+  border: var(--border-card-subtle);
+  background: var(--bg-primary);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* ==========================================================================
+   10. PACE FORECASTER TABLE & SQUIRCLE CONTAINERS
+   ========================================================================== */
+.forecaster-card {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: var(--radius-card-lg);
+  padding: 24px 28px;
+  box-shadow: var(--shadow-elevation-2);
+  box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
+  margin-bottom: 28px;
+  transition: var(--fluid-smooth);
+}
+
+.forecaster-card:hover {
+  border-color: var(--surface-border-active);
+  box-shadow: var(--shadow-elevation-3);
+}
+
+.forecaster-metric-grid {
+  border-top: none;
+  padding: 8px 0;
+  gap: 14px;
+}
+
+.forecaster-metric-grid .stat-item {
+  background: var(--bg-primary);
+  border: var(--border-card-subtle);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-elevation-1);
+  transition: var(--fluid-smooth);
+}
+
+.forecaster-metric-grid .stat-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--surface-border-active);
+  box-shadow: var(--shadow-elevation-2);
+}
+
+.forecaster-table-wrapper {
+  border-radius: 18px;
+  border: var(--border-card-subtle);
+  box-shadow: var(--shadow-elevation-2);
+  background: var(--bg-primary);
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.forecaster-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.forecaster-table th {
+  background: var(--bg-secondary);
+  color: var(--accent-blue);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 14px 18px;
+  border-bottom: var(--border-card-subtle);
+}
+
+.forecaster-table td {
+  padding: 14px 18px;
+  border-bottom: var(--border-card-subtle);
+  font-size: 0.86rem;
+  transition: background 0.15s ease;
+}
+
+.forecaster-table tr:last-child td {
+  border-bottom: none;
+}
+
+.forecaster-table tr:hover td {
+  background: rgba(217, 119, 6, 0.04);
+}
+
+/* ==========================================================================
+   11. TOPIC CHECKLIST & SYLLABUS (MODERN SQUIRCLE ACCORDIONS & ROWS)
+   ========================================================================== */
+.course-chip {
+  min-height: 42px;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-elevation-1);
+  transition: var(--spring-micro);
+}
+
+.course-chip:hover {
+  transform: translateY(-1px);
+}
+
+.course-chip.active {
+  transform: scale(1.02);
+  box-shadow: var(--accent-orange-glow);
+}
+
+.search-input {
+  min-height: 44px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  padding: 10px 18px 10px 42px;
+  font-size: 0.90rem;
+  box-shadow: var(--shadow-elevation-1);
+  transition: var(--fluid-smooth);
+}
+
+.search-input:focus {
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 0 3px var(--accent-orange-soft);
+}
+
+.module-card {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: 18px;
+  box-shadow: var(--shadow-elevation-1);
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: var(--fluid-smooth);
+}
+
+.module-card:hover {
+  border-color: var(--surface-border-active);
+  box-shadow: var(--shadow-elevation-2);
+}
+
+.module-header {
+  padding: 16px 20px;
+  border-radius: 18px;
+  transition: background 0.2s ease;
+}
+
+.module-header:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.topic-row {
+  border-radius: var(--radius-control);
+  padding: 12px 16px;
+  margin-bottom: 6px;
+  background: var(--bg-primary);
+  border: var(--border-card-subtle);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  transition: var(--fluid-smooth);
+}
+
+.topic-row:hover {
+  background: var(--accent-orange-soft);
+  border-color: var(--accent-orange-border);
+  transform: translateX(3px);
+}
+
+.topic-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  accent-color: var(--accent-orange);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.topic-checkbox:active {
+  transform: scale(0.88);
+}
+
+.btn-topic-note {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--radius-control);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--spring-micro);
+}
+
+.btn-topic-note:hover {
+  transform: scale(1.1);
+  color: var(--accent-orange);
+  background: var(--accent-orange-soft);
+}
+
+/* ==========================================================================
+   12. POLISHED SEGMENTED CONTROLS & NAVIGATION TABS
+   ========================================================================== */
+.pomo-mode-selector {
+  border-radius: var(--radius-pill);
+  padding: 5px;
+  background: rgba(140, 130, 122, 0.14);
+  border: var(--border-card-subtle);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.06);
+  gap: 4px;
+}
+
+[data-theme="dark"] .pomo-mode-selector {
+  background: rgba(245, 235, 224, 0.08);
+}
+
+.pomo-tab {
+  min-height: 44px;
+  padding: 8px 22px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: var(--spring-bounce);
+}
+
+.pomo-tab.active {
+  background: var(--accent-orange);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+  transform: scale(1.02);
+}
+
+/* Desktop Nav Tabs */
+.desktop-nav-tabs .nav-tab-btn {
+  min-height: 42px;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: var(--spring-micro);
+}
+
+.desktop-nav-tabs .nav-tab-btn:hover {
+  transform: translateY(-1px);
+}
+
+.desktop-nav-tabs .nav-tab-btn.active {
+  background: var(--accent-orange-soft);
+  color: var(--accent-orange);
+  border: 1px solid var(--accent-orange-border);
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);
+}
+
+/* Mobile Bottom Navigation Bar (Complete 48px Touch Safe Ergonomics) */
+.bottom-nav {
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.bottom-nav-item {
+  min-height: 48px;
+  border-radius: var(--radius-control);
+  margin: 0 2px;
+  transition: var(--spring-micro);
+}
+
+.bottom-nav-item:active {
+  transform: scale(0.90);
+}
+
+.bottom-nav-item.active {
+  color: var(--accent-orange);
+}
+
+.bottom-nav-item.active .nav-icon {
+  transform: translateY(-2px) scale(1.12);
+  filter: drop-shadow(0 2px 8px rgba(217, 119, 6, 0.5));
+}
+
+/* ==========================================================================
+   13. DESK STATS & REGAIN CARDS
+   ========================================================================== */
+.stats-counter-grid {
+  border: none;
+  gap: 16px;
+  padding: 10px 0 22px 0;
+}
+
+.stats-counter-grid .stat-item {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: 20px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow-elevation-2);
+  box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
+  transition: var(--fluid-smooth);
+}
+
+.stats-counter-grid .stat-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--surface-border-active);
+  box-shadow: var(--shadow-elevation-3);
+}
+
+.regain-tag-dist-card {
+  background: var(--bg-secondary);
+  border: var(--border-card-subtle);
+  border-radius: var(--radius-card-md);
+  padding: 22px 26px;
+  box-shadow: var(--shadow-elevation-2);
+  box-shadow: var(--shadow-elevation-2), var(--border-glass-specular);
+  transition: var(--fluid-smooth);
+  margin-top: 24px;
+}
+
+.regain-tag-dist-card:hover {
+  border-color: var(--surface-border-active);
+  box-shadow: var(--shadow-elevation-3);
+}
+
+/* Regain Slide-in Drawer */
+.regain-drawer {
+  border-radius: 0 26px 26px 0;
+  box-shadow: var(--shadow-elevation-modal);
+}
+
+.drawer-item {
+  min-height: 46px;
+  border-radius: var(--radius-control);
+  padding: 10px 18px;
+  transition: var(--spring-micro);
+}
+
+.drawer-item:hover {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   14. SYSTEM LABS & MEMORY PALACE SQUIRCLE CONTAINERS
+   ========================================================================== */
+.palace-container,
+.chaos-container {
+  border-radius: var(--radius-card-lg);
+  box-shadow: var(--shadow-elevation-2);
+  border: var(--border-card-subtle);
+}
+
+.palace-card-modal {
+  border-radius: 20px;
+  box-shadow: var(--shadow-elevation-modal);
+}
+
+/* ==========================================================================
+   15. UNIVERSAL ACCESSIBILITY & TOUCH ERGONOMICS (44px+ TOUCH RULE)
+   ========================================================================== */
+button,
+a.btn-pomo-main,
+a.btn-pomo-sec,
+.icon-btn,
+.nav-tab-btn,
+.pomo-tab,
+.course-chip,
+.btn-prompt-chip,
+.btn-habit-toggle,
+.btn-add-habit,
+.milestone-edit-btn,
+.btn-dossier,
+.bottom-nav-item {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.icon-btn {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--radius-pill);
+}
+
+.btn-pomo-main,
+.btn-pomo-sec {
+  min-height: 44px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--spring-micro);
+}
+
+.btn-pomo-main:active,
+.btn-pomo-sec:active {
+  transform: scale(0.96);
+}
