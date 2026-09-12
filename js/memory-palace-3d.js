@@ -105,9 +105,15 @@
     return 0xf43f5e; // Crimson Red
   }
 
-  function initMemoryPalace(containerId) {
-    palaceContainer = document.getElementById(containerId);
+  function initMemoryPalace(containerId = "memory-palace-3d-canvas") {
+    palaceContainer = document.getElementById(containerId || "memory-palace-3d-canvas");
     if (!palaceContainer) return;
+
+    if (palaceContainer.dataset.initialized === "true") {
+      onPalaceResize();
+      return;
+    }
+    palaceContainer.dataset.initialized = "true";
 
     palaceContainer.innerHTML = "";
     crystalMeshes = [];
@@ -578,5 +584,6 @@
   window.palaceResetView = palaceResetView;
   window.palaceFlipCard = palaceFlipCard;
   window.palaceGradeCard = palaceGradeCard;
+  window.memoryPalaceResize = onPalaceResize;
 
 })();

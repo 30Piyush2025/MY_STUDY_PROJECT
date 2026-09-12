@@ -303,14 +303,32 @@
     hapticFeedback(10);
 
     // Initialize Specialized 3D & Canvas Modules on Demand
-    if (viewName === 'bookshelf' && typeof window.initBookshelf3D === 'function') {
-      setTimeout(() => window.initBookshelf3D(), 50);
+    if (viewName === 'bookshelf') {
+      setTimeout(() => {
+        if (typeof window.initBookshelf3D === 'function') {
+          window.initBookshelf3D('bookshelf-3d-canvas-container');
+        }
+        if (typeof window.bookshelf3DResize === 'function') {
+          window.bookshelf3DResize();
+        }
+      }, 60);
     }
-    if (viewName === 'palace' && typeof window.initMemoryPalace === 'function') {
-      setTimeout(() => window.initMemoryPalace(), 50);
+    if (viewName === 'palace') {
+      setTimeout(() => {
+        if (typeof window.initMemoryPalace === 'function') {
+          window.initMemoryPalace('memory-palace-3d-canvas');
+        }
+        if (typeof window.memoryPalaceResize === 'function') {
+          window.memoryPalaceResize();
+        }
+      }, 60);
     }
-    if (viewName === 'chaos' && typeof window.initChaosSimulator === 'function') {
-      setTimeout(() => window.initChaosSimulator(), 50);
+    if (viewName === 'chaos') {
+      setTimeout(() => {
+        if (typeof window.initChaosSimulator === 'function') {
+          window.initChaosSimulator('chaos-canvas-wrapper');
+        }
+      }, 60);
     }
     if (viewName === 'analytics') {
       renderActivityHeatmap();
@@ -906,11 +924,11 @@
       const activity = state.dailyActivity[item.date] || { topics: 0, focusMinutes: 0 };
       const score = (activity.topics * 2) + Math.floor(activity.focusMinutes / 15);
 
-      let color = 'rgba(148, 163, 184, 0.12)';
-      if (score >= 8) color = '#00f2ff';
-      else if (score >= 4) color = '#0284c7';
-      else if (score >= 2) color = '#0369a1';
-      else if (score >= 1) color = '#075985';
+      let color = 'rgba(160, 140, 120, 0.12)';
+      if (score >= 8) color = '#e5a93c'; // Burnished Gold
+      else if (score >= 4) color = '#d97706'; // Warm Amber
+      else if (score >= 2) color = '#b45309'; // Ochre
+      else if (score >= 1) color = '#78350f'; // Subtle Walnut
 
       const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       rect.setAttribute('x', x);

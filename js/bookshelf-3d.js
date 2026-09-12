@@ -482,8 +482,8 @@
     return mesh;
   }
 
-  function initBookshelf3D(containerId) {
-    container = document.getElementById(containerId);
+  function initBookshelf3D(containerId = 'bookshelf-3d-canvas-container') {
+    container = document.getElementById(containerId || 'bookshelf-3d-canvas-container');
     if (!container) return;
 
     // Avoid double initialization
@@ -1105,6 +1105,7 @@
   window.initBookshelf3D = initBookshelf3D;
   window.bookshelf3DOpenBook = openBook;
   window.bookshelf3DClose = closeBook;
+  window.bookshelf3DResize = onResize;
   window.bookshelfData = BOOK_DATA;
 
 })();

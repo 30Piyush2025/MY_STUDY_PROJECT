@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#060913">
+  <meta name="theme-color" content="#0d1118">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>StudyPulse FOCUS ENGINE • Piyush Tiwari's AI & Systems Intelligence</title>
+  <title>Piyush Tiwari • Engineering Study Desk & 3D Library</title>
   
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="manifest" href="manifest.json">
   
+  <!-- Human-Crafted Typography Pairing: Newsreader (Editorial Serif) + Plus Jakarta Sans + JetBrains Mono + Caveat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="studypulse.css">
 </head>
@@ -25,32 +26,32 @@
   <header class="app-header">
     <div class="header-container">
       <div class="brand-wrapper" onclick="window.switchView('dashboard')">
-        <div class="brand-icon">⚡</div>
-        <div class="brand-title">
-          StudyPulse
-          <span class="brand-badge">FOCUS ENGINE</span>
+        <div class="brand-monogram">PT</div>
+        <div class="brand-text-block">
+          <div class="brand-title">Piyush Tiwari</div>
+          <div class="brand-subtitle">Study Desk & Library</div>
         </div>
       </div>
 
       <!-- Desktop Navigation Tabs -->
       <nav class="desktop-nav-tabs" aria-label="Desktop Navigation">
         <button class="nav-tab-btn active" data-view="dashboard" onclick="window.switchView('dashboard')">
-          <span>🏠</span> <span>Dashboard</span>
+          <span>🏠</span> <span>Desk</span>
         </button>
         <button class="nav-tab-btn" data-view="curriculum" onclick="window.switchView('curriculum')">
-          <span>📋</span> <span>Roadmap</span>
+          <span>📋</span> <span>Syllabus</span>
         </button>
         <button class="nav-tab-btn" data-view="bookshelf" onclick="window.switchView('bookshelf')">
-          <span>📚</span> <span>3D Bookshelf</span>
+          <span>📚</span> <span>3D Library</span>
         </button>
         <button class="nav-tab-btn" data-view="palace" onclick="window.switchView('palace')">
-          <span>🏛️</span> <span>Memory Palace</span>
+          <span>🏛️</span> <span>Recall</span>
         </button>
         <button class="nav-tab-btn" data-view="chaos" onclick="window.switchView('chaos')">
-          <span>⚡</span> <span>Chaos Lab</span>
+          <span>⚡</span> <span>Systems Lab</span>
         </button>
         <button class="nav-tab-btn" data-view="analytics" onclick="window.switchView('analytics')">
-          <span>📊</span> <span>Analytics</span>
+          <span>📊</span> <span>Journal</span>
         </button>
       </nav>
 
@@ -59,17 +60,17 @@
         <div class="streak-pill" title="Current Daily Streak">
           <span>🔥</span> <span id="header-streak-val">1 Day</span>
         </div>
-        <div class="rpg-badge-pill" title="RPG Master Rank">
+        <div class="rpg-badge-pill" title="Learning Progression">
           <span id="rpg-level-badge">LVL 1</span>
-          <span id="rpg-title-badge" style="opacity: 0.85; font-size: 0.7rem;">Code Initiate</span>
+          <span id="rpg-title-badge" style="opacity: 0.85; font-size: 0.72rem;">Code Initiate</span>
         </div>
         <button class="icon-btn" id="theme-toggle-btn" onclick="window.toggleAppTheme()" title="Toggle Dark/Light Mode">
           <span id="theme-toggle-icon">☀️</span>
         </button>
-        <a href="StudyPulse.apk" class="btn-apk-download" download="StudyPulse.apk" title="Download Android APK">
+        <a href="StudyPulse.apk" class="btn-apk-pill" download="StudyPulse.apk" title="Download Android App">
           <span>📥</span> <span>APK</span>
         </a>
-        <div class="user-avatar" title="Piyush Tiwari">
+        <div class="user-avatar-pt" title="Piyush Tiwari">
           PT
         </div>
       </div>
@@ -81,18 +82,21 @@
        ========================================================================= -->
   <main class="main-container">
 
-    <!-- VIEW 1: DASHBOARD & FOCUS ENGINE -->
+    <!-- VIEW 1: THE STUDY DESK (DASHBOARD & FOCUS) -->
     <section class="view-panel active" id="view-dashboard">
       <div class="dashboard-grid">
         
-        <!-- Left: Hero Card & Focus Engine -->
+        <!-- Left Column: Welcome & Focus Sprints -->
         <div>
           <div class="hero-card">
             <div class="hero-header">
-              <h2 class="hero-title">Welcome back, Piyush! 🎯</h2>
+              <h2 class="hero-title">Welcome to your Study Desk, <em>Piyush</em></h2>
               <p class="hero-subtitle">
-                Your AI & Distributed Systems Command Center is synchronized. Track your 7 courses, 488 lectures, and 1,769 curriculum topics with flow-state focus.
+                A dedicated personal sanctum for mastering Data Science, Machine Learning, and Distributed Systems. Everything is tracked locally: your 7 core curricula, 488 lectures, and 1,769 topics.
               </p>
+              <div class="handwritten-note">
+                ✍️ "Consistency beats intensity. 25 minutes of genuine focus today builds lasting mastery tomorrow." — Piyush's note
+              </div>
             </div>
 
             <!-- Stats Counter Grid -->
@@ -103,11 +107,11 @@
               </div>
               <div class="stat-item">
                 <div class="stat-num" id="dash-streak-count">1 Day</div>
-                <div class="stat-label">Study Streak</div>
+                <div class="stat-label">Daily Streak</div>
               </div>
               <div class="stat-item">
                 <div class="stat-num" id="dash-focus-hours">0.0h</div>
-                <div class="stat-label">Focus Logged</div>
+                <div class="stat-label">Deep Work Logged</div>
               </div>
               <div class="stat-item">
                 <div class="stat-num" id="dash-rpg-level">LEVEL 1</div>
@@ -115,25 +119,25 @@
               </div>
             </div>
 
-            <!-- RPG Level Progression Bar -->
-            <div style="margin-top: 18px;">
-              <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 700; margin-bottom: 6px;">
-                <span style="color: var(--accent-purple);">RPG PROGRESSION</span>
-                <span id="dash-rpg-xp" style="font-family: var(--font-mono);">0 XP</span>
+            <!-- Learning Milestone Progress -->
+            <div style="margin-top: 20px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.76rem; font-weight: 700; margin-bottom: 6px;">
+                <span style="color: var(--accent-gold); font-family: var(--font-mono);">STUDY MILESTONE</span>
+                <span id="dash-rpg-xp" style="font-family: var(--font-mono); color: var(--text-secondary);">0 XP</span>
               </div>
-              <div style="width: 100%; height: 6px; background: rgba(148, 163, 184, 0.15); border-radius: 999px; overflow: hidden;">
-                <div id="dash-rpg-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan)); transition: width 0.4s ease;"></div>
+              <div style="width: 100%; height: 6px; background: rgba(160, 140, 120, 0.15); border-radius: var(--radius-full); overflow: hidden;">
+                <div id="dash-rpg-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-sage)); transition: width 0.4s ease;"></div>
               </div>
             </div>
           </div>
 
-          <!-- Chrono-Block Pomodoro Section -->
-          <div class="focus-card" style="margin-top: 20px;">
+          <!-- Focus Sprints & Reading Timer -->
+          <div class="focus-card" style="margin-top: 24px;">
             <div class="pomo-mode-selector">
-              <button class="pomo-tab active" data-mode="pomo" onclick="window.setTimerMode('pomo')">Pomodoro (25m)</button>
-              <button class="pomo-tab" data-mode="deep" onclick="window.setTimerMode('deep')">Deep Work (50m)</button>
-              <button class="pomo-tab" data-mode="short" onclick="window.setTimerMode('short')">Short Break (5m)</button>
-              <button class="pomo-tab" data-mode="long" onclick="window.setTimerMode('long')">Long Break (15m)</button>
+              <button class="pomo-tab active" data-mode="pomo" onclick="window.setTimerMode('pomo')">Deep Work (25m)</button>
+              <button class="pomo-tab" data-mode="deep" onclick="window.setTimerMode('deep')">Extended Study (50m)</button>
+              <button class="pomo-tab" data-mode="short" onclick="window.setTimerMode('short')">Rest (5m)</button>
+              <button class="pomo-tab" data-mode="long" onclick="window.setTimerMode('long')">Reflect (15m)</button>
             </div>
 
             <div class="timer-ring-container">
@@ -143,7 +147,7 @@
               </svg>
               <div class="timer-display">
                 <div class="timer-digits" id="timer-digits">25:00</div>
-                <div class="timer-status-pill" id="timer-status-pill">FLOW STATE</div>
+                <div class="timer-status-pill" id="timer-status-pill">QUIET CONCENTRATION</div>
               </div>
             </div>
 
@@ -161,33 +165,24 @@
           </div>
         </div>
 
-        <!-- Right: Web Audio Synthesizer Studio -->
+        <!-- Right Column: Ambient Soundscapes & Quick Access -->
         <div>
           <div class="audio-studio-card">
             <div class="audio-header">
-              <h3><span>🎛️</span> <span>Focus Audio Synthesizer</span></h3>
+              <h3><span>🕯️</span> <span>Reading Room Soundscapes</span></h3>
               <button class="icon-btn" id="btn-audio-toggle" onclick="window.toggleAudioSynthesizer()" title="Toggle Master Audio">
                 <span>🔊</span>
               </button>
             </div>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
-              Real-time Web Audio synthesis generates pure neuro-acoustic frequencies to lock into deep flow state.
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 16px;">
+              Subtle procedural background acoustics generated right in your browser to mute distractions and keep your mind calm.
             </p>
 
             <div class="audio-channels-grid">
               <div class="audio-channel">
                 <div class="channel-info">
-                  <span>🧠 40Hz Gamma Beats</span>
-                  <span style="font-family: var(--font-mono); color: var(--accent-cyan);">35%</span>
-                </div>
-                <input type="range" class="audio-slider" min="0" max="1" step="0.01" value="0.35" 
-                       oninput="window.setChannelVolume('binaural', this.value)">
-              </div>
-
-              <div class="audio-channel">
-                <div class="channel-info">
-                  <span>🌧️ Nordic Rain</span>
-                  <span style="font-family: var(--font-mono); color: var(--accent-cyan);">30%</span>
+                  <span>🌧️ Rain on Window</span>
+                  <span style="font-family: var(--font-mono); color: var(--accent-gold);">30%</span>
                 </div>
                 <input type="range" class="audio-slider" min="0" max="1" step="0.01" value="0.30" 
                        oninput="window.setChannelVolume('rain', this.value)">
@@ -195,8 +190,8 @@
 
               <div class="audio-channel">
                 <div class="channel-info">
-                  <span>🌊 Deep Brown Noise</span>
-                  <span style="font-family: var(--font-mono); color: var(--accent-cyan);">25%</span>
+                  <span>🌊 Deep Brownian Air</span>
+                  <span style="font-family: var(--font-mono); color: var(--accent-gold);">25%</span>
                 </div>
                 <input type="range" class="audio-slider" min="0" max="1" step="0.01" value="0.25" 
                        oninput="window.setChannelVolume('brown', this.value)">
@@ -204,29 +199,38 @@
 
               <div class="audio-channel">
                 <div class="channel-info">
-                  <span>🎹 Ambient Lo-Fi Pad</span>
-                  <span style="font-family: var(--font-mono); color: var(--accent-cyan);">20%</span>
+                  <span>🧠 40Hz Focus Frequency</span>
+                  <span style="font-family: var(--font-mono); color: var(--accent-gold);">35%</span>
+                </div>
+                <input type="range" class="audio-slider" min="0" max="1" step="0.01" value="0.35" 
+                       oninput="window.setChannelVolume('binaural', this.value)">
+              </div>
+
+              <div class="audio-channel">
+                <div class="channel-info">
+                  <span>🎹 Ambient Rhodes Chords</span>
+                  <span style="font-family: var(--font-mono); color: var(--accent-gold);">20%</span>
                 </div>
                 <input type="range" class="audio-slider" min="0" max="1" step="0.01" value="0.20" 
                        oninput="window.setChannelVolume('lofi', this.value)">
               </div>
             </div>
 
-            <!-- Live FFT Visualizer -->
-            <canvas class="audio-fft-canvas" id="audio-fft-canvas" width="600" height="60"></canvas>
+            <!-- Real-time Sound Spectrum Canvas -->
+            <canvas class="audio-fft-canvas" id="audio-fft-canvas" width="600" height="56"></canvas>
           </div>
 
           <!-- Quick Navigation Cards -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 24px;">
             <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('bookshelf')">
-              <div style="font-size: 1.5rem; margin-bottom: 6px;">📚</div>
-              <div style="font-size: 0.9rem; font-weight: 700;">3D Bookshelf</div>
-              <div style="font-size: 0.72rem; color: var(--text-muted);">18 tactile curriculum volumes in WebGL</div>
+              <div style="font-size: 1.6rem; margin-bottom: 6px;">📚</div>
+              <div style="font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600;">The 3D Library</div>
+              <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">18 tactile volumes in Three.js</div>
             </div>
             <div class="stat-item" style="cursor: pointer;" onclick="window.switchView('chaos')">
-              <div style="font-size: 1.5rem; margin-bottom: 6px;">⚡</div>
-              <div style="font-size: 0.9rem; font-weight: 700;">Chaos Lab</div>
-              <div style="font-size: 0.72rem; color: var(--text-muted);">Raft, Redis & Kafka Distributed Simulator</div>
+              <div style="font-size: 1.6rem; margin-bottom: 6px;">⚡</div>
+              <div style="font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600;">Systems Lab</div>
+              <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Raft, Redis & Kafka Architecture</div>
             </div>
           </div>
         </div>
@@ -234,31 +238,31 @@
       </div>
     </section>
 
-    <!-- VIEW 2: CURRICULUM MASTER MATRIX -->
+    <!-- VIEW 2: CURATED SYLLABUS & ROADMAP -->
     <section class="view-panel" id="view-curriculum">
       <div class="curriculum-header-panel">
         <!-- Horizontal Course Switcher -->
         <div class="course-selector-scroll" id="course-selector-container"></div>
 
         <!-- Selected Course Overview -->
-        <div style="margin-bottom: 16px;">
-          <h2 id="active-course-title" style="font-size: 1.35rem; font-weight: 800; margin-bottom: 4px;">CampusX DSMP</h2>
-          <p id="active-course-desc" style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 6px;">End-to-End Data Science</p>
-          <div id="active-course-stats" style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); font-family: var(--font-mono);">
+        <div style="margin-bottom: 18px;">
+          <h2 id="active-course-title" style="font-family: var(--font-serif); font-size: 1.55rem; font-weight: 600; margin-bottom: 4px;">CampusX DSMP</h2>
+          <p id="active-course-desc" style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 6px;">End-to-End Data Science & Machine Learning</p>
+          <div id="active-course-stats" style="font-size: 0.78rem; font-weight: 700; color: var(--accent-gold); font-family: var(--font-mono);">
             40 Modules • 213 Lectures • 1,219 Topics
           </div>
         </div>
 
-        <!-- Search & Filters -->
+        <!-- Search & Filter Controls -->
         <div class="search-filter-row">
           <div class="search-input-box">
             <span class="search-icon-pos">🔍</span>
-            <input type="text" class="search-input" id="curriculum-search-input" placeholder="Search topics, algorithms, frameworks...">
+            <input type="text" class="search-input" id="curriculum-search-input" placeholder="Search topics, algorithms, frameworks, math...">
           </div>
           <div style="display: flex; gap: 6px;">
             <button class="course-chip filter-chip active" data-filter="all">All Topics</button>
             <button class="course-chip filter-chip" data-filter="pending">Pending</button>
-            <button class="course-chip filter-chip" data-filter="completed">Completed</button>
+            <button class="course-chip filter-chip" data-filter="completed">Mastered</button>
           </div>
         </div>
       </div>
@@ -272,22 +276,22 @@
       <div class="bookshelf-container">
         <div class="bookshelf-hud">
           <div class="bookshelf-hud-badge">
-            <span>📚 18 CURRICULUM VOLUMES IN THREE.JS WEBGL</span>
+            <span>📚 THE REFERENCE SHELF • 18 VOLUMES IN THREE.JS</span>
           </div>
-          <div class="bookshelf-hud-badge" style="background: rgba(0, 242, 255, 0.15); color: var(--accent-cyan);">
-            <span>👆 Tap book to inspect syllabus</span>
+          <div class="bookshelf-hud-badge" style="background: rgba(229, 169, 60, 0.15); color: var(--accent-gold);">
+            <span>👆 Tap or click any book to pull out & inspect syllabus</span>
           </div>
         </div>
         <div id="bookshelf-3d-canvas-container"></div>
       </div>
     </section>
 
-    <!-- VIEW 4: 3D MEMORY PALACE & FSRS -->
+    <!-- VIEW 4: ACTIVE RECALL ARCHIVE (3D MEMORY PALACE) -->
     <section class="view-panel" id="view-palace">
       <div class="palace-container">
         <div class="bookshelf-hud">
           <div class="bookshelf-hud-badge">
-            <span>🏛️ SPATIAL MEMORY PALACE • FSRS SPACED REPETITION</span>
+            <span>🏛️ CONCEPT PEDESTALS • FSRS SPACED REPETITION</span>
           </div>
           <button class="bookshelf-hud-badge" style="cursor: pointer;" onclick="window.palaceResetView()">
             <span>↺ Reset Orbit View</span>
@@ -298,19 +302,19 @@
         <!-- Floating Card Modal for Memory Palace -->
         <div class="palace-card-modal" id="palace-card-modal">
           <div class="palace-card-front" id="palace-card-front">
-            <div style="font-size: 0.72rem; font-weight: 700; color: var(--accent-cyan);" id="palace-card-category">DISTRIBUTED SYSTEMS</div>
-            <h3 style="font-size: 1.15rem; font-weight: 800; margin: 6px 0 10px;" id="palace-card-title">Concept</h3>
-            <p style="font-size: 0.9rem; color: var(--text-primary); line-height: 1.5;" id="palace-card-question">Question...</p>
+            <div style="font-size: 0.72rem; font-family: var(--font-mono); font-weight: 700; color: var(--accent-gold);" id="palace-card-category">DISTRIBUTED SYSTEMS</div>
+            <h3 style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: 6px 0 10px;" id="palace-card-title">Concept</h3>
+            <p style="font-size: 0.92rem; color: var(--text-primary); line-height: 1.55;" id="palace-card-question">Question...</p>
             <button class="btn-pomo-sec" style="margin-top: 14px; width: 100%;" onclick="window.palaceFlipCard()">
-              🔄 Reveal Architectural Solution
+              🔄 Reveal Solution & Invariants
             </button>
           </div>
 
           <div class="palace-card-back" id="palace-card-back" style="display: none;">
-            <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;" id="palace-card-answer">
+            <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 12px;" id="palace-card-answer">
               Answer...
             </div>
-            <pre style="background: #020617; padding: 10px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.78rem; overflow-x: auto; margin-bottom: 16px;"><code id="palace-card-code">code</code></pre>
+            <pre style="background: #06090e; padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.78rem; overflow-x: auto; margin-bottom: 16px; border: 1px solid var(--surface-border);"><code id="palace-card-code">code</code></pre>
             
             <div class="fsrs-rating-buttons">
               <button class="btn-fsrs again" onclick="window.palaceGradeCard('again')">Again (&lt;10m)</button>
@@ -323,13 +327,13 @@
       </div>
     </section>
 
-    <!-- VIEW 5: SYSTEM DESIGN CHAOS LAB -->
+    <!-- VIEW 5: DISTRIBUTED SYSTEMS ARCHITECTURE LAB -->
     <section class="view-panel" id="view-chaos">
       <div class="chaos-lab-panel">
         <div class="chaos-top-bar">
           <div>
-            <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;">Distributed Systems Chaos Simulator</h2>
-            <p style="font-size: 0.84rem; color: var(--text-secondary);">Real-time consensus, caching, and streaming fault injection lab</p>
+            <h2 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600; margin-bottom: 4px;">Distributed Systems Architecture Lab</h2>
+            <p style="font-size: 0.86rem; color: var(--text-secondary);">Interactive fault injection and resilience testing workbench</p>
           </div>
           <div class="chaos-arch-tabs">
             <button class="btn-arch-tab active" data-arch="gateway" onclick="window.loadChaosArchitecture('gateway')">API Gateway & Redis</button>
@@ -338,7 +342,7 @@
           </div>
         </div>
 
-        <div class="chaos-canvas-wrapper">
+        <div class="chaos-canvas-wrapper" id="chaos-canvas-wrapper">
           <canvas id="chaos-canvas"></canvas>
         </div>
 
@@ -359,26 +363,27 @@
         </div>
 
         <div class="chaos-console-logs" id="chaos-console-logs">
-          <div class="chaos-log-line" style="color: #64748b;">[SYSTEM INITIALIZED] Distributed cluster healthy. Ready for Chaos Monkey injection.</div>
+          <div class="chaos-log-line" style="color: #64748b;">[SYSTEM ONLINE] Distributed architecture running normally. Select an action to test resilience.</div>
         </div>
       </div>
     </section>
 
-    <!-- VIEW 6: COGNITIVE ANALYTICS & HEATMAP -->
+    <!-- VIEW 6: STUDY JOURNAL & ACTIVITY RECORD -->
     <section class="view-panel" id="view-analytics">
       <div class="analytics-panel">
         <div class="heatmap-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
             <div>
-              <h3 style="font-size: 1.15rem; font-weight: 800;">Cognitive Activity Heatmap</h3>
-              <p style="font-size: 0.82rem; color: var(--text-secondary);">365-day chronological record of daily study sprints and completed topics</p>
+              <h3 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600;">Annual Study Journal</h3>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">A real chronological 365-day heatmap of deep work sessions and mastered topics</p>
             </div>
-            <div style="display: flex; gap: 4px; align-items: center; font-size: 0.72rem; color: var(--text-muted);">
+            <div style="display: flex; gap: 5px; align-items: center; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
               <span>Less</span>
-              <span style="width: 10px; height: 10px; background: rgba(148, 163, 184, 0.15); border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #075985; border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #0284c7; border-radius: 2px;"></span>
-              <span style="width: 10px; height: 10px; background: #00f2ff; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: rgba(160, 140, 120, 0.12); border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #78350f; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #b45309; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #d97706; border-radius: 2px;"></span>
+              <span style="width: 10px; height: 10px; background: #e5a93c; border-radius: 2px;"></span>
               <span>More</span>
             </div>
           </div>
@@ -389,17 +394,17 @@
         </div>
 
         <!-- Student Profile Card -->
-        <div class="hero-card" style="padding: 24px;">
-          <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 8px;">Engineering Portfolio Profile</h3>
-          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-            <strong>Piyush Tiwari</strong> • Data Science, Machine Learning, Deep Learning & Distributed Systems Engineer.<br>
-            Mastering 7 flagship curriculums including CampusX DSMP, GenAI & LangChain, MLOps Bootcamp, AI Security, Python DSA, and Big Data Engineering.
+        <div class="hero-card" style="padding: 26px;">
+          <h3 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600; margin-bottom: 8px;">About Piyush Tiwari</h3>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.65;">
+            Data Science, Machine Learning & Distributed Systems Engineer.<br>
+            Studying full-spectrum engineering: from core algorithmic foundations and mathematical statistics to high-throughput distributed consensus, production MLOps pipelines, and foundation model orchestration.
           </p>
-          <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <div style="margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap;">
             <a href="https://github.com/30Piyush2025/MY_STUDY_PROJECT" target="_blank" class="btn-pomo-sec" style="text-decoration: none;">
               🐙 GitHub Repository
             </a>
-            <a href="StudyPulse.apk" class="btn-pomo-main" style="text-decoration: none; font-size: 0.88rem; padding: 8px 18px;">
+            <a href="StudyPulse.apk" class="btn-pomo-main" style="text-decoration: none; font-size: 0.88rem; padding: 10px 22px;">
               📥 Download Android App (APK)
             </a>
           </div>
@@ -412,20 +417,20 @@
   <!-- =========================================================================
        OVERLAYS & MODALS
        ========================================================================= -->
-  <!-- Topic Study Note Modal -->
+  <!-- Personal Study Notes Modal -->
   <div class="notes-modal-overlay" id="notes-modal-overlay">
     <div class="notes-card">
-      <div style="font-size: 0.74rem; font-weight: 700; color: var(--accent-cyan);">PERSONAL STUDY NOTES</div>
-      <h3 style="font-size: 1.1rem; font-weight: 800; margin-top: 4px;" id="notes-modal-topic-title">Topic Title</h3>
-      <textarea class="notes-textarea" id="notes-modal-textarea" placeholder="Write key formulas, code snippets, gotchas, or interview notes..."></textarea>
+      <div style="font-size: 0.74rem; font-family: var(--font-mono); font-weight: 700; color: var(--accent-gold);">STUDY NOTEBOOK</div>
+      <h3 style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin-top: 4px;" id="notes-modal-topic-title">Topic Title</h3>
+      <textarea class="notes-textarea" id="notes-modal-textarea" placeholder="Jot down key derivations, intuition, code snippets, or gotchas for quick review..."></textarea>
       <div class="notes-footer">
         <button class="btn-pomo-sec" onclick="window.closeTopicNoteModal()">Cancel</button>
-        <button class="btn-pomo-main" style="padding: 8px 20px; font-size: 0.88rem;" onclick="window.saveTopicNote()">Save Note</button>
+        <button class="btn-pomo-main" style="padding: 8px 22px; font-size: 0.88rem;" onclick="window.saveTopicNote()">Save to Notebook</button>
       </div>
     </div>
   </div>
 
-  <!-- Book Dossier Overlay (Populated dynamically by bookshelf-3d.js) -->
+  <!-- Book Dossier Modal Container (Used by 3D Bookshelf) -->
   <div class="dossier-overlay-modal" id="bookshelf-dossier-modal">
     <div class="dossier-card" id="bookshelf-dossier-content"></div>
   </div>
@@ -436,27 +441,27 @@
   <nav class="bottom-nav" aria-label="Mobile Bottom Navigation">
     <button class="bottom-nav-item active" data-view="dashboard" onclick="window.switchView('dashboard')">
       <span class="nav-icon">🏠</span>
-      <span>Focus</span>
+      <span>Desk</span>
     </button>
     <button class="bottom-nav-item" data-view="curriculum" onclick="window.switchView('curriculum')">
       <span class="nav-icon">📋</span>
-      <span>Roadmap</span>
+      <span>Syllabus</span>
     </button>
     <button class="bottom-nav-item" data-view="bookshelf" onclick="window.switchView('bookshelf')">
       <span class="nav-icon">📚</span>
-      <span>3D Shelf</span>
+      <span>3D Library</span>
     </button>
     <button class="bottom-nav-item" data-view="palace" onclick="window.switchView('palace')">
       <span class="nav-icon">🏛️</span>
-      <span>Palace</span>
+      <span>Recall</span>
     </button>
     <button class="bottom-nav-item" data-view="chaos" onclick="window.switchView('chaos')">
       <span class="nav-icon">⚡</span>
-      <span>Chaos</span>
+      <span>Systems</span>
     </button>
     <button class="bottom-nav-item" data-view="analytics" onclick="window.switchView('analytics')">
       <span class="nav-icon">📊</span>
-      <span>Stats</span>
+      <span>Journal</span>
     </button>
   </nav>
 
