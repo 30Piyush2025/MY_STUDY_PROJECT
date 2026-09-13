@@ -42,8 +42,7 @@
     inspectedDate: getTodayDateString(),
     selectedWeekOffset: 0, // 0 = current week, -1 = last week, -2 = 2 weeks ago
     selectedMonth: new Date().getMonth(), // 0-11
-    selectedYear: new Date().getFullYear(),
-    syntheticCache: {}
+    selectedYear: new Date().getFullYear()
   };
 
   // =========================================================================
@@ -189,25 +188,13 @@
     };
   }
 
-  // Deterministic PRNG for realistic synthetic baseline
-  function deterministicHash(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = ((hash << 5) - hash) + str.charCodeAt(i);
-      hash |= 0;
-    }
-    const x = Math.sin(hash) * 10000;
-    return x - Math.floor(x);
-  }
-
   /**
    * Retrieves unified telemetry for a single date string ("YYYY-MM-DD").
-   * Prioritizes actual user entries, with smooth deterministic fallback for historic days
-   * to ensure comprehensive, rich charts even when the app is freshly launched.
+   * Strictly uses authentic user activity stored in phone storage (localStorage/IndexedDB).
+   * Returns clean zero state if no activity was recorded on that date.
    */
   function getDateRecord(dateStr, liveState) {
     const raw = liveState.dailyActivity ? liveState.dailyActivity[dateStr] : null;
-    const todayStr = getTodayDateString();
 
     // Check habits done on that date from habit history
     const completedHabitsList = [];
@@ -219,7 +206,7 @@
       });
     }
 
-    // If explicit user activity exists, use real data
+    // If explicit user activity exists, return verified real data
     if (raw && (raw.focus !== undefined || raw.focusMinutes !== undefined || raw.topic !== undefined || raw.topics !== undefined || raw.habit !== undefined || raw.habits !== undefined)) {
       const focusMins = Number(raw.focus !== undefined ? raw.focus : (raw.focusMinutes || 0));
       const topics = Number(raw.topic !== undefined ? raw.topic : (raw.topics || 0));
@@ -228,7 +215,7 @@
         Number(raw.habit !== undefined ? raw.habit : (raw.habits || 0))
       );
       const sessions = raw.sessions || (focusMins > 0 ? Math.max(1, Math.round(focusMins / 30)) : 0);
-      const notes = raw.notes !== undefined ? raw.notes : (topics > 0 ? Math.min(topics, 2) : 0);
+      const notes = raw.notes !== undefined ? raw.notes : 0;
       const xp = raw.xp || (focusMins * 2 + topics * 50 + habitCount * 25);
 
       return {
@@ -244,88 +231,33 @@
       };
     }
 
-    // If today or future date without activity
-    if (dateStr >= todayStr) {
-      const habitCount = completedHabitsList.length;
+    // If only habits were recorded on this date
+    if (completedHabitsList.length > 0) {
       return {
         dateStr,
         focusMinutes: 0,
         topics: 0,
-        habits: habitCount,
+        habits: completedHabitsList.length,
         sessions: 0,
         notes: 0,
-        xp: habitCount * 25,
+        xp: completedHabitsList.length * 25,
         completedHabits: completedHabitsList,
         isSynthetic: false
       };
     }
 
-    // Historical date fallback: Realistic cognitive baseline for Piyush Tiwari
-    if (engineState.syntheticCache[dateStr]) {
-      return engineState.syntheticCache[dateStr];
-    }
-
-    const d = parseDateString(dateStr);
-    const dayOfWeek = (d.getDay() + 6) % 7; // 0 = Mon, ..., 6 = Sun
-    const r1 = deterministicHash(dateStr + '_seed1');
-    const r2 = deterministicHash(dateStr + '_seed2');
-
-    let baseMins = 0;
-    let topics = 0;
-    let habits = 0;
-
-    if (dayOfWeek === 2) {
-      // Wednesday: Peak Deep Work cognitive sprint
-      baseMins = Math.round(195 + r1 * 85); // 195 - 280 mins (3.25h - 4.6h)
-      topics = Math.round(2 + r2 * 3);     // 2 - 5 topics
-      habits = 5;
-    } else if (dayOfWeek === 0 || dayOfWeek === 3) {
-      // Monday / Thursday: Core distributed systems and DSA sprint
-      baseMins = Math.round(150 + r1 * 75); // 150 - 225 mins (2.5h - 3.75h)
-      topics = Math.round(2 + r2 * 2);     // 2 - 4 topics
-      habits = 4;
-    } else if (dayOfWeek === 1 || dayOfWeek === 4) {
-      // Tuesday / Friday: Machine learning & MLOps implementation
-      baseMins = Math.round(135 + r1 * 65); // 135 - 200 mins (2.25h - 3.3h)
-      topics = Math.round(1 + r2 * 2);     // 1 - 3 topics
-      habits = 4;
-    } else if (dayOfWeek === 5) {
-      // Saturday: Extended Project Architecture
-      baseMins = Math.round(160 + r1 * 80); // 160 - 240 mins (2.6h - 4.0h)
-      topics = Math.round(2 + r2 * 2);
-      habits = 5;
-    } else {
-      // Sunday: Deliberate recovery or light review
-      if (r1 < 0.3) {
-        baseMins = 0; // Rest Day
-        topics = 0;
-        habits = 1;
-      } else {
-        baseMins = Math.round(75 + r1 * 60); // 75 - 135 mins
-        topics = 1;
-        habits = 3;
-      }
-    }
-
-    const habitCount = Math.max(habits, completedHabitsList.length);
-    const sessions = baseMins > 0 ? Math.max(1, Math.round(baseMins / 32)) : 0;
-    const notes = topics > 0 ? Math.max(1, Math.floor(r2 * 2)) : 0;
-    const xp = baseMins * 2 + topics * 50 + habitCount * 25;
-
-    const synthRecord = {
+    // Authentic clean zero telemetry: No session was conducted on this date
+    return {
       dateStr,
-      focusMinutes: baseMins,
-      topics,
-      habits: habitCount,
-      sessions,
-      notes,
-      xp,
-      completedHabits: completedHabitsList,
-      isSynthetic: true
+      focusMinutes: 0,
+      topics: 0,
+      habits: 0,
+      sessions: 0,
+      notes: 0,
+      xp: 0,
+      completedHabits: [],
+      isSynthetic: false
     };
-
-    engineState.syntheticCache[dateStr] = synthRecord;
-    return synthRecord;
   }
 
   // =========================================================================
@@ -378,7 +310,7 @@
     const is7DaysAgo = dateStr === offsetDays(todayStr, -7);
 
     // Productivity Badge Logic
-    let badgeText = '🧘 Rest & Recovery';
+    let badgeText = 'No Activity Logged';
     let badgeClass = 'badge-rest';
     if (record.focusMinutes >= 200) {
       badgeText = '🔥 Elite Deep Sprint';
@@ -392,6 +324,9 @@
     } else if (record.focusMinutes > 0) {
       badgeText = '☕ Light Review';
       badgeClass = 'badge-light';
+    } else if (record.habits > 0) {
+      badgeText = '✨ Disciplines Logged';
+      badgeClass = 'badge-steady';
     }
 
     // Daily target (120m baseline)
@@ -423,7 +358,7 @@
             <div class="stats-hero-date">${formatDisplayDate(dateStr)}</div>
             <div class="stats-hero-sub">
               ${isToday ? '<span>📍 Current Study Session</span>' : `<span>Historical Log (${dateStr})</span>`}
-              ${record.isSynthetic ? '<span class="synthetic-tag" title="Deterministic baseline pattern">Baseline Telemetry</span>' : '<span class="verified-tag">Verified State</span>'}
+              <span class="verified-tag">Phone Flash Storage</span>
             </div>
           </div>
           <div class="stats-badge ${badgeClass}">${badgeText}</div>
@@ -1013,27 +948,24 @@
         <div class="stats-cognitive-card">
           <div class="stats-cognitive-badge">⚡ COGNITIVE PACING ADVICE</div>
           <div class="stats-cognitive-title">
-            Peak Focus Day: <span class="text-orange">${peakBucket.name}</span> (${formatMinsToHours(peakBucket.avgMins)} avg)
+            ${maxAvgMins > 0 ? `Peak Focus Day: <span class="text-orange">${peakBucket.name}</span> (${formatMinsToHours(peakBucket.avgMins)} avg)` : `Ready to Map Your Cognitive Rhythm`}
           </div>
           <p class="stats-cognitive-text">
-            Historical telemetry confirms your highest cognitive stamina lands on <strong>${peakBucket.name}s</strong>. 
-            Capitalize on this natural neurological peak by scheduling high-friction engineering subjects—such as 
-            <strong>Distributed Consensus algorithms (Raft, Paxos, Quorum logic)</strong>, <strong>Deep Transformer backprop derivations</strong>, 
-            and <strong>Hard Dynamic Programming DSA sets</strong>—during your peak ${peakBucket.name} window.
+            ${maxAvgMins > 0 ? `Historical telemetry confirms your highest cognitive stamina lands on <strong>${peakBucket.name}s</strong>. Capitalize on this natural neurological peak by scheduling high-friction engineering subjects—such as <strong>Distributed Systems (Raft, Quorum logic)</strong>, <strong>Deep Transformers</strong>, and <strong>Hard DSA sets</strong>—during your peak ${peakBucket.name} window.` : `No deep work sessions recorded yet across the past 8 weeks. Complete your first focus sprint on the Study Desk to begin mapping your peak performance weekdays and stamina cycles!`}
           </p>
           <div class="stats-cognitive-strategy-grid">
             <div class="stats-strategy-item">
               <div class="strategy-icon">🚀</div>
               <div class="strategy-content">
-                <div class="strategy-name">${peakBucket.name} Sprint Strategy</div>
-                <div class="strategy-desc">Schedule 50m extended mastery blocks. Protect this day from low-leverage administrative distractions.</div>
+                <div class="strategy-name">${maxAvgMins > 0 ? `${peakBucket.name} Sprint Strategy` : `Primary Sprint Strategy`}</div>
+                <div class="strategy-desc">${maxAvgMins > 0 ? `Schedule 50m extended mastery blocks. Protect this day from low-leverage administrative distractions.` : `Complete 25m or 50m sprints to establish your cognitive foundation.`}</div>
               </div>
             </div>
             <div class="stats-strategy-item">
               <div class="strategy-icon">🧘</div>
               <div class="strategy-content">
-                <div class="strategy-name">${lowestBucket.name} Recovery Strategy</div>
-                <div class="strategy-desc">Your lowest volume day (${formatMinsToHours(lowestBucket.avgMins)} avg). Treat as deliberate consolidation: FSRS reviews & 3D Memory Palace exploration.</div>
+                <div class="strategy-name">${maxAvgMins > 0 ? `${lowestBucket.name} Recovery Strategy` : `Rest & Review Strategy`}</div>
+                <div class="strategy-desc">${maxAvgMins > 0 ? `Your lowest volume day (${formatMinsToHours(lowestBucket.avgMins)} avg). Treat as deliberate consolidation: FSRS reviews & 3D Memory Palace exploration.` : `Deliberate recovery and review days maintain long-term learning momentum.`}</div>
               </div>
             </div>
           </div>

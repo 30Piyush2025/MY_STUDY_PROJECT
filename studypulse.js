@@ -38,7 +38,7 @@
       category: 'DEEP FOCUS',
       icon: '🌅',
       target: '45m deep focus algorithmic study',
-      streak: 3,
+      streak: 0,
       history: {}
     },
     {
@@ -47,7 +47,7 @@
       category: 'ALGORITHMS',
       icon: '🧩',
       target: 'Graph, Tree, or Dynamic Programming',
-      streak: 4,
+      streak: 0,
       history: {}
     },
     {
@@ -56,7 +56,7 @@
       category: 'SYSTEMS & ML',
       icon: '🏛️',
       target: 'Raft, MLOps, or Transformers',
-      streak: 2,
+      streak: 0,
       history: {}
     },
     {
@@ -65,7 +65,7 @@
       category: 'RESEARCH',
       icon: '📄',
       target: '20m reading & note taking',
-      streak: 1,
+      streak: 0,
       history: {}
     },
     {
@@ -74,7 +74,7 @@
       category: 'WELLBEING',
       icon: '💧',
       target: '3L water & mobility stretches',
-      streak: 5,
+      streak: 0,
       history: {}
     },
     {
@@ -83,7 +83,7 @@
       category: 'DAILY ROUTINE',
       icon: '🌙',
       target: 'FSRS flashcard review & sync notes',
-      streak: 3,
+      streak: 0,
       history: {}
     }
   ];
@@ -217,15 +217,43 @@
         state.habits = JSON.parse(JSON.stringify(DEFAULT_HABITS));
       }
 
+      // Sanitize habit streaks: calculate strictly from authentic history
+      if (Array.isArray(state.habits)) {
+        const todayStr = getTodayDateString();
+        state.habits.forEach(h => {
+          if (!h.history || typeof h.history !== 'object') {
+            h.history = {};
+            h.streak = 0;
+          } else {
+            let count = 0;
+            let checkDate = new Date();
+            let dStr = todayStr;
+            if (!h.history[dStr]) {
+              checkDate.setDate(checkDate.getDate() - 1);
+              dStr = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
+            }
+            while (h.history[dStr] === true) {
+              count++;
+              checkDate.setDate(checkDate.getDate() - 1);
+              dStr = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
+            }
+            h.streak = count;
+          }
+        });
+        savePersistedState(STORAGE_KEYS.HABITS);
+      }
+
       const savedStep = localStorage.getItem(STORAGE_KEYS.FOCUSPRO_STEP);
       if (savedStep) {
         state.focusProStep = parseInt(savedStep, 10) || 1;
       }
 
-      // Remove stale dummy data: if user hasn't studied yet, reset streak to 0
+      // Remove stale dummy data: if user hasn't studied yet, reset streak & XP to 0
       if (state.completedTopics.size === 0 && state.totalFocusSeconds === 0 && (!state.dailyActivity || Object.keys(state.dailyActivity).length === 0)) {
         state.streak = { count: 0, lastActive: null };
+        state.xp = 0;
         savePersistedState(STORAGE_KEYS.STREAK);
+        savePersistedState(STORAGE_KEYS.XP);
       }
     } catch (e) {
       console.warn('[StudyPulse] Error loading localStorage state:', e);
@@ -269,9 +297,223 @@
       if (!key || key === STORAGE_KEYS.FOCUSPRO_STEP) {
         localStorage.setItem(STORAGE_KEYS.FOCUSPRO_STEP, String(state.focusProStep));
       }
+
+      // Mirror to IndexedDB on phone storage
+      syncStateToIndexedDB();
     } catch (e) {
       console.warn('[StudyPulse] Error saving to localStorage:', e);
     }
+  }
+
+  // =========================================================================
+  // PHONE STORAGE VAULT: INDEXEDDB & PERSISTENT STORAGE
+  // =========================================================================
+  const DB_NAME = 'StudyPulsePhoneVault';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'user_study_data';
+  let idbInstance = null;
+
+  function initIndexedDBVault() {
+    if (!window.indexedDB) {
+      console.warn('[PhoneStorage] IndexedDB not supported on this device.');
+      return;
+    }
+    try {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      request.onupgradeneeded = function(e) {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME);
+        }
+      };
+      request.onsuccess = function(e) {
+        idbInstance = e.target.result;
+        console.log('[PhoneStorage] IndexedDB Phone Vault Active.');
+        syncStateToIndexedDB();
+      };
+      request.onerror = function(e) {
+        console.warn('[PhoneStorage] IndexedDB error:', e);
+      };
+    } catch (err) {
+      console.warn('[PhoneStorage] Error opening IndexedDB:', err);
+    }
+  }
+
+  function syncStateToIndexedDB() {
+    if (!idbInstance) return;
+    try {
+      const tx = idbInstance.transaction([STORE_NAME], 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      const snapshot = {
+        user: state.user,
+        theme: state.theme,
+        completedTopics: Array.from(state.completedTopics),
+        topicNotes: state.topicNotes,
+        totalFocusSeconds: state.totalFocusSeconds,
+        dailyActivity: state.dailyActivity,
+        streak: state.streak,
+        xp: state.xp,
+        fsrs: state.fsrs,
+        milestones: state.milestones,
+        habits: state.habits,
+        focusProStep: state.focusProStep,
+        lastSavedAt: new Date().toISOString()
+      };
+      store.put(snapshot, 'app_state_backup');
+    } catch (err) {
+      console.warn('[PhoneStorage] Could not write snapshot to IndexedDB:', err);
+    }
+  }
+
+  function requestPhoneStoragePersistence() {
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist().then(granted => {
+        console.log('[PhoneStorage] Persistent storage granted:', granted);
+        const badge = document.getElementById('phone-storage-status-text');
+        if (badge) {
+          badge.textContent = granted ? 'Phone Flash Storage (Persistent)' : 'Phone Storage (Standard)';
+        }
+      }).catch(() => {});
+    }
+  }
+
+  function exportPhoneStorageBackup() {
+    const backupData = {
+      app: 'StudyPulse',
+      version: '3.0',
+      exportedAt: new Date().toISOString(),
+      user: state.user,
+      theme: state.theme,
+      completedTopics: Array.from(state.completedTopics),
+      topicNotes: state.topicNotes,
+      totalFocusSeconds: state.totalFocusSeconds,
+      dailyActivity: state.dailyActivity,
+      streak: state.streak,
+      xp: state.xp,
+      fsrs: state.fsrs,
+      milestones: state.milestones,
+      habits: state.habits,
+      focusProStep: state.focusProStep
+    };
+
+    const jsonStr = JSON.stringify(backupData, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const today = getTodayDateString();
+    a.href = url;
+    a.download = `StudyPulse_Phone_Backup_${today}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('💾 Backup saved to Phone Storage (Downloads)!');
+    hapticFeedback([40, 30, 40]);
+  }
+
+  function importPhoneStorageBackup(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!data || typeof data !== 'object') {
+          throw new Error('Invalid backup file format.');
+        }
+
+        if (Array.isArray(data.completedTopics)) {
+          state.completedTopics = new Set(data.completedTopics);
+        }
+        if (data.topicNotes) state.topicNotes = data.topicNotes;
+        if (typeof data.totalFocusSeconds === 'number') state.totalFocusSeconds = data.totalFocusSeconds;
+        if (data.dailyActivity) state.dailyActivity = data.dailyActivity;
+        if (data.streak) state.streak = data.streak;
+        if (typeof data.xp === 'number') state.xp = data.xp;
+        if (data.milestones) state.milestones = data.milestones;
+        if (Array.isArray(data.habits)) state.habits = data.habits;
+        if (data.theme) state.theme = data.theme;
+        if (data.focusProStep) state.focusProStep = data.focusProStep;
+
+        savePersistedState();
+        syncStateToIndexedDB();
+
+        updateDashboardUI();
+        renderActivityHeatmap();
+        renderHabitsGrid();
+        renderMilestoneCountdown();
+        if (typeof window.initStudyStatsHub === 'function') {
+          window.initStudyStatsHub();
+        }
+
+        closePhoneStorageModal();
+        showToast('✅ Study data restored from Phone Storage!');
+        hapticFeedback([60, 40, 60]);
+      } catch (err) {
+        alert('Could not restore backup: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function resetAllUserData() {
+    if (!confirm('Are you sure you want to reset all data to a clean slate? This will clear all study progress, streaks, and habits.')) {
+      return;
+    }
+    state.completedTopics = new Set();
+    state.topicNotes = {};
+    state.totalFocusSeconds = 0;
+    state.dailyActivity = {};
+    state.streak = { count: 0, lastActive: null };
+    state.xp = 0;
+    state.fsrs = {};
+    state.milestones = { ...DEFAULT_MILESTONES };
+    state.habits = JSON.parse(JSON.stringify(DEFAULT_HABITS));
+    state.focusProStep = 1;
+
+    savePersistedState();
+    syncStateToIndexedDB();
+
+    updateDashboardUI();
+    renderActivityHeatmap();
+    renderHabitsGrid();
+    renderMilestoneCountdown();
+    if (typeof window.initStudyStatsHub === 'function') {
+      window.initStudyStatsHub();
+    }
+
+    closePhoneStorageModal();
+    showToast('🧹 Clean slate: All data cleared. Ready for your study journey!');
+    hapticFeedback([80, 50, 80]);
+  }
+
+  function openPhoneStorageModal() {
+    const overlay = document.getElementById('phone-storage-modal-overlay');
+    if (!overlay) return;
+    overlay.style.display = 'flex';
+
+    // Update storage status metrics
+    const hours = (state.totalFocusSeconds / 3600).toFixed(1);
+    const completedCount = state.completedTopics.size;
+    const habitsCount = (state.habits || []).length;
+    const streakCount = state.streak.count || 0;
+
+    const statsEl = document.getElementById('storage-modal-stats');
+    if (statsEl) {
+      statsEl.innerHTML = `
+        <div class="stat-item"><div class="stat-num">${completedCount}</div><div class="stat-label">Topics</div></div>
+        <div class="stat-item"><div class="stat-num">${hours}h</div><div class="stat-label">Focus</div></div>
+        <div class="stat-item"><div class="stat-num">${streakCount}</div><div class="stat-label">Streak</div></div>
+        <div class="stat-item"><div class="stat-num">${habitsCount}</div><div class="stat-label">Habits</div></div>
+      `;
+    }
+    hapticFeedback(10);
+  }
+
+  function closePhoneStorageModal() {
+    const overlay = document.getElementById('phone-storage-modal-overlay');
+    if (overlay) overlay.style.display = 'none';
+    hapticFeedback(8);
   }
 
   // =========================================================================
@@ -305,13 +547,18 @@
   function recordActivity(type, amount = 1) {
     const today = getTodayDateString();
     if (!state.dailyActivity[today]) {
-      state.dailyActivity[today] = { topics: 0, focusMinutes: 0, habits: 0 };
+      state.dailyActivity[today] = { topics: 0, focusMinutes: 0, habits: 0, tags: {} };
+    }
+    if (!state.dailyActivity[today].tags) {
+      state.dailyActivity[today].tags = {};
     }
 
     if (type === 'topic') {
       state.dailyActivity[today].topics = (state.dailyActivity[today].topics || 0) + amount;
     } else if (type === 'focus') {
       state.dailyActivity[today].focusMinutes = (state.dailyActivity[today].focusMinutes || 0) + amount;
+      const curTag = state.currentTag || 'General Study';
+      state.dailyActivity[today].tags[curTag] = (state.dailyActivity[today].tags[curTag] || 0) + amount;
     } else if (type === 'habit') {
       state.dailyActivity[today].habits = (state.dailyActivity[today].habits || 0) + amount;
     }
@@ -1363,11 +1610,8 @@
     const regainTodayEl = document.getElementById('regain-today-focus-time');
     if (regainTodayEl) regainTodayEl.textContent = timeFormatted;
 
-    const todayBar = document.getElementById('today-bar-fill');
-    if (todayBar) {
-      const pct = Math.min(100, Math.max(25, (state.totalFocusSeconds / 7200) * 100));
-      todayBar.style.height = `${pct}%`;
-    }
+    // Dynamic 7-day weekly tracker & tag breakdown from real phone storage data
+    renderDashboardWeeklyTracker();
 
     updateRPGStatus();
     updateMilestoneWidget();
@@ -1375,6 +1619,88 @@
     renderHabitsGrid();
     calculateProductivityScore();
     generateFocusProAdvice();
+  }
+
+  function renderDashboardWeeklyTracker() {
+    // 1. Weekly Bars (Mon - Sun)
+    const chartContainer = document.getElementById('regain-week-chart');
+    if (chartContainer) {
+      const today = new Date();
+      const dayOfWeek = (today.getDay() + 6) % 7; // Mon = 0 ... Sun = 6
+      const monday = new Date(today);
+      monday.setDate(today.getDate() - dayOfWeek);
+
+      const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+      let html = '';
+
+      for (let i = 0; i < 7; i++) {
+        const cur = new Date(monday);
+        cur.setDate(monday.getDate() + i);
+        const dateStr = `${cur.getFullYear()}-${String(cur.getMonth() + 1).padStart(2, '0')}-${String(cur.getDate()).padStart(2, '0')}`;
+        const isToday = i === dayOfWeek;
+
+        const dayRec = state.dailyActivity[dateStr];
+        const mins = dayRec ? (dayRec.focusMinutes || dayRec.focus || 0) : 0;
+        const pct = Math.min(100, Math.round((mins / 120) * 100));
+
+        html += `
+          <div class="regain-chart-col ${isToday ? 'is-today' : ''}" title="${dateStr}: ${mins} mins logged">
+            <div class="regain-chart-bar-bg">
+              <div class="regain-chart-bar-fill" ${isToday ? 'id="today-bar-fill"' : ''} style="height: ${pct}%;"></div>
+            </div>
+            <span class="regain-chart-label">${dayNames[i]}</span>
+          </div>
+        `;
+      }
+      chartContainer.innerHTML = html;
+    }
+
+    // 2. Real Tag Distribution
+    const tagTotals = {
+      'DSA & LeetCode': 0,
+      'Generative AI & LLMs': 0,
+      'CampusX Machine Learning': 0,
+      'Systems & Docker': 0
+    };
+
+    Object.values(state.dailyActivity || {}).forEach(day => {
+      if (day.tags && typeof day.tags === 'object') {
+        Object.entries(day.tags).forEach(([tag, mins]) => {
+          if (tagTotals[tag] !== undefined) {
+            tagTotals[tag] += Number(mins) || 0;
+          } else if (tag.includes('DSA') || tag.includes('LeetCode')) {
+            tagTotals['DSA & LeetCode'] += Number(mins) || 0;
+          } else if (tag.includes('AI') || tag.includes('LLM')) {
+            tagTotals['Generative AI & LLMs'] += Number(mins) || 0;
+          } else if (tag.includes('Machine') || tag.includes('DSMP')) {
+            tagTotals['CampusX Machine Learning'] += Number(mins) || 0;
+          } else if (tag.includes('System') || tag.includes('Docker')) {
+            tagTotals['Systems & Docker'] += Number(mins) || 0;
+          }
+        });
+      }
+    });
+
+    const maxTagMins = Math.max(1, ...Object.values(tagTotals));
+
+    const updateTagUI = (timeId, tagName) => {
+      const timeEl = document.getElementById(timeId);
+      if (timeEl) {
+        const m = tagTotals[tagName] || 0;
+        timeEl.textContent = m > 0 ? (m >= 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m}m`) : '0m';
+        const row = timeEl.closest('.regain-tag-row');
+        const barFill = row ? row.querySelector('.regain-tag-fill') : null;
+        if (barFill) {
+          const w = m > 0 ? Math.min(100, Math.round((m / maxTagMins) * 100)) : 0;
+          barFill.style.width = `${w}%`;
+        }
+      }
+    };
+
+    updateTagUI('regain-tag-dsa-time', 'DSA & LeetCode');
+    updateTagUI('regain-tag-ai-time', 'Generative AI & LLMs');
+    updateTagUI('regain-tag-ml-time', 'CampusX Machine Learning');
+    updateTagUI('regain-tag-sys-time', 'Systems & Docker');
   }
 
   function updateJournalStats() {
@@ -1938,7 +2264,7 @@
 
   function calculateProductivityScore() {
     const today = getTodayDateString();
-    const todayFocusMins = state.dailyActivity[today]?.focus || Math.floor(state.totalFocusSeconds / 60);
+    const todayFocusMins = state.dailyActivity[today]?.focusMinutes || state.dailyActivity[today]?.focus || Math.floor(state.totalFocusSeconds / 60);
 
     // 1. Focus time component (up to 40 pts, target: 90 mins)
     const focusPts = Math.min(40, Math.round((todayFocusMins / 90) * 40));
@@ -1955,13 +2281,15 @@
     // 4. Curriculum mastery (up to 10 pts)
     const masteryPts = Math.min(10, Math.round((state.completedTopics.size / 30) * 10));
 
-    // Total score (min 20, max 100)
-    const totalScore = Math.min(100, Math.max(20, Math.round(10 + focusPts + habitPts + streakPts + masteryPts)));
+    // Total score (0 to 100)
+    const rawScore = focusPts + habitPts + streakPts + masteryPts;
+    const totalScore = Math.min(100, rawScore);
 
-    let status = 'Priming Flow';
+    let status = 'Ready to Start';
     if (totalScore >= 85) status = 'Peak Flow';
     else if (totalScore >= 70) status = 'Optimal Flow';
-    else if (totalScore >= 50) status = 'Steady Rhythm';
+    else if (totalScore >= 40) status = 'Steady Rhythm';
+    else if (totalScore > 0) status = 'Priming Flow';
 
     // Update Status Bar Pill
     const scoreTextEl = document.getElementById('focuspro-score-text');
@@ -2302,11 +2630,20 @@
   window.saveNewHabit = saveNewHabit;
   window.jumpToHabitsSection = jumpToHabitsSection;
 
+  // Expose Phone Storage API
+  window.openPhoneStorageModal = openPhoneStorageModal;
+  window.closePhoneStorageModal = closePhoneStorageModal;
+  window.exportPhoneStorageBackup = exportPhoneStorageBackup;
+  window.importPhoneStorageBackup = importPhoneStorageBackup;
+  window.resetAllUserData = resetAllUserData;
+
   // =========================================================================
   // INITIALIZATION ON DOM READY
   // =========================================================================
   document.addEventListener('DOMContentLoaded', () => {
     loadPersistedState();
+    initIndexedDBVault();
+    requestPhoneStoragePersistence();
     initTheme();
     updateTimerDisplay();
     renderCourseSelector();
@@ -2342,7 +2679,7 @@
       window.initStudyStatsHub();
     }
 
-    console.log('[StudyPulse FOCUS ENGINE] Successfully initialized for Piyush Tiwari.');
+    console.log('[StudyPulse FOCUS ENGINE] Successfully initialized for Piyush Tiwari with Phone Storage Active.');
   });
 
   // Expose state to window for analytics engine
